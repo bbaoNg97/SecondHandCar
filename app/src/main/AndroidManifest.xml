@@ -10,14 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
+
+        </activity>
+        <activity android:name=".ResetPwActivity" />
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResetPwActivity"></activity>
-        <activity android:name=".RegistrationActivity"></activity>
     </application>
 
 </manifest>
