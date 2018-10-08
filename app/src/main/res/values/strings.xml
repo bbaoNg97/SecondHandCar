@@ -6,4 +6,10 @@
     <string name="sign_up">Sign Up</string>
     <string name="reset">Reset</string>
 
+    <string name="name">Name</string>
+    <string name="contactNo">Contact Number</string>
+    <string name="custEmail">Email Address</string>
+    <string name="regPw">Password</string>
+    <string name="confirmPw">Confirm Password</string>
+
 </resources>
