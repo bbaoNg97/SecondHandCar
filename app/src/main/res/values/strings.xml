@@ -13,4 +13,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="name">Name</string>
+    <string name="contactNo">Contact Number</string>
+    <string name="custEmail">Email Address</string>
+    <string name="regPw">Password</string>
+    <string name="confirmPw">Confirm Password</string>
+
 </resources>
