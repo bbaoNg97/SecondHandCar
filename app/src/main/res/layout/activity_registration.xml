@@ -7,7 +7,7 @@
     tools:context="my.edu.tarc.secondhandcar.RegistrationActivity">
 
     <android.support.constraint.ConstraintLayout  android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputLayout  android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 android:id="@+id/textViewEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/custEmail"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress" />
 
         </android.support.design.widget.TextInputLayout>
@@ -96,7 +96,7 @@
                 android:id="@+id/textViewCustPw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/regPw"
+                android:hint="@string/password"
                 android:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>
@@ -131,7 +131,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:text="Sign Up Now"
+            android:text="@string/sign_up_now"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

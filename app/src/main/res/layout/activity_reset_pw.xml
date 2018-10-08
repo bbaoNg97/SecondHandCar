@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageViewReset"
@@ -80,7 +80,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="Reset your password"
+            android:text="@string/reset_your_password"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             app:layout_constraintHorizontal_bias="0.502"
