@@ -19,6 +19,7 @@
 
             </activity>
 
+
         <!--add the parent activity name (go back to the parent) who is the parent)!-->
         <activity android:name=".ResetPwActivity" android:parentActivityName=".LoginActivity"> </activity>
         <activity android:name=".RegistrationActivity" android:parentActivityName=".LoginActivity"> </activity>
