@@ -11,11 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity" >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             </activity>
 
@@ -23,11 +19,20 @@
         <!--add the parent activity name (go back to the parent) who is the parent)!-->
         <activity android:name=".ResetPwActivity" android:parentActivityName=".LoginActivity"> </activity>
         <activity android:name=".RegistrationActivity" android:parentActivityName=".LoginActivity"> </activity>
-        <activity android:name=".ViewProfileActivity" >
+        <activity android:name=".ViewProfileActivity" android:parentActivityName=".LoginActivity">
 
         </activity>
         <activity android:name=".EditProfActivity" android:parentActivityName=".ViewProfileActivity"> </activity>
         <activity android:name=".ChangePasswordActivity" android:parentActivityName=".ViewProfileActivity"> </activity>
+
+        <activity android:name=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

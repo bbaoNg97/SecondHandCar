@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -39,15 +41,25 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_home:
+
+                        //to show the home title
+                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                         setFragment(homeFragment);
                         return true;
                     case R.id.nav_booking:
+                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                         setFragment(bookingFragment);
                         return true;
                     case R.id.nav_profile:
+                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                         setFragment(profileFragment);
                         return true;
                     case R.id.nav_search:
+                        //to show the custom title
+                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                        getSupportActionBar().setCustomView(R.layout.search_action_bar);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
                         setFragment(searchFragment);
                         return true;
                     default:
