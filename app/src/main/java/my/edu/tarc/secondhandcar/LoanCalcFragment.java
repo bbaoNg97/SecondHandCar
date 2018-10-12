@@ -55,6 +55,7 @@ buttonReset.setOnClickListener(new View.OnClickListener() {
         buttonReset.setVisibility(View.INVISIBLE);
         buttonRepayment.setVisibility(View.INVISIBLE);
         editTextPrice.requestFocus();
+        //
     }
 });
 
