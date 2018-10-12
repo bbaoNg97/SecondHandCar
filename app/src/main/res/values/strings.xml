@@ -33,5 +33,6 @@
     <string name="new_password">New Password</string>
     <string name="loan_calculator">Loan Calculator</string>
     <string name="saved_car">Saved Car</string>
+    <string name="searchbtn">Search your desired car</string>
 
 </resources>
