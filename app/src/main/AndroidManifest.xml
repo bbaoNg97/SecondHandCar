@@ -9,24 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity" />
 
         <!-- add the parent activity name (go back to the parent) who is the parent)! -->
         <activity
             android:name=".ResetPwActivity"
-            android:parentActivityName=".LoginActivity"></activity>
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".RegistrationActivity"
-            android:parentActivityName=".LoginActivity"></activity>
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".ViewProfileActivity"
-            android:parentActivityName=".LoginActivity"></activity>
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".EditProfActivity"
-            android:parentActivityName=".ViewProfileActivity"></activity>
+            android:parentActivityName=".ViewProfileActivity" />
         <activity
             android:name=".ChangePasswordActivity"
-            android:parentActivityName=".ViewProfileActivity"></activity>
+            android:parentActivityName=".ViewProfileActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".searchCarActivity" ></activity>
+        <activity android:name=".searchCarActivity" />
+        <activity android:name=".AdvSearchActivity"></activity>
     </application>
 
 </manifest>
