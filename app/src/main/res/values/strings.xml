@@ -31,5 +31,7 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
+    <string name="loan_calculator">Loan Calculator</string>
+    <string name="saved_car">Saved Car</string>
 
 </resources>

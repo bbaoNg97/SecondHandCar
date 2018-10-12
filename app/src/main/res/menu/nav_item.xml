@@ -6,14 +6,17 @@
         android:id="@+id/nav_home"
         android:icon="@drawable/baseline_home_black_24dp"
         android:title="@string/nav_home" />
+
     <item
-        android:id="@+id/nav_search"
-        android:icon="@drawable/baseline_search_black_24dp"
-        android:title="@string/nav_search" />
+        android:id="@+id/nav_favourite"
+        android:icon="@drawable/baseline_favorite_black_24dp"
+        android:title="@string/saved_car"/>
+
     <item
-        android:id="@+id/nav_booking"
-        android:icon="@drawable/baseline_bookmark_black_24dp"
-        android:title="@string/nav_booking" />
+        android:id="@+id/nav_loanCalc"
+        android:icon="@drawable/icons_calculator_24dp"
+        android:title="@string/loan_calculator" />
+
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/baseline_account_circle_black_24dp"

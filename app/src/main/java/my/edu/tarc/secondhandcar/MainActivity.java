@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mMainFrame;
 
     private HomeFragment homeFragment;
-    private BookingFragment bookingFragment;
+    private LoanCalcFragment loanCalcFragment;
     private ProfileFragment profileFragment;
-    private SearchFragment searchFragment;
+    private SavedCarFragment savedCarFragment;
 
 
     @Override
@@ -30,9 +30,11 @@ public class MainActivity extends AppCompatActivity {
         mMainNav=(BottomNavigationView)findViewById(R.id.main_nav);
 
         homeFragment= new HomeFragment();
-        bookingFragment = new BookingFragment();
+        loanCalcFragment=new LoanCalcFragment();
         profileFragment= new ProfileFragment();
-        searchFragment= new SearchFragment();
+        savedCarFragment=new SavedCarFragment();
+
+
         setFragment(homeFragment);
 
 
@@ -46,22 +48,19 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                         setFragment(homeFragment);
                         return true;
-                    case R.id.nav_booking:
+                    case R.id.nav_loanCalc:
                         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
-                        setFragment(bookingFragment);
+                        setFragment(loanCalcFragment);
+                        return true;
+                    case R.id.nav_favourite:
+                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                        setFragment(savedCarFragment);
                         return true;
                     case R.id.nav_profile:
                         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                         setFragment(profileFragment);
                         return true;
-                    case R.id.nav_search:
-                        //to show the custom title
-                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-                        getSupportActionBar().setCustomView(R.layout.search_action_bar);
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-                        setFragment(searchFragment);
-                        return true;
                     default:
                         return false;
 

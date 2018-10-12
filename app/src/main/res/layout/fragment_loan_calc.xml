@@ -2,13 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="my.edu.tarc.secondhandcar.BookingFragment">
+    tools:context="my.edu.tarc.secondhandcar.LoanCalcFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Booking" />
+        android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>
