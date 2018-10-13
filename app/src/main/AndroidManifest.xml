@@ -28,15 +28,17 @@
             android:name=".ChangePasswordActivity"
             android:parentActivityName=".ViewProfileActivity" />
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".searchCarActivity" />
+        <activity android:name=".AdvSearchActivity" />
+        <activity android:name=".CarActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".searchCarActivity" />
-        <activity android:name=".AdvSearchActivity" />
-        <activity android:name=".CarActivity"></activity>
     </application>
 
 </manifest>
