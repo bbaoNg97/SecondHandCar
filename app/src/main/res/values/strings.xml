@@ -40,5 +40,7 @@
     <string name="price_range">Price Range</string>
     <string name="mileage">Mileage</string>
     <string name="year">Year</string>
+    <string name="purpose">Purpose</string>
+    <string name="color">Color</string>
 
 </resources>
