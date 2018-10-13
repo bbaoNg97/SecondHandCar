@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class searchCarActivity extends AppCompatActivity {
-private Button BtnAdvSearch;
+private Button buttonAdvSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,8 +18,8 @@ private Button BtnAdvSearch;
         getSupportActionBar().setCustomView(R.layout.search_action_bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        BtnAdvSearch=(Button)findViewById(R.id.buttonAdvSearch);
-        BtnAdvSearch.setOnClickListener(new View.OnClickListener() {
+        buttonAdvSearch=(Button)findViewById(R.id.buttonAdvSearch);
+        buttonAdvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent advSearchIntent=new Intent(searchCarActivity.this,AdvSearchActivity.class);
