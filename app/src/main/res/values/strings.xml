@@ -43,4 +43,11 @@
     <string name="purpose">Purpose</string>
     <string name="color">Color</string>
 
+    <string-array name="purpose">
+        <item>Daily Drive</item>
+        <item>Mountain Climbing</item>
+        <item>Tournament(Racing/Decoration)</item>
+        <item>Public Transportation (Taxi)</item>
+    </string-array>
+
 </resources>
