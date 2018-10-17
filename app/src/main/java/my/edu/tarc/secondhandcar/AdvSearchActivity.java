@@ -1,5 +1,6 @@
 package my.edu.tarc.secondhandcar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ public class AdvSearchActivity extends AppCompatActivity  {
 
     private String[] spinnerColorName;
     private int[] spinnerColor;
+
 
 
     private Spinner mSpinnerColor, mSpinnerPurpose;
@@ -62,7 +65,7 @@ public class AdvSearchActivity extends AppCompatActivity  {
         mSpinnerColor = (Spinner) findViewById(R.id.spinnerColor);
         mSpinnerPurpose = (Spinner) findViewById(R.id.spinnerPurpose);
 
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         spinnerColorName = new String[]{"All", "White", "Black", "Silver", "Red", "Blue", "Brown",
                 "Yellow", "Green", "Purple", "Others"};
@@ -127,7 +130,6 @@ public class AdvSearchActivity extends AppCompatActivity  {
                 final String spPurpose= mSpinnerPurpose.getSelectedItem().toString();
                 advSearchCarIntent.putExtra("Purpose",spPurpose.toString());
                 advSearchCarIntent.putExtra("Color",colorName.toString());
-
 
 
                 startActivity(advSearchCarIntent);

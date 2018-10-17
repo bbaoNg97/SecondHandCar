@@ -42,6 +42,7 @@
     <string name="year">Year</string>
     <string name="purpose">Purpose</string>
     <string name="color">Color</string>
+    <string name="search_result">Search Result</string>
 
     <string-array name="purpose">
         <item>Daily Drive</item>
