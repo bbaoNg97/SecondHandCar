@@ -7,9 +7,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mMainNav;
@@ -18,7 +20,10 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private LoanCalcFragment loanCalcFragment;
     private ProfileFragment profileFragment;
-    private SavedCarFragment savedCarFragment;
+    private MyBookingFragment myBookingFragment;
+    private NoBookingFragment noBookingFragment;
+
+
 
 
     @Override
@@ -32,10 +37,13 @@ public class MainActivity extends AppCompatActivity {
         homeFragment= new HomeFragment();
         loanCalcFragment=new LoanCalcFragment();
         profileFragment= new ProfileFragment();
-        savedCarFragment=new SavedCarFragment();
+        myBookingFragment=new MyBookingFragment();
+        noBookingFragment=new NoBookingFragment();
+
 
 
         setFragment(homeFragment);
+        setTitle(R.string.title_home);
 
 
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -43,21 +51,24 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_home:
-
-                        //to show the home title
-                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                        setTitle(R.string.title_home);
                         setFragment(homeFragment);
                         return true;
+
                     case R.id.nav_loanCalc:
-                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                        setTitle(R.string.title_loanCalc);
                         setFragment(loanCalcFragment);
                         return true;
-                    case R.id.nav_favourite:
-                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
-                        setFragment(savedCarFragment);
+
+                    case R.id.nav_appointment:
+                        //Todo:if got booking,setFragment(appointmentFragment),if no booking,setFragment(
+                        setTitle(R.string.title_appointment);
+                        setFragment( myBookingFragment);
+                        //setFragment(noBookingFragment);
                         return true;
+
                     case R.id.nav_profile:
-                        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                        setTitle(R.string.title_profile);
                         setFragment(profileFragment);
                         return true;
 

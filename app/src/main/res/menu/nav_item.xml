@@ -8,9 +8,9 @@
         android:title="@string/nav_home" />
 
     <item
-        android:id="@+id/nav_favourite"
-        android:icon="@drawable/baseline_favorite_black_24dp"
-        android:title="@string/saved_car"/>
+        android:id="@+id/nav_appointment"
+        android:icon="@drawable/baseline_my_booking_black_24dp"
+        android:title="@string/my_booking"/>
 
     <item
         android:id="@+id/nav_loanCalc"
