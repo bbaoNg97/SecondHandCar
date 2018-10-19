@@ -20,7 +20,10 @@
             android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".ViewProfileActivity"
-            android:parentActivityName=".LoginActivity" />
+            android:parentActivityName=".LoginActivity">
+
+
+        </activity>
         <activity
             android:name=".EditProfActivity"
             android:parentActivityName=".ViewProfileActivity" />
@@ -38,6 +41,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
