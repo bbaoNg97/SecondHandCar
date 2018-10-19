@@ -48,6 +48,9 @@
     <string name="title_appointment">My Booking </string>
     <string name="title_loanCalc">Loan Calculator</string>
     <string name="title_profile">My Profile</string>
+    <string name="car_name">Car Name:</string>
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>
 
     <string-array name="purpose">
         <item>Daily Drive</item>
@@ -56,4 +59,13 @@
         <item>Public Transportation (Taxi)</item>
     </string-array>
 
+    <string name="title_booking_detail">Booking Detail</string>
+    <string name="price">Price:</string>
+    <string name="dealer_location">Dealer Location:</string>
+    <string name="agent">Agent:</string>
+    <string name="contact_no">"Contact Number: "</string>
+    <string name="agent_email">Agent Email:</string>
+    <string name="app_date">Appiontment Date:</string>
+    <string name="app_time">Appointment Time: </string>
+    <string name="title_chooseDateTime">Choose Date Time</string>
 </resources>

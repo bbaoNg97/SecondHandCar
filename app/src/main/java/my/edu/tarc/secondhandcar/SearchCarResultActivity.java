@@ -1,10 +1,12 @@
 package my.edu.tarc.secondhandcar;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class SearchCarResultActivity extends AppCompatActivity {
 
@@ -21,10 +23,17 @@ public class SearchCarResultActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.car_result_action_bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CarResultAdapter carResultAdapter=new CarResultAdapter(this,IMAGES,NAMES);
-        listViewCarResult=(ListView)findViewById(R.id.listViewCarResult);
-        listViewCarResult.setAdapter(carResultAdapter);
 
+        AdapterCarResult adapterCarResult =new AdapterCarResult(this,IMAGES,NAMES);
+        listViewCarResult=(ListView)findViewById(R.id.listViewCarResult);
+        listViewCarResult.setAdapter(adapterCarResult);
+        listViewCarResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent carIntent=new Intent(SearchCarResultActivity.this,CarActivity.class);
+                startActivity(carIntent);
+            }
+        });
 
     }
 
