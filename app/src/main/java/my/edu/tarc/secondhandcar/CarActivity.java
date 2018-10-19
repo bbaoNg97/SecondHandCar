@@ -4,10 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class CarActivity extends Activity {
+public class CarActivity extends AppCompatActivity {
 
     private ViewPager viewPager1;
     private Button btnMakeAppointment;
@@ -20,6 +21,9 @@ public class CarActivity extends Activity {
         btnMakeAppointment=(Button)findViewById(R.id.buttonAppointment);
 
         ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(this);
+
+        setTitle("Car Name");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager1.setAdapter(viewPagerAdapter);
         btnMakeAppointment.setOnClickListener(new View.OnClickListener() {

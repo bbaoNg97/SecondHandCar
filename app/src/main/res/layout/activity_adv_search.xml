@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/textViewPriceRange"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -22,7 +22,6 @@
             android:text="@string/price_range"
             android:textAlignment="center"
             android:textColor="@android:color/background_dark"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +29,7 @@
 
         <TextView
             android:id="@+id/textViewMileAge"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -47,7 +46,7 @@
 
         <TextView
             android:id="@+id/textViewYear"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="15dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -64,7 +63,7 @@
 
         <SeekBar
             android:id="@+id/seekBarMinMileage"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -81,7 +80,7 @@
 
         <SeekBar
             android:id="@+id/seekBarMaxMileage"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -98,7 +97,7 @@
 
         <SeekBar
             android:id="@+id/seekBarMaxYear"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -114,7 +113,7 @@
 
         <SeekBar
             android:id="@+id/seekBarMinPrice"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -132,7 +131,7 @@
 
         <SeekBar
             android:id="@+id/seekBarMaxPrice"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -148,21 +147,21 @@
 
         <TextView
             android:id="@+id/textViewPurpose"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="16dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="0dp"
             android:text="@string/purpose"
             android:textAlignment="center"
             android:textColor="@android:color/background_dark"
             app:layout_constraintHorizontal_bias="0.024"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerColor" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerColor"
+            android:layout_marginStart="8dp" />
 
         <Spinner
             android:id="@+id/spinnerPurpose"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -171,11 +170,11 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewPurpose" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewPurpose" />
 
         <TextView
             android:id="@+id/textViewColor"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -192,7 +191,7 @@
 
         <Spinner
             android:id="@+id/spinnerColor"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -205,7 +204,7 @@
 
         <Button
             android:id="@+id/buttonAdvSearchCar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -220,14 +219,14 @@
 
         <TextView
             android:id="@+id/textViewMinMileage"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Min Mileage: 5000 km"
+            android:text="@string/min_mileage_5000_km"
 
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -236,13 +235,13 @@
 
         <TextView
             android:id="@+id/textViewMinPrice"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="Min Price: RM 5000"
+            android:text="@string/min_price_rm_5000"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -250,13 +249,13 @@
 
         <TextView
             android:id="@+id/textViewMaxPrice"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="Max Price: RM"
+            android:text="@string/max_price_rm"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -264,14 +263,14 @@
 
         <TextView
             android:id="@+id/textViewMaxMileage"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="6dp"
-            android:text="Max Mileage:    km"
+            android:text="@string/max_mileage_km"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -279,14 +278,14 @@
 
         <TextView
             android:id="@+id/textViewMinYear"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Min Year: 1950"
+            android:text="@string/min_year_1950"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -294,14 +293,14 @@
 
         <TextView
             android:id="@+id/textViewMaxYear"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Max Year: "
+            android:text="@string/max_year"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -309,7 +308,7 @@
 
         <SeekBar
             android:id="@+id/seekBarMinYear"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"

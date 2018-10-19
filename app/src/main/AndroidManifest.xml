@@ -38,8 +38,11 @@
         <activity android:name=".AdvSearchActivity" android:parentActivityName=".searchCarActivity">
 
         </activity>
-        <activity android:name=".CarActivity"></activity>
+        <activity android:name=".CarActivity" android:parentActivityName=".SearchCarResultActivity"></activity>
         <activity android:name=".SearchCarResultActivity" android:parentActivityName=".searchCarActivity"></activity>
+        <activity android:name=".MakeAppointmentActivity" android:parentActivityName=".CarActivity"></activity>
+        <activity android:name=".BookingDetailActivity" android:parentActivityName=".MainActivity"></activity>
+
     </application>
 
 </manifest>

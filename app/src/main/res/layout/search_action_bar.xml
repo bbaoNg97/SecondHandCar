@@ -10,5 +10,6 @@
         android:layout_height="wrap_content"
         android:drawableRight="@drawable/ic_action_search"
         android:inputType="text"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:drawableEnd="@drawable/ic_action_search"/>
 </LinearLayout>

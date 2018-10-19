@@ -33,7 +33,8 @@
                 android:text="This is the description comment by the seller, scrollable gvhgvhgvghvhvhgvgvjgvtfytftdyterdfcffcghfuytfgvjhbjkhbjhguygngbjhgjnkjhkjhkjhkjhkjhkhkjhkjhkhkjhkjhkjhkjhkjhkjhkjhkjhkhkjhjkhkjhkjhkj"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/textViewName"
@@ -42,7 +43,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Name"
+                android:text="@string/name"
                 android:textColor="@android:color/background_dark"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -70,7 +71,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Price"
+                android:text="@string/car_price"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -94,7 +95,7 @@
                 <TableRow
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="81dp">
 
@@ -110,9 +111,10 @@
                         android:background="@color/colorWhite"
                         android:drawableLeft="@drawable/ic_action_location"
                         android:gravity="center"
-                        android:text="Color"
+                        android:text="@string/color"
                         android:textColor="@android:color/background_dark"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:drawableStart="@drawable/ic_action_location"/>
 
                     <TextView
                         android:id="@+id/textViewMileage"
@@ -125,15 +127,17 @@
                         android:background="@color/colorWhite"
                         android:drawableLeft="@drawable/ic_action_mileage"
                         android:gravity="center"
-                        android:text="Milage"
+                        android:text="@string/mileage"
                         android:textColor="@android:color/background_dark"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:drawableStart="@drawable/ic_action_mileage"
+                        android:layout_marginEnd="1dp"/>
                 </TableRow>
 
                 <TableRow
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="81dp">
 
@@ -148,9 +152,10 @@
                         android:background="@color/colorWhite"
                         android:drawableLeft="@drawable/ic_action_year"
                         android:gravity="center"
-                        android:text="Year"
+                        android:text="@string/year"
                         android:textColor="@android:color/background_dark"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:drawableStart="@drawable/ic_action_year"/>
 
                     <TextView
                         android:id="@+id/textViewLocation"
@@ -163,9 +168,11 @@
                         android:drawableLeft="@drawable/ic_action_location"
                         android:drawablePadding="0dp"
                         android:gravity="center"
-                        android:text="Location"
+                        android:text="@string/location"
                         android:textColor="@android:color/background_dark"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:drawableStart="@drawable/ic_action_location"
+                        android:layout_marginEnd="1dp"/>
 
                 </TableRow>
 
@@ -179,10 +186,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_action_call"
-        android:text="Make An Appointment"
+        android:text="@string/make_an_appointment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:drawableStart="@drawable/ic_action_call"/>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        tools:layout_editor_absoluteY="8dp"
+        tools:ignore="ScrollViewSize">
 
         <TextView
             android:id="@+id/tvPrice"
@@ -49,7 +50,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvCarName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvCarName"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/textViewPrice"
@@ -62,7 +64,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPrice"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvDealerLoc"
@@ -88,7 +91,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDealerLoc" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDealerLoc"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvAgent"
@@ -114,7 +118,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAgent" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAgent"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvAgentContact"
@@ -140,7 +145,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAgentContact" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAgentContact"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvAgentEmail"
@@ -166,7 +172,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAgentEmail" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAgentEmail"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvAppDate"
@@ -192,7 +199,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAppDate" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAppDate"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvAppTime"
@@ -218,7 +226,8 @@
             app:layout_constraintHorizontal_bias="0.025"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAppTime" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAppTime"
+            tools:ignore="HardcodedText" />
 
         <ImageView
             android:id="@+id/imageViewCarPhoto"
@@ -228,7 +237,9 @@
             android:layout_marginTop="8dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/ic_launcher"
+            android:layout_marginEnd="8dp"
+            tools:ignore="ContentDescription" />
 
 
     </android.support.constraint.ConstraintLayout>

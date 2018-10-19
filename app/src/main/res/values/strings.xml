@@ -68,4 +68,19 @@
     <string name="app_date">Appiontment Date:</string>
     <string name="app_time">Appointment Time: </string>
     <string name="title_chooseDateTime">Choose Date Time</string>
+    <string name="location">Location</string>
+    <string name="make_an_appointment">Make An Appointment</string>
+    <string name="car_price">Price</string>
+    <string name="calculate">Calculate</string>
+    <string name="car_price_rm">Car Price (RM)</string>
+    <string name="down_payment_rm">Down Payment (RM)</string>
+    <string name="interest_rate">Interest Rate %</string>
+    <string name="loan_period_year">Loan Period (Year)</string>
+    <string name="max_mileage_km">Max Mileage: km</string>
+    <string name="max_price_rm">Max Price: RM</string>
+    <string name="max_year">Max Year:</string>
+    <string name="min_mileage_5000_km">Min Mileage: 5000 km</string>
+    <string name="min_price_rm_5000">Min Price: RM 5000</string>
+    <string name="min_year_1950">Min Year: 1950</string>
+    <string name="send_appointment_request">Send Appointment Request</string>
 </resources>

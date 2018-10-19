@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/buttonSearch"
-        android:elevation="20dp"
+        android:drawableStart="@drawable/baseline_search_black_24dp"
         android:padding="10dp"
         style="@android:style/Widget.DeviceDefault.Button.Inset"
         android:layout_width="0dp"
@@ -20,7 +20,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/shadow"
         android:drawableLeft="@drawable/baseline_search_black_24dp"
-        android:paddingLeft="20dp"
+
         android:text="@string/searchbtn"
         android:textAlignment="center"
         android:textAllCaps="false"
