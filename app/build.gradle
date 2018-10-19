@@ -28,10 +28,12 @@ dependencies {
     //here
     apply plugin: 'com.android.application'
 
+
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:design:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:26.+'
-
+    compile 'com.google.zxing:core:3.3.0'
+    compile 'com.google.zxing:javase:3.3.0'
     testCompile 'junit:junit:4.12'
 }

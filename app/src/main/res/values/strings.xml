@@ -32,7 +32,7 @@
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="loan_calculator">Loan Calculator</string>
-    <string name="saved_car">Saved Car</string>
+    <string name="my_booking">My Booking</string>
     <string name="searchbtn">Search your desired car</string>
     <string name="car_brand">Car Brand</string>
     <string name="car_model">Car Model</string>
@@ -42,5 +42,18 @@
     <string name="year">Year</string>
     <string name="purpose">Purpose</string>
     <string name="color">Color</string>
+    <string name="search_result">Search Result</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_appointment">My Booking </string>
+    <string name="title_loanCalc">Loan Calculator</string>
+    <string name="title_profile">My Profile</string>
+
+    <string-array name="purpose">
+        <item>Daily Drive</item>
+        <item>Mountain Climbing</item>
+        <item>Tournament(Racing/Decoration)</item>
+        <item>Public Transportation (Taxi)</item>
+    </string-array>
 
 </resources>
