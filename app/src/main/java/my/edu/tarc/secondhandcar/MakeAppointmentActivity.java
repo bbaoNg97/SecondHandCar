@@ -2,16 +2,20 @@ package my.edu.tarc.secondhandcar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -25,6 +29,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private TextView textViewDate,textViewTime;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
+    private Button btnSendRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title_chooseDateTime);
 
+        btnSendRequest=(Button)findViewById(R.id.buttonSendAppReq);
         textViewDate=(TextView) findViewById(R.id.textViewDate);
         textViewTime=(TextView)findViewById(R.id.textViewTime);
         textViewDate.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +107,40 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             }
         };
 
+        btnSendRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Todo: date can not < today(MUST >=today),time must be 9-5
+                if(textViewDate.getText().equals("")|| textViewTime.getText().equals("")){
+                    Toast.makeText(getApplicationContext(), "Error: Please select date and time.", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    AlertDialog.Builder confirmBuilder=new AlertDialog.Builder(MakeAppointmentActivity.this);
+                    confirmBuilder.setTitle("Request Confirmation");
+                    final AlertDialog dialog=confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Todo:send notification to seller app
 
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
+                            dialogInterface.cancel();
+
+                        }
+                    }).create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorBlack));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorBlack));
+                        }
+                    });
+                    dialog.show();
+                }
+            }
+        });
     }
 }
