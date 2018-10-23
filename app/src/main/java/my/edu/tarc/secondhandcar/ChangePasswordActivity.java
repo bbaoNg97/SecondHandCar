@@ -9,6 +9,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.change_password);
     }
 }

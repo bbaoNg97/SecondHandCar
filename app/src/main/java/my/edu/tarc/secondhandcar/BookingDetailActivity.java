@@ -10,8 +10,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
         setTitle(R.string.title_booking_detail);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
     }
 }

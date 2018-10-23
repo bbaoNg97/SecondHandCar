@@ -10,7 +10,6 @@
     <string name="nav_booking">Booking</string>
     <string name="nav_profile">Profile</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="name">Name</string>
@@ -83,4 +82,17 @@
     <string name="min_price_rm_5000">Min Price: RM 5000</string>
     <string name="min_year_1950">Min Year: 1950</string>
     <string name="send_appointment_request">Send Appointment Request</string>
+
+    <string name="EditProfile">Edit My Profile</string>
+    <string name="logout">Logout</string>
+    <string name="RateUs">Rate Us</string>
+    <string name="AboutUs">About Us</string>
+    <string name="Share">Share Our App</string>
+    <string name="welcome">Welcome !</string>
+
+    <string name="title_adv_search">Advanced Search</string>
+    <string name="title_car_detail">Car Details</string>
+    <string name="title_edit_prof">Edit Profile</string>
+    <string name="title_reg">Registration</string>
+    <string name="title_reset_pw">Reset Password</string>
 </resources>

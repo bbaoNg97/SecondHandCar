@@ -65,7 +65,8 @@ public class AdvSearchActivity extends AppCompatActivity  {
         mSpinnerColor = (Spinner) findViewById(R.id.spinnerColor);
         mSpinnerPurpose = (Spinner) findViewById(R.id.spinnerPurpose);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.title_adv_search);
+
 
         spinnerColorName = new String[]{"All", "White", "Black", "Silver", "Red", "Blue", "Brown",
                 "Yellow", "Green", "Purple", "Others"};

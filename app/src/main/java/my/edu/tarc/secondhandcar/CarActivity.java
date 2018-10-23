@@ -22,8 +22,7 @@ public class CarActivity extends AppCompatActivity {
 
         ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(this);
 
-        setTitle("Car Name");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.title_car_detail);
 
         viewPager1.setAdapter(viewPagerAdapter);
         btnMakeAppointment.setOnClickListener(new View.OnClickListener() {
