@@ -89,7 +89,7 @@ public class ProfileFragment extends Fragment {
         //if it is showing my profile icon
         else {
             Intent myProfileIntent = new Intent(getActivity().getApplicationContext(), ViewProfileActivity.class);
-            //myProfileIntent.putExtra("email",name);
+
             startActivity(myProfileIntent);
         }
         return super.onOptionsItemSelected(item);

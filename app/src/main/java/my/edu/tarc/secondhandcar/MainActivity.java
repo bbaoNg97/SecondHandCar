@@ -1,15 +1,21 @@
 package my.edu.tarc.secondhandcar;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -38,11 +44,14 @@ public class MainActivity extends AppCompatActivity {
         myBookingFragment=new MyBookingFragment();
         noBookingFragment=new NoBookingFragment();
 
-
-
         setFragment(homeFragment);
         setTitle(R.string.title_home);
 
+        if(!isConnected()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Connection Error");
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+        }
 
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -77,6 +86,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    //to check network connectivity
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
     }
 
     private void setFragment(Fragment fragement) {

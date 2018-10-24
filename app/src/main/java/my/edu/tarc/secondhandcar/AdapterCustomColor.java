@@ -13,14 +13,14 @@ import android.widget.TextView;
 
 
 
-public class CustomColorAdapter extends ArrayAdapter<String> {
+public class AdapterCustomColor extends ArrayAdapter<String> {
 
     String[] spinnerColorName;
     int[] spinnerColor;
 
     Context mContext;
 
-    public CustomColorAdapter(@NonNull Context context, String[] titles, int[] images) {
+    public AdapterCustomColor(@NonNull Context context, String[] titles, int[] images) {
         super(context, R.layout.custom_spinner_color);
         this.spinnerColorName = titles;
         this.spinnerColor = images;

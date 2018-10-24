@@ -1,27 +1,15 @@
 package my.edu.tarc.secondhandcar;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.icu.text.DecimalFormat;
-import android.icu.text.NumberFormat;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
-import java.util.List;
 
 
 public class AdvSearchActivity extends AppCompatActivity  {
@@ -62,9 +50,9 @@ public class AdvSearchActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_adv_search);
 
         //link spinner UI
-        mSpinnerColor = (Spinner) findViewById(R.id.spinnerColor);
         mSpinnerPurpose = (Spinner) findViewById(R.id.spinnerPurpose);
 
+        mSpinnerColor = (Spinner) findViewById(R.id.spinnerColor);
         setTitle(R.string.title_adv_search);
 
 
@@ -78,8 +66,8 @@ public class AdvSearchActivity extends AppCompatActivity  {
                 , R.drawable.color_purple, R.drawable.color_others};
 
 
-        CustomColorAdapter mCustomColorAdapter = new CustomColorAdapter(AdvSearchActivity.this, spinnerColorName, spinnerColor);
-        mSpinnerColor.setAdapter(mCustomColorAdapter);
+        AdapterCustomColor mAdapterCustomColor = new AdapterCustomColor(AdvSearchActivity.this, spinnerColorName, spinnerColor);
+        mSpinnerColor.setAdapter(mAdapterCustomColor);
 
 
         mSpinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
