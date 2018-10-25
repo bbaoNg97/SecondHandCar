@@ -1,6 +1,7 @@
 package my.edu.tarc.secondhandcar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,7 +37,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     List<String> custEmailList;
     public static final String TAG = "my.edu.tarc.secondhandcar";
-
+    String strCustID;
+    int totalCust;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +55,14 @@ public class RegistrationActivity extends AppCompatActivity {
         btnSignUp = (Button) findViewById(R.id.buttonRegSignUp);
         loading = (ProgressBar) findViewById(R.id.loading);
 
-        //to store all customer detail from db
-        getAllCustomer(getApplicationContext(),getString(R.string.get_cust_url));
+        //to get all customer detail from db
+        getAllCustomer(getApplicationContext(), getString(R.string.get_cust_url));
+
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                strCustID=generateCustID(totalCust);
                 registration();
             }
         });
@@ -65,55 +70,74 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    private void registration() {
-        Customer customer=new Customer();
+    private String generateCustID(int countCustomer) {
+        String id = "CU";
 
-        final String confPwd=this.etConfPassword.getText().toString();
+        String count = Integer.toString(countCustomer+1);
+        //if total cust is 0-9
+        if (countCustomer < 10) {
+            id = id + "000" + count;
+        }
+        //if total cust is 10-99
+        else if (countCustomer >= 10 && countCustomer < 100) {
+            id = id + "00" + count;
+        }
+        //if total cust is 100-999
+        else if (countCustomer >= 100 && countCustomer < 1000) {
+            id = id + "0" + count;
+        }
+        //if total cust is more than 1000
+        else {
+            id = id + count;
+        }
+
+        return id;
+    }
+
+
+    private void registration() {
+        Customer customer = new Customer();
+
+        final String confPwd = this.etConfPassword.getText().toString();
         final String name = this.etName.getText().toString();
         final String contactNo = this.etContactNo.getText().toString();
         final String email = this.etEmail.getText().toString();
         final String password = this.etPassword.getText().toString();
 
         //check duplicate username
-        AlertDialog.Builder builder=new AlertDialog.Builder(RegistrationActivity.this);
-        if(name.equals("")){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
+        if (name.equals("")) {
             etName.setError("Please fill in your name");
-        }
-        else if(contactNo.equals("")){
+        } else if (contactNo.equals("")) {
             etContactNo.setError("Please fill in your contact number");
-        }
-        else if(email.equals("")){
+        } else if (email.equals("")) {
             etEmail.setError("Email please");
-        }
-        else if(password.equals("")){
+        } else if (password.equals("")) {
             etPassword.setError("Password please");
-        }
-        else if(confPwd.equals("")){
+        } else if (confPwd.equals("")) {
             etConfPassword.setError("Please confirm your password");
-        }
-        else{
+        } else {
             loading.setVisibility(View.VISIBLE);
             btnSignUp.setEnabled(false);
-            if(foundEmail(email)){
-                builder.setMessage("Email is exist. Please try another.").setNegativeButton("Retry",null).create().show();
+            if (foundEmail(email)) {
+                builder.setMessage("Email is exist. Please try another.").setNegativeButton("Retry", null).create().show();
                 loading.setVisibility(View.GONE);
                 btnSignUp.setEnabled(true);
-            }
-            else if(!password.equals(confPwd)){
-                builder.setMessage("Please make sure password is match with confirm password.").setNegativeButton("Retry",null).create().show();
+            } else if (!password.equals(confPwd)) {
+                builder.setMessage("Please make sure password is match with confirm password.").setNegativeButton("Retry", null).create().show();
                 loading.setVisibility(View.GONE);
                 btnSignUp.setEnabled(true);
-            }
-            else{
+            } else {
                 customer.setCustName(name);
                 customer.setCustContactNo(contactNo);
                 customer.setCustEmail(email);
                 customer.setPassword(password);
-                try{
-                    makeServiceCall(this,getString(R.string.reg_url),customer);
-                }catch (Exception e){
+                customer.setCustID(strCustID);
+                try {
+                    makeServiceCall(this, getString(R.string.reg_url), customer);
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"Error: at reg()"+e.getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Error: \n" + e.getMessage(), Toast.LENGTH_LONG).show();
                     loading.setVisibility(View.GONE);
                     btnSignUp.setEnabled(true);
                 }
@@ -121,12 +145,11 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
 
-
     }
 
-    private void makeServiceCall(final Context context, String url, final Customer customer ){
+    private void makeServiceCall(final Context context, String url, final Customer customer) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        try{
+        try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, getString(R.string.reg_url),
                     new Response.Listener<String>() {
                         @Override
@@ -140,12 +163,15 @@ public class RegistrationActivity extends AppCompatActivity {
                                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                                     loading.setVisibility(View.GONE);
                                     btnSignUp.setEnabled(true);
+                                    //if success, go to login page
+                                    Intent loginIntent=new Intent(RegistrationActivity.this,LoginActivity.class);
+                                    startActivity(loginIntent);
                                 }
 
                             } catch (JSONException e) {
 
                                 e.printStackTrace();
-                                Toast.makeText(context, "Register failed! at onResponse()" + e.toString(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
                                 loading.setVisibility(View.GONE);
                                 btnSignUp.setEnabled(true);
 
@@ -166,7 +192,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
                     //LHS is from php, RHS is getText there
-                    params.put("custID",customer.getCustID());
+                    params.put("custID", customer.getCustID());
                     params.put("custName", customer.getCustName());
                     params.put("custEmail", customer.getCustEmail());
                     params.put("custContactNo", customer.getCustContactNo());
@@ -178,9 +204,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
             queue.add(stringRequest);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "Register failed! Onmake service call() " + e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -197,24 +223,25 @@ public class RegistrationActivity extends AppCompatActivity {
                         try {
                             //everytime i listen to the server, i clear the list
                             custEmailList.clear();
+
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject userResponse = (JSONObject) response.get(i);
                                 //json object that contains all of the customer in the user table
                                 String strEmail = userResponse.getString("custEmail");
-                                //String strID=userResponse.getString("custID");
                                 custEmailList.add(strEmail);
-
+                                totalCust++;
                             }
 
+
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Error: getAllCustomer" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Error: \n" + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "Error: getAllCUstomerOutside " + volleyError.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error: \n" + volleyError.getMessage(), Toast.LENGTH_LONG).show();
 
                     }
                 });

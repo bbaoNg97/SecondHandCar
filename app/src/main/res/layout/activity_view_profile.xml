@@ -71,11 +71,11 @@
             android:text="@string/contactNo"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewcustName"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCustName"
             app:layout_constraintHorizontal_bias="0.0" />
 
         <TextView
-            android:id="@+id/textViewcustName"
+            android:id="@+id/textViewCustName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"

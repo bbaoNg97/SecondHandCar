@@ -41,12 +41,17 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
-        btnLogout = (Button)v.findViewById(R.id.buttonLogout);
+        tvWelcome = (TextView) v.findViewById(R.id.textViewWelcome);
+        btnLogout = (Button) v.findViewById(R.id.buttonLogout);
+        tlWelcome = (TableLayout) v.findViewById(R.id.tableLayoutWelcome);
+
+
+        btnLogout = (Button) v.findViewById(R.id.buttonLogout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor user=getActivity().getSharedPreferences("my_pref",Context.MODE_PRIVATE).edit();
-                user.putString("email",null);
+                SharedPreferences.Editor user = getActivity().getSharedPreferences("My_pref", Context.MODE_PRIVATE).edit();
+                user.putString("email", null);
                 user.apply();
 
                 getActivity().finish();
@@ -60,22 +65,25 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        tvWelcome = (TextView) getView().findViewById(R.id.textViewWelcome);
-        btnLogout = (Button) getView().findViewById(R.id.buttonLogout);
-        tlWelcome = (TableLayout) getView().findViewById(R.id.tableLayoutWelcome);
 
-        //to do layout setting
-        boolean checkName = checkSharePref(tvWelcome, btnLogout, tlWelcome);
+        try {
+            //to do layout setting
+            boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
+            //check if it has been logged in
 
-        //check if it has been logged in
-
-        if (checkName == true) {
-            inflater.inflate(R.menu.action_bar_welcome, menu);
+            if (isLogin == true) {
+                inflater.inflate(R.menu.action_bar_welcome, menu);
+            }
+            //if havent login yet
+            else {
+                inflater.inflate(R.menu.action_bar_login, menu);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity().getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
-        //if havent login yet
-        else {
-            inflater.inflate(R.menu.action_bar_login, menu);
-        }
+
+
     }
 
     @Override
@@ -95,12 +103,12 @@ public class ProfileFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean checkSharePref(TextView textView, Button button, TableLayout tableLayout) {
+    public boolean checkCustomer(TextView textView, Button button, TableLayout tableLayout) {
         try {
-            SharedPreferences sharePref = getActivity().getSharedPreferences("my_pref", Context.MODE_PRIVATE);
+            SharedPreferences sharePref = getActivity().getSharedPreferences("My_pref", Context.MODE_PRIVATE);
             String welcome;
-            name = sharePref.getString("email", null);
-            if (name.equals("abc")) {
+            name = sharePref.getString("custName", null);
+            if (!name.isEmpty()) {
                 button.setVisibility(View.VISIBLE);
                 tableLayout.setVisibility(View.VISIBLE);
                 welcome = "Welcome! " + name;
