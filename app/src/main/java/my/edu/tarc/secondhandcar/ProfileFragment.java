@@ -19,11 +19,14 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.zip.Inflater;
+
 public class ProfileFragment extends Fragment {
     private TextView tvWelcome, tvAboutUs, tvRateUs, tvShareApp;
     private Button btnLogout;
     private TableLayout tlWelcome;
     private String name;
+    boolean loggedIn=false;
 
 
     public ProfileFragment() {
@@ -34,6 +37,7 @@ public class ProfileFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -54,9 +58,11 @@ public class ProfileFragment extends Fragment {
                 user.putString("email", null);
                 user.apply();
 
+                getActivity().invalidateOptionsMenu();
                 getActivity().finish();
             }
         });
+
         return v;
     }
 
@@ -64,25 +70,58 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        //inflater.inflate(R.menu.action_bar_login,menu);
+        //to do layout setting
+        boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
+        //check if it has been logged in
+
+       if (isLogin == true) {
+            inflater.inflate(R.menu.action_bar_welcome, menu);
+      }
+        //if havent login yet
+        else {
+           inflater.inflate(R.menu.action_bar_login, menu);
+       }
 
 
-        try {
-            //to do layout setting
-            boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
-            //check if it has been logged in
 
-            if (isLogin == true) {
-                inflater.inflate(R.menu.action_bar_welcome, menu);
-            }
-            //if havent login yet
-            else {
-                inflater.inflate(R.menu.action_bar_login, menu);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity().getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+    }
+    public void isLogin(Menu menu,MenuInflater inflater){
+        //to do layout setting
+        boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
+        //check if it has been logged in
+
+        if (isLogin) {
+           // inflater.inflate(R.menu.action_bar_welcome, menu);
+            loggedIn=true;
+
+        }
+        //if havent login yet
+        else {
+            //inflater.inflate(R.menu.action_bar_login, menu);
+            loggedIn=false;
+
         }
 
+    }
+
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuInflater inflater=getActivity().getMenuInflater();
+        isLogin(menu,inflater);
+        try{
+            if(loggedIn){
+                inflater.inflate(R.menu.action_bar_welcome, menu);
+            }
+            else{
+                inflater.inflate(R.menu.action_bar_login, menu);
+            }
+            super.onPrepareOptionsMenu(menu);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -108,6 +147,7 @@ public class ProfileFragment extends Fragment {
             SharedPreferences sharePref = getActivity().getSharedPreferences("My_pref", Context.MODE_PRIVATE);
             String welcome;
             name = sharePref.getString("custName", null);
+            //is has name(means is logged in)
             if (!name.isEmpty()) {
                 button.setVisibility(View.VISIBLE);
                 tableLayout.setVisibility(View.VISIBLE);
