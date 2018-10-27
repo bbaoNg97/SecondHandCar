@@ -54,11 +54,14 @@ public class ProfileFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor user = getActivity().getSharedPreferences("My_pref", Context.MODE_PRIVATE).edit();
-                user.putString("email", null);
+                SharedPreferences.Editor user = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE).edit();
+                user.putString("custName", null);
+                user.putString("custID",null);
+                user.putString("custEmail",null);
+                user.putString("password",null);
+                user.putString("custContactNo",null);
                 user.apply();
 
-                getActivity().invalidateOptionsMenu();
                 getActivity().finish();
             }
         });
@@ -75,53 +78,15 @@ public class ProfileFragment extends Fragment {
         boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
         //check if it has been logged in
 
-       if (isLogin == true) {
+        if (isLogin == true) {
             inflater.inflate(R.menu.action_bar_welcome, menu);
-      }
-        //if havent login yet
-        else {
-           inflater.inflate(R.menu.action_bar_login, menu);
-       }
-
-
-
-    }
-    public void isLogin(Menu menu,MenuInflater inflater){
-        //to do layout setting
-        boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
-        //check if it has been logged in
-
-        if (isLogin) {
-           // inflater.inflate(R.menu.action_bar_welcome, menu);
-            loggedIn=true;
-
         }
         //if havent login yet
         else {
-            //inflater.inflate(R.menu.action_bar_login, menu);
-            loggedIn=false;
-
+            inflater.inflate(R.menu.action_bar_login, menu);
         }
 
-    }
 
-
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuInflater inflater=getActivity().getMenuInflater();
-        isLogin(menu,inflater);
-        try{
-            if(loggedIn){
-                inflater.inflate(R.menu.action_bar_welcome, menu);
-            }
-            else{
-                inflater.inflate(R.menu.action_bar_login, menu);
-            }
-            super.onPrepareOptionsMenu(menu);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
     }
 
@@ -136,7 +101,6 @@ public class ProfileFragment extends Fragment {
         //if it is showing my profile icon
         else {
             Intent myProfileIntent = new Intent(getActivity().getApplicationContext(), ViewProfileActivity.class);
-
             startActivity(myProfileIntent);
         }
         return super.onOptionsItemSelected(item);
@@ -144,7 +108,7 @@ public class ProfileFragment extends Fragment {
 
     public boolean checkCustomer(TextView textView, Button button, TableLayout tableLayout) {
         try {
-            SharedPreferences sharePref = getActivity().getSharedPreferences("My_pref", Context.MODE_PRIVATE);
+            SharedPreferences sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
             String welcome;
             name = sharePref.getString("custName", null);
             //is has name(means is logged in)

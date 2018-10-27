@@ -56,6 +56,8 @@
     <string name="login_url">https://dewy-minuses.000webhostapp.com/Login.php</string>
     <string name="reg_url">https://dewy-minuses.000webhostapp.com/Registration.php</string>
     <string name="get_cust_url">https://dewy-minuses.000webhostapp.com/GetCustEmail.php</string>
+    <string name="update_prof_url">https://dewy-minuses.000webhostapp.com/CustUpdateProf.php</string>
+    <string name="update_password_url">https://dewy-minuses.000webhostapp.com/CustUpdatePwd.php</string>
     <string-array name="purpose">
         <item>Daily Drive</item>
         <item>Mountain Climbing</item>

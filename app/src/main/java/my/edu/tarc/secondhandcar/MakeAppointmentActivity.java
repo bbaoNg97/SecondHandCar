@@ -2,7 +2,10 @@ package my.edu.tarc.secondhandcar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
 
 import org.w3c.dom.Text;
 
@@ -31,8 +36,11 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
     private Button btnSendRequest;
-    private String time;
+    private String time, custID;
     private Date selectedTime;
+    SharedPreferences sharePref;
+    RequestQueue queue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +48,15 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_make_appointment);
 
         setTitle(R.string.title_chooseDateTime);
+        if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+            builder.setTitle("Connection Error");
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+        }
 
+        //get share preference
+        sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+        custID = sharePref.getString("custID", null);
 
         btnSendRequest = (Button) findViewById(R.id.buttonSendAppReq);
         textViewDate = (TextView) findViewById(R.id.textViewDate);
@@ -95,17 +111,16 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hour, int minute) {
                 //'sh' indicates showing purpose
                 String shTime;
-                SimpleDateFormat shFormatter=new SimpleDateFormat("hh:mm a");
+                SimpleDateFormat shFormatter = new SimpleDateFormat("hh:mm a");
 
                 time = hour + ":" + minute;
 
-                if(hour>=12){
-                    hour=hour-12;
-                    shTime = hour +":"+minute+" PM";
-                }
-                else{
+                if (hour >= 12) {
+                    hour = hour - 12;
+                    shTime = hour + ":" + minute + " PM";
+                } else {
 
-                    shTime = hour +":"+minute+" AM";
+                    shTime = hour + ":" + minute + " AM";
                 }
 
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
@@ -115,93 +130,103 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
                 //convert time to Date object, and format to String object
                 ParsePosition pos1 = new ParsePosition(0);
-                Date shSelectedTime= shFormatter.parse(shTime,pos1);
-                shTime=shFormatter.format(shSelectedTime);
+                Date shSelectedTime = shFormatter.parse(shTime, pos1);
+                shTime = shFormatter.format(shSelectedTime);
                 textViewTime.setText(shTime);
             }
         };
 
         btnSendRequest.setOnClickListener(new View.OnClickListener()
-
         {
             @Override
             public void onClick(View view) {
+                    try {
 
-                try {
+                        String strDate = textViewDate.getText().toString();
+                        String strTime = textViewTime.getText().toString();
 
-                    String strDate = textViewDate.getText().toString();
-                    String strTime = textViewTime.getText().toString();
-
-                    //date and time can not be null
-                    if (strDate.equals("") || strTime.equals("")) {
-                        Toast.makeText(getApplicationContext(), "Error: Please select date and time.", Toast.LENGTH_LONG).show();
-                    } else {
-                        Date validDate = new Date();
-                        Calendar cal = Calendar.getInstance();
-                        //valid booking date is one month from today
-                        cal.setTime(validDate);
-                        cal.add(Calendar.MONTH, 1);
-                        //store the valid date(month)
-                        validDate = cal.getTime();
-
-                        //store current date to make comparison with selected date
-                        Date currentDate = new Date();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        //convert to Date object to make comparison with currentDate
-                        ParsePosition pos = new ParsePosition(0);
-                        Date selectedDate = dateFormat.parse(strDate, pos);
-
-                        //get the hour from selected time, must between 9am-5pm
-                        cal.setTime(selectedTime);
-                        int hour = cal.get(Calendar.HOUR_OF_DAY);
-
-
-                        //check if selected date is before currentDate
-                        if (selectedDate.before(currentDate)) {
-                            Toast.makeText(getApplicationContext(), "Error: Date cannot earlier than today.", Toast.LENGTH_LONG).show();
-                        }
-                        //check if selected date is after one month
-                        else if (selectedDate.after(validDate)) {
-                            Toast.makeText(getApplicationContext(), "Error: Only can make booking within one month.", Toast.LENGTH_LONG).show();
-                        }
-                        //check if booking time is between 9-5pm
-                        else if (hour < 9 || hour >= 17) {
-                            Toast.makeText(getApplicationContext(), "Error: Only can book time in between 9am-5pm", Toast.LENGTH_LONG).show();
+                        //date and time can not be null
+                        if (strDate.equals("") || strTime.equals("")) {
+                            Toast.makeText(getApplicationContext(), "Error: Please select date and time.", Toast.LENGTH_LONG).show();
                         } else {
-                            AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
-                            confirmBuilder.setTitle("Request Confirmation");
-                            final AlertDialog dialog = confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    //Todo:store the time into database(the below one)
-                                    //time = formatter.format(selectedTime);
-                                    //Todo:send notification to seller app
+                            Date validDate = new Date();
+                            Calendar cal = Calendar.getInstance();
+                            //valid booking date is one month from today
+                            cal.setTime(validDate);
+                            cal.add(Calendar.MONTH, 1);
+                            //store the valid date(month)
+                            validDate = cal.getTime();
 
-                                }
-                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
+                            //store current date to make comparison with selected date
+                            Date currentDate = new Date();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                            //convert to Date object to make comparison with currentDate
+                            ParsePosition pos = new ParsePosition(0);
+                            Date selectedDate = dateFormat.parse(strDate, pos);
 
-                                    dialogInterface.cancel();
+                            //get the hour from selected time, must between 9am-5pm
+                            cal.setTime(selectedTime);
+                            int hour = cal.get(Calendar.HOUR_OF_DAY);
 
-                                }
-                            }).create();
-                            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                                @Override
-                                public void onShow(DialogInterface dialogInterface) {
-                                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorBlack));
-                                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorBlack));
-                                }
-                            });
-                            dialog.show();
+
+                            //check if selected date is before currentDate
+                            if (selectedDate.before(currentDate)) {
+                                Toast.makeText(getApplicationContext(), "Error: Date cannot earlier than today.", Toast.LENGTH_LONG).show();
+                            }
+                            //check if selected date is after one month
+                            else if (selectedDate.after(validDate)) {
+                                Toast.makeText(getApplicationContext(), "Error: Only can make booking within one month.", Toast.LENGTH_LONG).show();
+                            }
+                            //check if booking time is between 9-5pm
+                            else if (hour < 9 || hour >= 17) {
+                                Toast.makeText(getApplicationContext(), "Error: Only can book time in between 9am-5pm", Toast.LENGTH_LONG).show();
+                            }
+                            //check connection
+                            else if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                                builder.setTitle("Connection Error");
+                                builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+                            }
+                            //if havent login yet
+                            else if (custID==null) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                                builder.setMessage("Please login first").setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent loginIntent = new Intent(MakeAppointmentActivity.this, LoginActivity.class);
+                                        startActivity(loginIntent);
+                                    }
+                                }).create().show();
+                            } else {
+                                AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                                confirmBuilder.setTitle("Request Confirmation");
+                                confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //Todo:store the time into database(the below one)
+                                        //time = formatter.format(selectedTime);
+                                        //Todo:send notification to seller app
+
+                                    }
+                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        dialogInterface.cancel();
+
+                                    }
+                                }).create().show();
+
+                            }
+
                         }
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
+
 
             }
         });

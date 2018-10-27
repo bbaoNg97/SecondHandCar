@@ -39,6 +39,7 @@ public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "my.edu.tarc.secondhandcar";
     String strCustID;
     int totalCust;
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +59,10 @@ public class RegistrationActivity extends AppCompatActivity {
         //to get all customer detail from db
         getAllCustomer(getApplicationContext(), getString(R.string.get_cust_url));
 
-
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                strCustID=generateCustID(totalCust);
+                strCustID = generateCustID(totalCust);
                 registration();
             }
         });
@@ -73,7 +73,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private String generateCustID(int countCustomer) {
         String id = "CU";
 
-        String count = Integer.toString(countCustomer+1);
+        String count = Integer.toString(countCustomer + 1);
         //if total cust is 0-9
         if (countCustomer < 10) {
             id = id + "000" + count;
@@ -104,9 +104,11 @@ public class RegistrationActivity extends AppCompatActivity {
         final String email = this.etEmail.getText().toString();
         final String password = this.etPassword.getText().toString();
 
-        //check duplicate username
-        AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
-        if (name.equals("")) {
+        if (!LoginActivity.isConnected(RegistrationActivity.this)) {
+            builder = new AlertDialog.Builder(RegistrationActivity.this);
+            builder.setTitle("Connection Error");
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+        } else if (name.equals("")) {
             etName.setError("Please fill in your name");
         } else if (contactNo.equals("")) {
             etContactNo.setError("Please fill in your contact number");
@@ -136,8 +138,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 try {
                     makeServiceCall(this, getString(R.string.reg_url), customer);
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Error: \n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    checkError(e, RegistrationActivity.this);
                     loading.setVisibility(View.GONE);
                     btnSignUp.setEnabled(true);
                 }
@@ -164,14 +165,13 @@ public class RegistrationActivity extends AppCompatActivity {
                                     loading.setVisibility(View.GONE);
                                     btnSignUp.setEnabled(true);
                                     //if success, go to login page
-                                    Intent loginIntent=new Intent(RegistrationActivity.this,LoginActivity.class);
+                                    Intent loginIntent = new Intent(RegistrationActivity.this, LoginActivity.class);
                                     startActivity(loginIntent);
                                 }
 
                             } catch (JSONException e) {
 
-                                e.printStackTrace();
-                                Toast.makeText(context, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
+                                checkError(e, RegistrationActivity.this);
                                 loading.setVisibility(View.GONE);
                                 btnSignUp.setEnabled(true);
 
@@ -182,7 +182,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(context, "Register failed!\n" + error.toString(), Toast.LENGTH_LONG).show();
+                            checkError(error, RegistrationActivity.this);
                             loading.setVisibility(View.GONE);
                             btnSignUp.setEnabled(true);
 
@@ -205,11 +205,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
             queue.add(stringRequest);
         } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(context, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
+            checkError(e, RegistrationActivity.this);
+
         }
 
     }
+
 
     private void getAllCustomer(Context context, String url) {
         // Instantiate the RequestQueue
@@ -234,14 +235,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Error: \n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            checkError(e, RegistrationActivity.this);
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "Error: \n" + volleyError.getMessage(), Toast.LENGTH_LONG).show();
+                        checkError(volleyError, RegistrationActivity.this);
 
                     }
                 });
@@ -251,6 +252,17 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(RegistrationActivity.this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
+            builder.setTitle("Connection Error");
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(RegistrationActivity.this, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public boolean foundEmail(String emails) {

@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         loading.setVisibility(View.GONE);
 
         //if no internet
-        if (!isConnected()) {
+        if (!isConnected(LoginActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Connection Error");
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                     String name = "";
                     String contactNo = "";
                     String email = "";
+                    String pw= "";
 
                     if (success.equals("1")) {
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -134,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                             name = object.getString("name");
                             contactNo = object.getString("contactNo");
                             email = object.getString("email").trim();
-
+                            pw=object.getString("password");
 
 
                             loading.setVisibility(View.GONE);
@@ -147,15 +148,17 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Login success", Toast.LENGTH_LONG).show();
 
                         SharedPreferences.Editor shPr = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                        shPr.clear();
                         shPr.putString("custEmail", email);
-                        shPr.commit();
+                        //shPr.commit();
                         shPr.putString("custID", id);
-                        shPr.commit();
+                        // shPr.commit();
                         shPr.putString("custName", name);
-                        shPr.commit();
+                        //shPr.commit();
                         shPr.putString("custContactNo", contactNo);
-                        shPr.commit();
-
+                        //shPr.commit();
+                        shPr.putString("password",pw);
+                        shPr.apply();
                         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(mainIntent);
                         finish();
@@ -193,7 +196,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (!isConnected()) {
+                        if (!isConnected(LoginActivity.this)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle("Connection Error");
                             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
@@ -232,9 +235,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //check internet
-    private boolean isConnected() {
+    public static boolean isConnected(Context context) {
         ConnectivityManager cm =
-                (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
