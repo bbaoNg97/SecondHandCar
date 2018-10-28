@@ -211,7 +211,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-
+    //to check if there is any redundant customer Email in Insert process, and count the total number of customer to generate ID
     private void getAllCustomer(Context context, String url) {
         // Instantiate the RequestQueue
         requestQueue = Volley.newRequestQueue(context);
@@ -265,6 +265,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
+    //to check if the email entered is repeated or not
     public boolean foundEmail(String emails) {
         //check whether the username exist or not
         boolean found = false;

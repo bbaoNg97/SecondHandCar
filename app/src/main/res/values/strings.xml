@@ -58,6 +58,8 @@
     <string name="get_cust_url">https://dewy-minuses.000webhostapp.com/GetCustEmail.php</string>
     <string name="update_prof_url">https://dewy-minuses.000webhostapp.com/CustUpdateProf.php</string>
     <string name="update_password_url">https://dewy-minuses.000webhostapp.com/CustUpdatePwd.php</string>
+    <string name="insert_booking_url">https://dewy-minuses.000webhostapp.com/InsertBooking.php</string>
+    <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/Get%20All%20Appointment.php</string>
     <string-array name="purpose">
         <item>Daily Drive</item>
         <item>Mountain Climbing</item>

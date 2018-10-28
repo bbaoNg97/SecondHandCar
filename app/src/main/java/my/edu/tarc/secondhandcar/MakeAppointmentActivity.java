@@ -38,6 +38,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private Date selectedTime;
     SharedPreferences sharePref;
     RequestQueue queue;
+    private String appID, carID;
 
 
     @Override
@@ -134,105 +135,132 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             }
         };
 
-        btnSendRequest.setOnClickListener(new View.OnClickListener()
-        {
+        btnSendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    try {
+                try {
 
-                        String strDate = textViewDate.getText().toString();
-                        String strTime = textViewTime.getText().toString();
+                    final String strDate = textViewDate.getText().toString();
+                    final String strTime = textViewTime.getText().toString();
 
-                        //date and time can not be null
-                        if (strDate.equals("") || strTime.equals("")) {
-                            Toast.makeText(getApplicationContext(), "Error: Please select date and time.", Toast.LENGTH_LONG).show();
+                    //date and time can not be null
+                    if (strDate.equals("") || strTime.equals("")) {
+                        Toast.makeText(getApplicationContext(), "Error: Please select date and time.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Date validDate = new Date();
+                        Calendar cal = Calendar.getInstance();
+                        //valid booking date is one month from today
+                        cal.setTime(validDate);
+                        cal.add(Calendar.MONTH, 1);
+                        //store the valid date(month)
+                        validDate = cal.getTime();
+
+                        //store current date to make comparison with selected date
+                        Date currentDate = new Date();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        //convert to Date object to make comparison with currentDate
+                        ParsePosition pos = new ParsePosition(0);
+                        Date selectedDate = dateFormat.parse(strDate, pos);
+
+                        //get the hour from selected time, must between 9am-5pm
+                        cal.setTime(selectedTime);
+                        int hour = cal.get(Calendar.HOUR_OF_DAY);
+
+
+                        //check if selected date is before currentDate
+                        if (selectedDate.before(currentDate)) {
+                            Toast.makeText(getApplicationContext(), "Error: Date cannot earlier than today.", Toast.LENGTH_LONG).show();
+                        }
+                        //check if selected date is after one month
+                        else if (selectedDate.after(validDate)) {
+                            Toast.makeText(getApplicationContext(), "Error: Only can make booking within one month.", Toast.LENGTH_LONG).show();
+                        }
+                        //check if booking time is between 9-5pm
+                        else if (hour < 9 || hour >= 17) {
+                            Toast.makeText(getApplicationContext(), "Error: Only can book time in between 9am-5pm", Toast.LENGTH_LONG).show();
+                        }
+                        //check connection
+                        else if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            builder.setTitle("Connection Error");
+                            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+                        }
+                        //if havent login yet
+                        else if (custID == null) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            builder.setMessage("Please login first").setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent loginIntent = new Intent(MakeAppointmentActivity.this, LoginActivity.class);
+                                    startActivity(loginIntent);
+                                }
+                            }).create().show();
                         } else {
-                            Date validDate = new Date();
-                            Calendar cal = Calendar.getInstance();
-                            //valid booking date is one month from today
-                            cal.setTime(validDate);
-                            cal.add(Calendar.MONTH, 1);
-                            //store the valid date(month)
-                            validDate = cal.getTime();
+                            AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            confirmBuilder.setTitle("Request Confirmation");
+                            confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                            //store current date to make comparison with selected date
-                            Date currentDate = new Date();
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                            //convert to Date object to make comparison with currentDate
-                            ParsePosition pos = new ParsePosition(0);
-                            Date selectedDate = dateFormat.parse(strDate, pos);
-
-                            //get the hour from selected time, must between 9am-5pm
-                            cal.setTime(selectedTime);
-                            int hour = cal.get(Calendar.HOUR_OF_DAY);
-
-
-                            //check if selected date is before currentDate
-                            if (selectedDate.before(currentDate)) {
-                                Toast.makeText(getApplicationContext(), "Error: Date cannot earlier than today.", Toast.LENGTH_LONG).show();
-                            }
-                            //check if selected date is after one month
-                            else if (selectedDate.after(validDate)) {
-                                Toast.makeText(getApplicationContext(), "Error: Only can make booking within one month.", Toast.LENGTH_LONG).show();
-                            }
-                            //check if booking time is between 9-5pm
-                            else if (hour < 9 || hour >= 17) {
-                                Toast.makeText(getApplicationContext(), "Error: Only can book time in between 9am-5pm", Toast.LENGTH_LONG).show();
-                            }
-                            //check connection
-                            else if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
-                                builder.setTitle("Connection Error");
-                                builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
-                            }
-                            //if havent login yet
-                            else if (custID==null) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
-                                builder.setMessage("Please login first").setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent loginIntent = new Intent(MakeAppointmentActivity.this, LoginActivity.class);
-                                        startActivity(loginIntent);
-                                    }
-                                }).create().show();
-                            } else {
-                                AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
-                                confirmBuilder.setTitle("Request Confirmation");
-                                confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        //Todo:store the time into database(the below one)
-                                        //time = formatter.format(selectedTime);
-                                        //Todo:send notification to seller app
-                                        Intent intent=new Intent();
-                                        intent.setAction("my.edu.tarc.secondhandcar.MY_NOTIFICATION");
-                                        intent.putExtra("data","Hello world");
-                                        sendBroadcast(intent);
+                                    //Todo: store date, time, appID,custID,carID,status(pending by default)(no need) ,agentID(no need)
+                                    //custID is get,date time also got(strDate, strTime)
+                                    //Todo: get carID(using getString after done choosing car that part)
+                                    //Todo:generate appID
+                                    //makeServiceCall(MakeAppointmentActivity.this,getString(R.string.insert_booking_url),custID,carID,strDate,strTime);
 
 
 
-                                    }
-                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    //Todo:send notification to seller app
+                                    //Intent intent = new Intent();
+                                    //intent.setAction("my.edu.tarc.secondhandcar.MY_NOTIFICATION");
+                                    //intent.putExtra("data", "Hello world");
+                                    //sendBroadcast(intent);
 
-                                        dialogInterface.cancel();
 
-                                    }
-                                }).create().show();
+                                }
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                            }
+                                    dialogInterface.cancel();
+
+                                }
+                            }).create().show();
 
                         }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
 
 
             }
         });
+    }
+    private String generateAppID(int countAppointment) {
+        String id = "A";
+
+        String count = Integer.toString(countAppointment + 1);
+        //if total appointment is 0-9
+        if (countAppointment < 10) {
+            id = id + "000" + count;
+        }
+        //if total appointment is 10-99
+        else if (countAppointment >= 10 && countAppointment < 100) {
+            id = id + "00" + count;
+        }
+        //if total appointment is 100-999
+        else if (countAppointment >= 100 && countAppointment < 1000) {
+            id = id + "0" + count;
+        }
+        //if total appointment is more than 1000
+        else {
+            id = id + count;
+        }
+
+        return id;
     }
 }
