@@ -22,8 +22,6 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
-import org.w3c.dom.Text;
-
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -206,6 +204,12 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                         //Todo:store the time into database(the below one)
                                         //time = formatter.format(selectedTime);
                                         //Todo:send notification to seller app
+                                        Intent intent=new Intent();
+                                        intent.setAction("my.edu.tarc.secondhandcar.MY_NOTIFICATION");
+                                        intent.putExtra("data","Hello world");
+                                        sendBroadcast(intent);
+
+
 
                                     }
                                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
