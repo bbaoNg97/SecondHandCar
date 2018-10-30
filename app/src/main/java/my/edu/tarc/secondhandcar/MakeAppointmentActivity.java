@@ -54,7 +54,6 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private String time, custID;
     private Date selectedTime;
     SharedPreferences sharePref;
-    RequestQueue queue;
     private String appID, carID;
     RequestQueue requestQueue;
     List<String> bookingList;
@@ -86,6 +85,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         textViewTime = (TextView) findViewById(R.id.textViewTime);
         booking=(ProgressBar)findViewById(R.id.booking);
         proceed();
+        getAllAppointment(MakeAppointmentActivity.this,getString(R.string.get_appointment_url));
         textViewDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,8 +166,6 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
 
-                    getAllCustomer(MakeAppointmentActivity.this,getString(R.string.get_appointment_url));
-
                     final String strDate = textViewDate.getText().toString();
                     final String strTime = textViewTime.getText().toString();
 
@@ -230,6 +228,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
+
                                     booking.setVisibility(View.VISIBLE);
                                     textViewDate.setEnabled(false);
                                     textViewTime.setEnabled(false);
@@ -239,7 +238,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                     //custID is get,date time also got(strDate, strTime)
                                     //Todo: get carID(using getString after done choosing car that part)
 
-                                    makeServiceCall(MakeAppointmentActivity.this,getString(R.string.insert_booking_url),nextAppID,strDate,strTime,carID,custID);
+                                    makeServiceCall(MakeAppointmentActivity.this,getString(R.string.insert_booking_url),nextAppID,strDate,strTime,"C0001",custID);
 
 
 
@@ -308,6 +307,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             checkError(error, MakeAppointmentActivity.this);
+                            error.printStackTrace();
                             proceed();
 
                         }
@@ -336,11 +336,9 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
     }
     //to count total number of appointment and count the total number of customer to generate ID
-    private void getAllCustomer(Context context, String url) {
+    private void getAllAppointment(Context context, String url) {
         // Instantiate the RequestQueue
         requestQueue = Volley.newRequestQueue(context);
-
-
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
                 url,
@@ -351,13 +349,6 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                             //everytime i listen to the server, i clear the list
                             bookingList.clear();
 
-                            //if no appointment details
-                            if(response.length()==0){
-                                nextAppID = generateAppID(0);
-                            }
-                            else{
-                                //to generate next appointment ID
-                                nextAppID=generateAppID(totalBooking);
                                 for (int i = 0; i < response.length(); i++) {
                                     JSONObject userResponse = (JSONObject) response.get(i);
                                     //json object that contains all of the customer in the user table
@@ -365,20 +356,20 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                     bookingList.add(appID);
                                     totalBooking++;
                                 }
-                            }
-
-
+                                //to generate next appointment ID
+                                nextAppID=generateAppID(totalBooking);
 
                         } catch (Exception e) {
 
-                            checkError(e, MakeAppointmentActivity.this);
-                        }
+                            e.printStackTrace();
+                       }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        checkError(volleyError, MakeAppointmentActivity.this);
+                        //checkError(volleyError, MakeAppointmentActivity.this);
+                        volleyError.printStackTrace();
 
                     }
                 });
