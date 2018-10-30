@@ -290,7 +290,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                     //loading.setVisibility(View.GONE);
                                     //btnSignUp.setEnabled(true);
                                     //if success, go to login page
-                                    Intent mainIntent = new Intent(MakeAppointmentActivity.this, MainActivity.class);
+                                    Intent mainIntent = new Intent(MakeAppointmentActivity.this, MakeAppointmentActivity.class);
                                     startActivity(mainIntent);
                                 }
 
