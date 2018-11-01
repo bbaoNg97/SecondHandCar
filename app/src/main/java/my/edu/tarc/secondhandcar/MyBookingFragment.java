@@ -61,8 +61,8 @@ public class MyBookingFragment extends Fragment {
 
     SharedPreferences sharePref;
 
-    private ProgressBar downloding;
-    // private String carName, price, appID, carID, agentID, appDate, appTIme, appStatus, custID;
+    private ProgressBar downloading;
+
 
 
     private String custID;
@@ -88,12 +88,12 @@ public class MyBookingFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_booking, container, false);
         sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
-        downloding = (ProgressBar) v.findViewById(R.id.downloadBooking);
+        downloading = (ProgressBar) v.findViewById(R.id.downloadBooking);
         btnSearch = (Button) v.findViewById(R.id.btnSearch);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
         if (custID==null) {
-            downloding.setVisibility(View.GONE);
+            downloading.setVisibility(View.GONE);
             tvCaption.setVisibility(View.VISIBLE);
             tvCaption1.setVisibility(View.VISIBLE);
             btnSearch.setEnabled(true);
@@ -120,7 +120,7 @@ public class MyBookingFragment extends Fragment {
     private void getAppointment(final Context context, String url) {
 
         clearView();
-        downloding.setVisibility(View.VISIBLE);
+        downloading.setVisibility(View.VISIBLE);
         btnSearch.setEnabled(false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -164,19 +164,19 @@ public class MyBookingFragment extends Fragment {
                                 listViewMyBooking.setAdapter(myBookingAdapter);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
 
-                                downloding.setVisibility(View.GONE);
+                                downloading.setVisibility(View.GONE);
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
                                 tvCaption1.setVisibility(View.VISIBLE);
                                 btnSearch.setVisibility(View.VISIBLE);
                                 btnSearch.setEnabled(true);
 
-                                downloding.setVisibility(View.GONE);
+                                downloading.setVisibility(View.GONE);
                             }
 
                         } catch (JSONException e) {
                             Toast.makeText(getActivity(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
-                            downloding.setVisibility(View.GONE);
+                            downloading.setVisibility(View.GONE);
                             e.printStackTrace();
                             btnSearch.setEnabled(true);
 
@@ -190,7 +190,7 @@ public class MyBookingFragment extends Fragment {
 
 
                         Toast.makeText(getActivity(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
-                        downloding.setVisibility(View.GONE);
+                        downloading.setVisibility(View.GONE);
                         error.printStackTrace();
                         btnSearch.setEnabled(true);
 
