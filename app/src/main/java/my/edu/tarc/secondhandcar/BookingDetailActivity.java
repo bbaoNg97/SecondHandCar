@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +30,10 @@ import java.util.Map;
 
 public class BookingDetailActivity extends AppCompatActivity {
     private Button btnBackMyBooking;
-    private TextView tvCarName,tvAppDate,tvAppTime,tvPrice;
-    private String carName,appDate,appTime,price,carPhoto,agentID,custID;
+    private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvDealerLoc, tvAgentName, tvAgentContactNo, tvAgentEmail;
+    private String carName, appDate, appTime, price, carPhoto, agentID, custID;
     private ImageView ivCarPhoto;
+    private ProgressBar downloadingAppDetail;
     SharedPreferences sharePref;
 
     @Override
@@ -43,28 +45,29 @@ public class BookingDetailActivity extends AppCompatActivity {
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
 
-        tvCarName=(TextView)findViewById(R.id.textViewCarName);
-        tvAppDate=(TextView)findViewById(R.id.textViewAppDate);
-        tvAppTime=(TextView)findViewById(R.id.textViewAppTime);
-        tvPrice=(TextView)findViewById(R.id.textViewPrice);
-        ivCarPhoto=(ImageView)findViewById(R.id.imageViewCarPhoto);
+        tvCarName = (TextView) findViewById(R.id.textViewCarName);
+        tvAppDate = (TextView) findViewById(R.id.textViewAppDate);
+        tvAppTime = (TextView) findViewById(R.id.textViewAppTime);
+        tvPrice = (TextView) findViewById(R.id.textViewPrice);
+        tvDealerLoc = (TextView) findViewById(R.id.textViewDealerLocation);
+        tvAgentName = (TextView) findViewById(R.id.textViewAgent);
+        tvAgentContactNo = (TextView) findViewById(R.id.textViewAgentContactNo);
+        tvAgentEmail = (TextView) findViewById(R.id.textViewAgentEmail);
+        ivCarPhoto = (ImageView) findViewById(R.id.imageViewCarPhoto);
         btnBackMyBooking = (Button) findViewById(R.id.buttonBackMyBooking);
+        downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
 
-        Intent intent=getIntent();
-        carName=intent.getStringExtra("CarName");
-        appDate=intent.getStringExtra("appDate");
-        appTime=intent.getStringExtra("appTime");
-        price=intent.getStringExtra("price");
-        carPhoto=intent.getStringExtra("carPhoto");
-        agentID=intent.getStringExtra("agentID");
+        downloadingAppDetail.setVisibility(View.GONE);
+        Intent intent = getIntent();
+        carName = intent.getStringExtra("CarName");
+        appDate = intent.getStringExtra("appDate");
+        appTime = intent.getStringExtra("appTime");
+        price = intent.getStringExtra("price");
+        carPhoto = intent.getStringExtra("carPhoto");
+        agentID = intent.getStringExtra("agentID");
 
-        getAppointmentDetail(this,getString(R.string.get_booking_detail_url),custID,agentID);
+        getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
 
-        tvCarName.setText(carName.toString());
-        tvAppDate.setText(appDate.toString());
-        tvAppTime.setText(appTime.toString());
-        tvPrice.setText("RM "+ price.toString()+".00");
-        Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
 
         btnBackMyBooking.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +79,8 @@ public class BookingDetailActivity extends AppCompatActivity {
     }
 
     private void getAppointmentDetail(Context context, String url, final String custID, final String agentID) {
-
+        downloadingAppDetail.setVisibility(View.VISIBLE);
+        btnBackMyBooking.setEnabled(false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -88,29 +92,47 @@ public class BookingDetailActivity extends AppCompatActivity {
                             JSONArray jsonArray = jsonObject.getJSONArray("DETAIL");
                             //if HAVE RECORD
                             if (success.equals("1")) {
+                                String agentContact = "";
+                                String agentName = "";
+                                String agentEmail = "";
+                                String dealerLocation = "";
                                 //retrive the record
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject userResponse = jsonArray.getJSONObject(i);
 
 
-                                    String agentContact = userResponse.getString("agentContactNo");
-                                    String agentName = userResponse.getString("agentName");
-                                    String agentEmail = userResponse.getString("agentEmail");
-                                    String dealerLocation = userResponse.getString("dealerLocation");
+                                    agentContact = userResponse.getString("agentContactNo");
+                                    agentName = userResponse.getString("agentName");
+                                    agentEmail = userResponse.getString("agentEmail");
+                                    dealerLocation = userResponse.getString("dealerLocation");
 
 
                                 }
 
+                                tvCarName.setText(carName.toString());
+                                tvAppDate.setText(appDate.toString());
+                                tvAppTime.setText(appTime.toString());
+                                tvPrice.setText("RM " + price.toString() + ".00");
+                                Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
+                                tvDealerLoc.setText(dealerLocation.toString());
+                                tvAgentName.setText(agentName.toString());
+                                tvAgentEmail.setText(agentEmail.toString());
+                                tvAgentContactNo.setText(agentContact.toString());
+                                downloadingAppDetail.setVisibility(View.GONE);
+                                btnBackMyBooking.setEnabled(true);
 
 
                             } else {
-//if return nothing
+                                Toast.makeText(BookingDetailActivity.this, "No record", Toast.LENGTH_LONG).show();
+                                downloadingAppDetail.setVisibility(View.GONE);
+                                btnBackMyBooking.setEnabled(true);
                             }
 
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
                             e.printStackTrace();
-
+                            downloadingAppDetail.setVisibility(View.GONE);
+                            btnBackMyBooking.setEnabled(true);
 
                         }
 
@@ -121,7 +143,8 @@ public class BookingDetailActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getApplicationContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                         error.printStackTrace();
-
+                        downloadingAppDetail.setVisibility(View.GONE);
+                        btnBackMyBooking.setEnabled(true);
 
                     }
                 }) {
@@ -130,7 +153,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 //LHS is from php, RHS is getText there
                 params.put("custID", custID);
-                params.put("agentID",agentID);
+                params.put("agentID", agentID);
 
                 return params;
             }

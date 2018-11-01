@@ -90,10 +90,17 @@ public class MyBookingFragment extends Fragment {
         custID = sharePref.getString("custID", null);
         downloding = (ProgressBar) v.findViewById(R.id.downloadBooking);
         btnSearch = (Button) v.findViewById(R.id.btnSearch);
-        getAppointment(getActivity(), getString(R.string.get_my_booking_url));
-
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
+        if (custID==null) {
+            downloding.setVisibility(View.GONE);
+            tvCaption.setVisibility(View.VISIBLE);
+            tvCaption1.setVisibility(View.VISIBLE);
+            btnSearch.setEnabled(true);
+        } else {
+            getAppointment(getActivity(), getString(R.string.get_my_booking_url));
+        }
+
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +187,8 @@ public class MyBookingFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
+
                         Toast.makeText(getActivity(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                         downloding.setVisibility(View.GONE);
                         error.printStackTrace();
@@ -191,6 +200,7 @@ public class MyBookingFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //LHS is from php, RHS is getText there
+
                 params.put("custID", custID);
 
                 return params;
@@ -213,7 +223,13 @@ public class MyBookingFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        getAppointment(getActivity(), getString(R.string.get_my_booking_url));
+        if (custID==null) {
+            tvCaption.setVisibility(View.VISIBLE);
+            tvCaption1.setVisibility(View.VISIBLE);
+            btnSearch.setEnabled(true);
+        } else {
+            getAppointment(getActivity(), getString(R.string.get_my_booking_url));
+        }
         return super.onOptionsItemSelected(item);
     }
 
