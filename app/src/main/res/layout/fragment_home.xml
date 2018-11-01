@@ -23,7 +23,6 @@
         android:text="@string/searchbtn"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Notification.Media"
         android:textColor="#C0C0C0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

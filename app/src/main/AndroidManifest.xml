@@ -60,8 +60,7 @@
             android:name=".MakeAppointmentActivity"
             android:parentActivityName=".CarActivity"></activity>
         <activity
-            android:name=".BookingDetailActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:name=".BookingDetailActivity"></activity>
 
         <receiver android:name=".BookingBroadcastReceiver">
             <intent-filter android:priority="999">

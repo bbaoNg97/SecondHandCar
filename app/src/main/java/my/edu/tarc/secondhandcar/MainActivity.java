@@ -1,6 +1,7 @@
 package my.edu.tarc.secondhandcar;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -27,13 +28,18 @@ public class MainActivity extends AppCompatActivity {
     private LoanCalcFragment loanCalcFragment;
     private ProfileFragment profileFragment;
     private MyBookingFragment myBookingFragment;
-    private NoBookingFragment noBookingFragment;
+
+    private String name;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+        name = sharePref.getString("custName", null);
 
         mMainFrame=(FrameLayout)findViewById(R.id.main_fram);
         mMainNav=(BottomNavigationView)findViewById(R.id.main_nav);
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         loanCalcFragment=new LoanCalcFragment();
         profileFragment= new ProfileFragment();
         myBookingFragment=new MyBookingFragment();
-        noBookingFragment=new NoBookingFragment();
+
 
         setFragment(homeFragment);
         setTitle(R.string.title_home);
@@ -68,10 +74,8 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.nav_appointment:
-                        //Todo:if got booking,setFragment(appointmentFragment),if no booking,setFragment(
                         setTitle(R.string.title_appointment);
                         setFragment( myBookingFragment);
-                        //setFragment(noBookingFragment);
                         return true;
 
                     case R.id.nav_profile:

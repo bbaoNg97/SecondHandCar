@@ -76,8 +76,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
         }
 
-        //get share preference
-        sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+
         custID = sharePref.getString("custID", null);
 
         btnSendRequest = (Button) findViewById(R.id.buttonSendAppReq);
@@ -287,8 +286,6 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 //if register successful
                                 if (success.equals("1")) {
                                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                                    //loading.setVisibility(View.GONE);
-                                    //btnSignUp.setEnabled(true);
                                     //if success, go to login page
                                     Intent mainIntent = new Intent(MakeAppointmentActivity.this, MakeAppointmentActivity.class);
                                     startActivity(mainIntent);
