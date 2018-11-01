@@ -17,7 +17,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     TextView textViewEditProf, textViewCustEmail, textViewCustID, textViewCustContactNo, textViewCustName;
     Button buttonChangePw;
-    SharedPreferences sharePref;
+
 
 
     @Override

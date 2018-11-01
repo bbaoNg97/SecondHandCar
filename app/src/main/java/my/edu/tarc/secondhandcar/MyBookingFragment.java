@@ -55,9 +55,10 @@ public class MyBookingFragment extends Fragment {
     private ArrayList<String> arrBookingTimes = new ArrayList<>();
     private ArrayList<String> arrPrice = new ArrayList<>();
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
+    private ArrayList<String> arrAgentID = new ArrayList<>();
     private TextView tvCaption, tvCaption1;
     private Button btnSearch;
-    RequestQueue requestQueue;
+
     SharedPreferences sharePref;
 
     private ProgressBar downloding;
@@ -86,14 +87,14 @@ public class MyBookingFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_booking, container, false);
         sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
-
-
         custID = sharePref.getString("custID", null);
-        getAppointmentDetail(getActivity(), getString(R.string.get_my_booking_url));
+        downloding = (ProgressBar) v.findViewById(R.id.downloadBooking);
+        btnSearch = (Button) v.findViewById(R.id.btnSearch);
+        getAppointment(getActivity(), getString(R.string.get_my_booking_url));
 
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
-        btnSearch = (Button) v.findViewById(R.id.btnSearch);
+
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,18 +106,15 @@ public class MyBookingFragment extends Fragment {
         listViewMyBooking = (ListView) v.findViewById(R.id.listViewBooking);
 
 
-        downloding = (ProgressBar) v.findViewById(R.id.downloadBooking);
-        downloding.setVisibility(View.VISIBLE);
-        btnSearch.setEnabled(false);
         return v;
 
     }
 
-    private void getAppointmentDetail(final Context context, String url) {
-       // downloding.setVisibility(View.VISIBLE);
-        //btnSearch.setEnabled(false);
-        clearView();
+    private void getAppointment(final Context context, String url) {
 
+        clearView();
+        downloding.setVisibility(View.VISIBLE);
+        btnSearch.setEnabled(false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -152,10 +150,13 @@ public class MyBookingFragment extends Fragment {
                                     arrBookingStatus.add(appStatus);
                                     arrPrice.add(price);
                                     arrCarPhoto.add(carPhoto);
+                                    arrAgentID.add(agentID);
 
                                 }
-                                AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity().getApplicationContext(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto);
+                                AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity().getApplicationContext(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrAgentID);
                                 listViewMyBooking.setAdapter(myBookingAdapter);
+                                Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
+
                                 downloding.setVisibility(View.GONE);
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
@@ -212,8 +213,7 @@ public class MyBookingFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        getAppointmentDetail(getActivity(), getString(R.string.get_my_booking_url));
-
+        getAppointment(getActivity(), getString(R.string.get_my_booking_url));
         return super.onOptionsItemSelected(item);
     }
 

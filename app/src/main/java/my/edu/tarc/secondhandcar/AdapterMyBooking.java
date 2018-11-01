@@ -29,9 +29,10 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
     private ArrayList<String> times = new ArrayList<>();
     private ArrayList<String> price = new ArrayList<>();
     private ArrayList<String> carPhoto = new ArrayList<>();
-    private String strPrice,strCarPhoto;
+    private ArrayList<String> agentID = new ArrayList<>();
+    private String strPrice,strCarPhoto,strAgentID;
 
-    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times,ArrayList<String> price,ArrayList<String> carPhoto) {
+    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times,ArrayList<String> price,ArrayList<String> carPhoto,ArrayList<String> agentID) {
         super(context, R.layout.content_my_booking);
         this.bookingStatus = bookingStatus;
         this.carNames = carNames;
@@ -39,6 +40,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         this.times = times;
         this.price=price;
         this.carPhoto=carPhoto;
+        this.agentID=agentID;
         this.context = context;
     }
 
@@ -65,6 +67,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         bookingTime.setText(times.get(position));
         strPrice=price.get(position);
         strCarPhoto=carPhoto.get(position);
+        strAgentID=agentID.get(position);
 
 
 
@@ -84,6 +87,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
                 bookingDetailIntent.putExtra("appTime", bookingTime.getText().toString());
                 bookingDetailIntent.putExtra("price", strPrice);
                 bookingDetailIntent.putExtra("carPhoto",strCarPhoto);
+                bookingDetailIntent.putExtra("agentID",strAgentID);
 
                 context.startActivity(bookingDetailIntent);
             }

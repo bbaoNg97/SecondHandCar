@@ -23,7 +23,8 @@
         android:text="@string/time"
         app:layout_constraintLeft_toRightOf="@+id/textViewBookingDate"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCarName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCarName"
+        app:layout_constraintHorizontal_bias="0.36" />
 
     <TextView
         android:id="@+id/textViewBookingTime"

@@ -61,6 +61,7 @@
     <string name="insert_booking_url">https://dewy-minuses.000webhostapp.com/InsertBooking.php</string>
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAppointment.php</string>
     <string name="get_my_booking_url">https://dewy-minuses.000webhostapp.com/GetMyBooking.php</string>
+    <string name="get_booking_detail_url">https://dewy-minuses.000webhostapp.com/getBookingDetail.php</string>
     <string-array name="purpose">
         <item>Daily Drive</item>
         <item>Mountain Climbing</item>
