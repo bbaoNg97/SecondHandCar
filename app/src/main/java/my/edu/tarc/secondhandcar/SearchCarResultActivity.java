@@ -11,8 +11,8 @@ import android.widget.ListView;
 public class SearchCarResultActivity extends AppCompatActivity {
 
     private ListView listViewCarResult;
-    private Integer [] IMAGES={R.drawable.test1,R.drawable.test3,R.drawable.test4,R.drawable.test5,R.drawable.test6};
-    private String[] NAMES ={"Proton Saga","Proton Vira","Honda Civic", "Honda City","Myvi"};
+    private Integer [] IMAGES={R.drawable.t1,R.drawable.t2,R.drawable.t3};
+    private String[] NAMES ={"Proton Saga","Proton Vira","Honda Civic",};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
