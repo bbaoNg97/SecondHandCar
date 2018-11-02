@@ -47,8 +47,9 @@ import java.util.Map;
 
 
 public class MyBookingFragment extends Fragment {
-
     private ListView listViewMyBooking;
+    private ProgressBar downloading;
+    private TextView tvCaption, tvCaption1;
     private ArrayList<String> arrBookingStatus = new ArrayList<>();
     private ArrayList<String> arrCarNAMES = new ArrayList<>();
     private ArrayList<String> arrBookingDates = new ArrayList<>();
@@ -56,14 +57,10 @@ public class MyBookingFragment extends Fragment {
     private ArrayList<String> arrPrice = new ArrayList<>();
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
     private ArrayList<String> arrAgentID = new ArrayList<>();
-    private TextView tvCaption, tvCaption1;
+
     private Button btnSearch;
 
     SharedPreferences sharePref;
-
-    private ProgressBar downloading;
-
-
 
     private String custID;
 

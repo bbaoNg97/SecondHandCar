@@ -29,13 +29,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BookingDetailActivity extends AppCompatActivity {
+
     private Button btnBackMyBooking;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvDealerLoc, tvAgentName, tvAgentContactNo, tvAgentEmail;
     private String carName, appDate, appTime, price, carPhoto, agentID, custID;
     private ImageView ivCarPhoto;
     private ProgressBar downloadingAppDetail;
     SharedPreferences sharePref;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
