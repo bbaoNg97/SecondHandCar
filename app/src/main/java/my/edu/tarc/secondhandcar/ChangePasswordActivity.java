@@ -127,8 +127,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                     SharedPreferences.Editor editor = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
                                     editor.putString("password", strNewPw);
                                     editor.commit();
-                                    Intent profileIntent = new Intent(ChangePasswordActivity.this, MainActivity.class);
-                                    startActivity(profileIntent);
+                                    onBackPressed();
                                 } else {
                                     proceed();
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);

@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
         }
 
+        mMainNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+
+            }
+        });
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -105,5 +111,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction =getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fram,fragement);
         fragmentTransaction.commit();
+    }
+    private void switchFrag(MenuItem item){
+
+
     }
 }

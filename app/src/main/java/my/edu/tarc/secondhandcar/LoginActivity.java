@@ -8,9 +8,13 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPw = (EditText) findViewById(R.id.editTextPw);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
@@ -59,7 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         textViewReset = (TextView) findViewById(R.id.textViewResetPw);
         loading = (ProgressBar) findViewById(R.id.loadingLogin);
         loading.setVisibility(View.GONE);
-
+        setTitle(R.string.login);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //if no internet
         if (!isConnected(LoginActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -103,6 +109,17 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+
     public void onLogin(final String email, final String pw) {
         //Customer customer = new Customer();
         loading.setVisibility(View.VISIBLE);
@@ -124,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                     String name = "";
                     String contactNo = "";
                     String email = "";
-                    String pw= "";
+                    String pw = "";
 
                     if (success.equals("1")) {
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -135,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                             name = object.getString("name");
                             contactNo = object.getString("contactNo");
                             email = object.getString("email").trim();
-                            pw=object.getString("password");
+                            pw = object.getString("password");
 
 
                             loading.setVisibility(View.GONE);
@@ -157,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                         //shPr.commit();
                         shPr.putString("custContactNo", contactNo);
                         //shPr.commit();
-                        shPr.putString("password",pw);
+                        shPr.putString("password", pw);
                         shPr.apply();
                         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(mainIntent);

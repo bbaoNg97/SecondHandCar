@@ -127,8 +127,7 @@ public class EditProfActivity extends AppCompatActivity {
                                     editor.commit();
 
                                     Toast.makeText(EditProfActivity.this, message, Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(EditProfActivity.this, ViewProfileActivity.class);
-                                    startActivity(intent);
+                                    onBackPressed();
 
                                 } else {
                                     Toast.makeText(EditProfActivity.this, message, Toast.LENGTH_LONG).show();

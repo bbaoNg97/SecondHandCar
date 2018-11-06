@@ -33,14 +33,14 @@
     <string name="loan_calculator">Loan Calculator</string>
     <string name="my_booking">My Booking</string>
     <string name="searchbtn">Search your desired car</string>
-    <string name="car_brand">Car Brand</string>
-    <string name="car_model">Car Model</string>
+    <string name="car_brand">Car Brand: </string>
+    <string name="car_model">Car Model: </string>
     <string name="recommendCar">Recommend me a car</string>
     <string name="price_range">Price Range</string>
     <string name="mileage">Mileage</string>
     <string name="year">Year</string>
-    <string name="purpose">Purpose</string>
-    <string name="color">Color</string>
+    <string name="purpose">Purpose: </string>
+    <string name="color">Color: </string>
     <string name="search_result">Search Result</string>
 
     <string name="title_home">Home</string>
@@ -62,6 +62,7 @@
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAppointment.php</string>
     <string name="get_my_booking_url">https://dewy-minuses.000webhostapp.com/GetMyBooking.php</string>
     <string name="get_booking_detail_url">https://dewy-minuses.000webhostapp.com/getBookingDetail.php</string>
+    <string name="get_car_brand_url">http://dewy-minuses.000webhostapp.com/brand.php</string>
     <string-array name="purpose">
         <item>Daily Drive</item>
         <item>Mountain Climbing</item>
@@ -107,4 +108,13 @@
     <string name="title_reg">Registration</string>
     <string name="title_reset_pw">Reset Password</string>
     <string name="back">Back</string>
+
+    <string name="cust_id">Customer ID: </string>
+    <string name="cust_name">Name:  </string>
+    <string name="cust_contactNo">Contact number:   </string>
+    <string name="cust_email">Email address:    </string>
+    <string name="title_search_result">Search Result</string>
+    <string name="edit_booking">Edit Booking</string>
+
+
 </resources>

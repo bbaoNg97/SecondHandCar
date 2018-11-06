@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +28,7 @@ public class ProfileFragment extends Fragment {
     private Button btnLogout;
     private TableLayout tlWelcome;
     private String name;
-    boolean loggedIn=false;
+    boolean loggedIn = false;
 
 
     public ProfileFragment() {
@@ -56,13 +58,19 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 SharedPreferences.Editor user = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE).edit();
                 user.putString("custName", null);
-                user.putString("custID",null);
-                user.putString("custEmail",null);
-                user.putString("password",null);
-                user.putString("custContactNo",null);
+                user.putString("custID", null);
+                user.putString("custEmail", null);
+                user.putString("password", null);
+                user.putString("custContactNo", null);
                 user.apply();
 
-                getActivity().finish();
+                HomeFragment fragmentMain = new HomeFragment();
+                FragmentManager fManager = getFragmentManager();
+                FragmentTransaction fTransaction=fManager.beginTransaction();
+                fTransaction.replace(R.id.main_fram,fragmentMain);
+                fTransaction.addToBackStack(null);
+                fTransaction.commit();
+                Toast.makeText(getActivity(),"Logout Success",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -85,7 +93,6 @@ public class ProfileFragment extends Fragment {
         else {
             inflater.inflate(R.menu.action_bar_login, menu);
         }
-
 
 
     }

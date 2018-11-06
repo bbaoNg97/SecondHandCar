@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 public class BookingDetailActivity extends AppCompatActivity {
 
-    private Button btnBackMyBooking;
+    private Button btnEditBooking;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvDealerLoc, tvAgentName, tvAgentContactNo, tvAgentEmail;
     private String carName, appDate, appTime, price, carPhoto, agentID, custID;
     private ImageView ivCarPhoto;
@@ -41,6 +42,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
         setTitle(R.string.title_booking_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
@@ -54,9 +56,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         tvAgentContactNo = (TextView) findViewById(R.id.textViewAgentContactNo);
         tvAgentEmail = (TextView) findViewById(R.id.textViewAgentEmail);
         ivCarPhoto = (ImageView) findViewById(R.id.imageViewCarPhoto);
-        btnBackMyBooking = (Button) findViewById(R.id.buttonBackMyBooking);
         downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
-
+        btnEditBooking=(Button)findViewById(R.id.buttonEdit);
         downloadingAppDetail.setVisibility(View.GONE);
         Intent intent = getIntent();
         carName = intent.getStringExtra("CarName");
@@ -69,18 +70,10 @@ public class BookingDetailActivity extends AppCompatActivity {
         getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
 
 
-        btnBackMyBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
     }
 
     private void getAppointmentDetail(Context context, String url, final String custID, final String agentID) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
-        btnBackMyBooking.setEnabled(false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -119,20 +112,17 @@ public class BookingDetailActivity extends AppCompatActivity {
                                 tvAgentEmail.setText(agentEmail.toString());
                                 tvAgentContactNo.setText(agentContact.toString());
                                 downloadingAppDetail.setVisibility(View.GONE);
-                                btnBackMyBooking.setEnabled(true);
 
 
                             } else {
                                 Toast.makeText(BookingDetailActivity.this, "No record", Toast.LENGTH_LONG).show();
                                 downloadingAppDetail.setVisibility(View.GONE);
-                                btnBackMyBooking.setEnabled(true);
                             }
 
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                             downloadingAppDetail.setVisibility(View.GONE);
-                            btnBackMyBooking.setEnabled(true);
 
                         }
 
@@ -144,7 +134,6 @@ public class BookingDetailActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                         downloadingAppDetail.setVisibility(View.GONE);
-                        btnBackMyBooking.setEnabled(true);
 
                     }
                 }) {
@@ -161,5 +150,15 @@ public class BookingDetailActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+    public void onEdit(View v){
+        Intent editBookingIntent=new Intent(BookingDetailActivity.this,MakeAppointmentActivity.class);
+        startActivity(editBookingIntent);
     }
 }

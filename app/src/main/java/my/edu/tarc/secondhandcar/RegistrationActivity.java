@@ -47,6 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
         setTitle(R.string.title_reg);
 
+        
         custEmailList = new ArrayList<>();
         etName = (EditText) findViewById(R.id.editTextRegName);
         etContactNo = (EditText) findViewById(R.id.editTextRegContactNo);

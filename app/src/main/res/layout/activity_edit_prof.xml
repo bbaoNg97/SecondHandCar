@@ -12,14 +12,17 @@
 
         <TextView
             android:id="@+id/textViewcID"
-            android:layout_width="wrap_content"
+            android:layout_width="140sp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="@string/customer_id"
+            android:text="@string/cust_id"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -27,17 +30,17 @@
 
         <TextView
             android:id="@+id/textViewCustID"
-            android:layout_width="wrap_content"
+            android:layout_width="170sp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/textViewcID"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewcID" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editTextcustName"
@@ -50,25 +53,29 @@
             android:layout_marginTop="8dp"
             android:inputType="textPersonName"
             android:maxLines="1"
+            android:textSize="14sp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/textViewcn"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewcn" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewCustEmail" />
 
         <TextView
             android:id="@+id/textViewcn"
-            android:layout_width="wrap_content"
+            android:layout_width="140sp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/name"
+            android:layout_marginTop="16dp"
+            android:text="@string/cust_name"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCustEmail" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewEm" />
 
         <EditText
             android:id="@+id/editTextCustContNo"
@@ -78,57 +85,64 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:inputType="phone"
             android:maxLines="1"
+            android:textSize="14sp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewchp" />
-
-        <TextView
-            android:id="@+id/textViewchp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="15dp"
-            android:text="@string/contactNo"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/textViewchp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextcustName" />
 
         <TextView
-            android:id="@+id/textViewCustEmail"
-            android:layout_width="wrap_content"
+            android:id="@+id/textViewchp"
+            android:layout_width="140sp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/cust_contactNo"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewEm" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewcn" />
+
+        <TextView
+            android:id="@+id/textViewCustEmail"
+            android:layout_width="170sp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@+id/textViewEm"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCustID" />
 
         <TextView
             android:id="@+id/textViewEm"
-            android:layout_width="wrap_content"
+            android:layout_width="140sp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/email"
+            android:layout_marginTop="16dp"
+            android:text="@string/cust_email"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCustID" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewcID" />
 
         <Button
             android:id="@+id/buttonUpdateProf"
@@ -157,7 +171,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="invisible" />
+            tools:visibility="gone" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

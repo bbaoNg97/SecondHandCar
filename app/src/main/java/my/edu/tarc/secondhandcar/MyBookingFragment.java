@@ -57,6 +57,7 @@ public class MyBookingFragment extends Fragment {
     private ArrayList<String> arrPrice = new ArrayList<>();
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
     private ArrayList<String> arrAgentID = new ArrayList<>();
+    private TextView tvTips;
 
     private Button btnSearch;
 
@@ -89,6 +90,8 @@ public class MyBookingFragment extends Fragment {
         btnSearch = (Button) v.findViewById(R.id.btnSearch);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
+        tvTips=(TextView)v.findViewById(R.id.textViewTips);
+
         if (custID==null) {
             downloading.setVisibility(View.GONE);
             tvCaption.setVisibility(View.VISIBLE);
@@ -115,7 +118,7 @@ public class MyBookingFragment extends Fragment {
     }
 
     private void getAppointment(final Context context, String url) {
-
+        tvTips.setVisibility(View.GONE);
         clearView();
         downloading.setVisibility(View.VISIBLE);
         btnSearch.setEnabled(false);
@@ -160,14 +163,14 @@ public class MyBookingFragment extends Fragment {
                                 AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity().getApplicationContext(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrAgentID);
                                 listViewMyBooking.setAdapter(myBookingAdapter);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
-
+                                tvTips.setVisibility(View.VISIBLE);
+                                tvTips.setText( "Green - Met, Red - Booked, Pen - Pending");
                                 downloading.setVisibility(View.GONE);
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
                                 tvCaption1.setVisibility(View.VISIBLE);
                                 btnSearch.setVisibility(View.VISIBLE);
                                 btnSearch.setEnabled(true);
-
                                 downloading.setVisibility(View.GONE);
                             }
 
@@ -184,14 +187,14 @@ public class MyBookingFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
                         Toast.makeText(getActivity(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                         downloading.setVisibility(View.GONE);
                         error.printStackTrace();
                         btnSearch.setEnabled(true);
+                        tvTips.setVisibility(View.VISIBLE);
 
                     }
+
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

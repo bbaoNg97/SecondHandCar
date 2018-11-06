@@ -29,8 +29,7 @@
             android:name=".RegistrationActivity"
             android:parentActivityName=".LoginActivity" />
         <activity
-            android:name=".ViewProfileActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:name=".ViewProfileActivity"></activity>
         <activity
             android:name=".EditProfActivity"
             android:parentActivityName=".ViewProfileActivity" />
@@ -54,8 +53,7 @@
             android:name=".CarActivity"
             android:parentActivityName=".SearchCarResultActivity"></activity>
         <activity
-            android:name=".SearchCarResultActivity"
-            android:parentActivityName=".searchCarActivity"></activity>
+            android:name=".SearchCarResultActivity"></activity>
         <activity
             android:name=".MakeAppointmentActivity"
             android:parentActivityName=".CarActivity"></activity>

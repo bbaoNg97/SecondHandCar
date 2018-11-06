@@ -15,235 +15,267 @@
 
         <TextView
             android:id="@+id/tvPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:text="@string/price"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCarName"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.024"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginTop="16dp"
+            android:text="@string/price"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCarName" />
 
         <TextView
             android:id="@+id/tvCarName"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:text="@string/car_name"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.026"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/car_name"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewCarPhoto" />
 
         <TextView
             android:id="@+id/textViewCarName"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvCarName"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@+id/imageViewCarPhoto"
+            tools:ignore="HardcodedText"
+            android:layout_marginTop="18dp"
+            app:layout_constraintLeft_toRightOf="@+id/tvCarName" />
 
         <TextView
             android:id="@+id/textViewPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPrice"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewCarName"
+            tools:ignore="HardcodedText"
+            app:layout_constraintLeft_toRightOf="@+id/tvPrice"
+            android:layout_marginTop="18dp" />
 
         <TextView
             android:id="@+id/tvDealerLoc"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/dealer_location"
-            app:layout_constraintHorizontal_bias="0.025"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewPrice"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
 
         <TextView
             android:id="@+id/textViewDealerLocation"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDealerLoc"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            app:layout_constraintLeft_toRightOf="@+id/tvDealerLoc"
+            android:layout_marginTop="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPrice" />
 
         <TextView
             android:id="@+id/tvAgent"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/agent"
-            app:layout_constraintHorizontal_bias="0.025"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDealerLocation"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDealerLoc" />
 
         <TextView
             android:id="@+id/textViewAgent"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAgent"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewDealerLocation"
+            tools:ignore="HardcodedText"
+            app:layout_constraintLeft_toRightOf="@+id/tvAgent"
+            android:layout_marginTop="20dp" />
 
         <TextView
             android:id="@+id/tvAgentContact"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/contact_no"
-            app:layout_constraintHorizontal_bias="0.025"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewAgent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAgent" />
 
         <TextView
             android:id="@+id/textViewAgentContactNo"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAgentContact"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewAgent"
+            tools:ignore="HardcodedText"
+            android:layout_marginTop="19dp"
+            app:layout_constraintLeft_toRightOf="@+id/tvAgentContact" />
 
         <TextView
             android:id="@+id/tvAgentEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/agent_email"
-            app:layout_constraintHorizontal_bias="0.025"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewAgentContactNo"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAgentContact" />
 
         <TextView
             android:id="@+id/textViewAgentEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAgentEmail"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewAgentContactNo"
+            tools:ignore="HardcodedText"
+            app:layout_constraintLeft_toRightOf="@+id/tvAgentEmail"
+            android:layout_marginTop="17dp" />
 
         <TextView
             android:id="@+id/tvAppDate"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/app_date"
-            app:layout_constraintHorizontal_bias="0.025"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewAgentEmail"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAgentEmail" />
 
         <TextView
             android:id="@+id/textViewAppDate"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAppDate"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewAgentEmail"
+            tools:ignore="HardcodedText"
+            app:layout_constraintLeft_toRightOf="@+id/tvAppDate"
+            android:layout_marginTop="20dp" />
 
         <TextView
             android:id="@+id/tvAppTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/app_time"
-            app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewAppDate"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
-
-        <TextView
-            android:id="@+id/textViewAppTime"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.025"
+            android:layout_marginTop="16dp"
+            android:text="@string/app_time"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAppTime"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@+id/tvAppDate" />
+
+        <TextView
+            android:id="@+id/textViewAppTime"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.19"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewAppDate"
+            tools:ignore="HardcodedText"
+            app:layout_constraintLeft_toRightOf="@+id/tvAppTime"
+            android:layout_marginTop="19dp" />
 
         <ImageView
             android:id="@+id/imageViewCarPhoto"
@@ -260,22 +292,6 @@
             app:srcCompat="@mipmap/ic_launcher"
             tools:ignore="ContentDescription" />
 
-        <Button
-            android:id="@+id/buttonBackMyBooking"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewAppTime" />
-
         <ProgressBar
             android:id="@+id/downloadingAppDetail"
             style="?android:attr/progressBarStyle"
@@ -287,11 +303,28 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.395" />
+
+        <Button
+            android:id="@+id/buttonEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:onClick="onEdit"
+            android:text="@string/edit_booking"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginTop="33dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvAppTime" />
 
 
     </android.support.constraint.ConstraintLayout>
