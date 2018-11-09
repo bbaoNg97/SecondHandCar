@@ -20,12 +20,10 @@ public class SearchCarResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_car_result);
         setTitle(R.string.title_search_result);
-        // getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        //getSupportActionBar().setCustomView(R.layout.car_result_action_bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        AdapterCarResult adapterCarResult = new AdapterCarResult(this, IMAGES, NAMES);
+        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, IMAGES, NAMES);
         listViewCarResult = (ListView) findViewById(R.id.listViewCarResult);
         listViewCarResult.setAdapter(adapterCarResult);
         listViewCarResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {

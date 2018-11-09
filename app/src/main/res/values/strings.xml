@@ -90,8 +90,8 @@
     <string name="max_mileage_km">Max Mileage: km</string>
     <string name="max_price_rm">Max Price: RM</string>
     <string name="max_year">Max Year:</string>
-    <string name="min_mileage_5000_km">Min Mileage: 5000 km</string>
-    <string name="min_price_rm_5000">Min Price: RM 5000</string>
+    <string name="min_mileage_5000_km">Min Mileage: 5,000 km</string>
+    <string name="min_price_rm_5000">Min Price: RM5,000.00</string>
     <string name="min_year_1950">Min Year: 1950</string>
     <string name="send_appointment_request">Send Appointment Request</string>
 
@@ -115,6 +115,11 @@
     <string name="cust_email">Email address:    </string>
     <string name="title_search_result">Search Result</string>
     <string name="edit_booking">Edit Booking</string>
+    <string name="get_maxPrice">Max Price:</string>
+    <string name="get_minPrice">Min Price:</string>
+    <string name="get_minMileage">Min Mileage:</string>
+    <string name="km">km</string>
+    <string name="get_maxMileage">Max Mileage:</string>
 
 
 </resources>

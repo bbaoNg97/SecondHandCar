@@ -17,7 +17,8 @@ public class CarActivity extends AppCompatActivity {
     private ImageView imageViewCars;
     private Button btnMakeAppointment;
     private TextView textViewDesc, textViewName, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation;
-    private String id, name, img, brand, price, color, desc, year, mile;
+    private String id, name, img, brand, price, color, desc, year, mile,carName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,8 @@ public class CarActivity extends AppCompatActivity {
         year = intent.getStringExtra("CarYear");
         mile = intent.getStringExtra("CarMile");
 
-        textViewName.setText(brand +" "+ name);
+        carName=brand +" "+ name;
+        textViewName.setText(carName);
         textViewColor.setText(color);
         textViewPrice.setText("RM " +price);
         textViewYear.setText(year);
@@ -61,7 +63,10 @@ public class CarActivity extends AppCompatActivity {
         btnMakeAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent bookingIntent = new Intent(CarActivity.this, MakeAppointmentActivity.class);
+                bookingIntent.putExtra("CarName",carName);
+                bookingIntent.putExtra("Price",price);
                 startActivity(bookingIntent);
             }
         });

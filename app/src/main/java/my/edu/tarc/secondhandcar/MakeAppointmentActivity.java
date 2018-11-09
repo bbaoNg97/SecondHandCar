@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,12 +47,12 @@ import java.util.Map;
 
 public class MakeAppointmentActivity extends AppCompatActivity {
 
-    private TextView textViewDate, textViewTime;
+    private TextView tvDate, tvTime,tvSelectedCar,tvPrice;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
     private Button btnSendRequest;
     private ProgressBar booking;
-    private String time, custID;
+    private String time, custID,price,carName;
     private Date selectedTime;
     SharedPreferences sharePref;
     private String appID, carID;
@@ -60,8 +61,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private int totalBooking;
     public static final String TAG = "my.edu.tarc.secondhandcar";
     String nextAppID;
-
-
+    Double dPrice;
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,16 +77,26 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
         }
 
-
+        sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
+        price=getIntent().getStringExtra("Price");
+        carName=getIntent().getStringExtra("CarName");
+        dPrice=Double.parseDouble(price);
+        price=formatter.format(dPrice);
 
         btnSendRequest = (Button) findViewById(R.id.buttonSendAppReq);
-        textViewDate = (TextView) findViewById(R.id.textViewDate);
-        textViewTime = (TextView) findViewById(R.id.textViewTime);
-        booking=(ProgressBar)findViewById(R.id.booking);
+        tvDate = (TextView) findViewById(R.id.textViewDate);
+        tvTime = (TextView) findViewById(R.id.textViewTime);
+        booking = (ProgressBar) findViewById(R.id.booking);
+        tvSelectedCar=(TextView) findViewById(R.id.textViewSelectedCarName);
+        tvPrice=(TextView) findViewById(R.id.textViewSelectedCarPrice);
+
+        tvSelectedCar.setText(carName);
+        tvPrice.setText(price);
         proceed();
-        getAllAppointment(MakeAppointmentActivity.this,getString(R.string.get_appointment_url));
-        textViewDate.setOnClickListener(new View.OnClickListener() {
+
+        getAllAppointment(MakeAppointmentActivity.this, getString(R.string.get_appointment_url));
+        tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
@@ -102,7 +113,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             }
         });
 
-        textViewTime.setOnClickListener(new View.OnClickListener() {
+        tvTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -125,7 +136,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                 //initially month start at 0,so plus 1
                 month = month + 1;
                 String date = day + "/" + month + "/" + year;
-                textViewDate.setText(date);
+                tvDate.setText(date);
             }
         };
 
@@ -156,7 +167,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                 ParsePosition pos1 = new ParsePosition(0);
                 Date shSelectedTime = shFormatter.parse(shTime, pos1);
                 shTime = shFormatter.format(shSelectedTime);
-                textViewTime.setText(shTime);
+                tvTime.setText(shTime);
             }
         };
 
@@ -165,8 +176,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
 
-                    final String strDate = textViewDate.getText().toString();
-                    final String strTime = textViewTime.getText().toString();
+                    final String strDate = tvDate.getText().toString();
+                    final String strTime = tvTime.getText().toString();
 
                     //date and time can not be null
                     if (strDate.equals("") || strTime.equals("")) {
@@ -229,16 +240,15 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
 
                                     booking.setVisibility(View.VISIBLE);
-                                    textViewDate.setEnabled(false);
-                                    textViewTime.setEnabled(false);
+                                    tvDate.setEnabled(false);
+                                    tvTime.setEnabled(false);
                                     btnSendRequest.setEnabled(false);
 
                                     //Todo: store date, time, appID,custID,carID,status(pending by default)(no need) ,agentID(no need)
                                     //custID is get,date time also got(strDate, strTime)
                                     //Todo: get carID(using getString after done choosing car that part)
 
-                                    makeServiceCall(MakeAppointmentActivity.this,getString(R.string.insert_booking_url),nextAppID,strDate,strTime,"C0001",custID);
-
+                                    makeServiceCall(MakeAppointmentActivity.this, getString(R.string.insert_booking_url), nextAppID, strDate, strTime, "C0001", custID);
 
 
                                     //Todo:send notification to seller app
@@ -272,7 +282,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         });
     }
 
-    private void makeServiceCall(final Context context, String url, final String appID, final String appDate, final String appTime, final String carID, final String custID ) {
+    private void makeServiceCall(final Context context, String url, final String appID, final String appDate, final String appTime, final String carID, final String custID) {
         RequestQueue queue = Volley.newRequestQueue(context);
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -332,6 +342,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         }
 
     }
+
     //to count total number of appointment and count the total number of customer to generate ID
     private void getAllAppointment(Context context, String url) {
         // Instantiate the RequestQueue
@@ -346,20 +357,20 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                             //everytime i listen to the server, i clear the list
                             bookingList.clear();
 
-                                for (int i = 0; i < response.length(); i++) {
-                                    JSONObject userResponse = (JSONObject) response.get(i);
-                                    //json object that contains all of the customer in the user table
-                                    String appID = userResponse.getString("appID");
-                                    bookingList.add(appID);
-                                    totalBooking++;
-                                }
-                                //to generate next appointment ID
-                                nextAppID=generateAppID(totalBooking);
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject userResponse = (JSONObject) response.get(i);
+                                //json object that contains all of the customer in the user table
+                                String appID = userResponse.getString("appID");
+                                bookingList.add(appID);
+                                totalBooking++;
+                            }
+                            //to generate next appointment ID
+                            nextAppID = generateAppID(totalBooking);
 
                         } catch (Exception e) {
 
                             e.printStackTrace();
-                       }
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -388,6 +399,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             Toast.makeText(MakeAppointmentActivity.this, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
+
     private String generateAppID(int countAppointment) {
         String id = "A";
 
@@ -412,10 +424,10 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         return id;
     }
 
-    private void proceed(){
+    private void proceed() {
         booking.setVisibility(View.GONE);
-        textViewDate.setEnabled(true);
-        textViewTime.setEnabled(true);
+        tvDate.setEnabled(true);
+        tvTime.setEnabled(true);
         btnSendRequest.setEnabled(true);
     }
 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private static final String TAG = "CarAdapter";
-
     private ArrayList<String> mCarName = new ArrayList<>();
     private ArrayList<String> mCarImage = new ArrayList<>();
     private ArrayList<String> mCarId = new ArrayList<>();
@@ -40,7 +40,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
     private Context mContext;
-
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, Context mContext) {
         this.mCarName = mCarName;
@@ -72,7 +72,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 .into(holder.imageViewShCar);
 
         holder.textViewCarName.setText(mCarBrand.get(position) + " " + mCarName.get(position));
-        holder.textViewCarPrice.setText("RM "+mCarPrice.get(position));
+        Double dPrice = Double.parseDouble(mCarPrice.get(position));
+
+        String price = formatter.format(dPrice);
+        holder.textViewCarPrice.setText(price);
 
 
         holder.LayoutCar.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +84,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 Log.d(TAG, "onClick:Clicked on: " + mCarName.get(position));
                 Toast.makeText(mContext, mCarName.get(position), Toast.LENGTH_LONG).show();
 
-               Intent intent = new Intent(mContext, CarActivity.class);
+                Intent intent = new Intent(mContext, CarActivity.class);
                 intent.putExtra("CarID", mCarId.get(position));
                 intent.putExtra("CarName", mCarName.get(position));
                 intent.putExtra("CarImg", mCarImage.get(position));
