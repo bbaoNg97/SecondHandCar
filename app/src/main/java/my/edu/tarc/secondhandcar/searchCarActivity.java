@@ -7,12 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,11 +27,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class searchCarActivity extends AppCompatActivity {
     private Button buttonAdvSearch, buttonSearch;
     private Spinner spBrand, spModel;
     private ArrayList<String> brand = new ArrayList<>();
+    private ArrayList<String> cModel = new ArrayList<>();
     private ProgressBar pbRetrievingData;
 
     @Override
@@ -48,7 +53,13 @@ public class searchCarActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String carBrand=spBrand.getSelectedItem().toString();
+                String carModel=spModel.getSelectedItem().toString();
+
                 Intent searchResultIntent = new Intent(searchCarActivity.this, SearchCarResultActivity.class);
+                searchResultIntent.putExtra("carBrand",carBrand);
+                searchResultIntent.putExtra("carModel",carModel);
+
                 startActivity(searchResultIntent);
             }
         });
@@ -63,6 +74,19 @@ public class searchCarActivity extends AppCompatActivity {
         });
         pbRetrievingData.setVisibility(View.VISIBLE);
         getBrand(getString(R.string.get_car_brand_url));
+
+        spBrand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String brand = spBrand.getSelectedItem().toString();
+                getModel(getString(R.string.get_car_model_url), brand);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void getBrand(String url) {
@@ -124,6 +148,76 @@ public class searchCarActivity extends AppCompatActivity {
                         finish();
                     }
                 }) {
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+
+    private void getModel(String url, final String carBrand) {
+        cModel.clear();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String success = jsonObject.getString("success");
+                    JSONArray jsonArray = jsonObject.getJSONArray("MODEL");
+                    if (success.equals("1")) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject object = jsonArray.getJSONObject(i);
+
+                            //follow index
+                            String model = object.getString("name").trim();
+                            cModel.add(model);
+                        }
+                        pbRetrievingData.setVisibility(View.GONE);
+                        buttonSearch.setEnabled(true);
+                        ArrayAdapter<String> modelAdapt = new ArrayAdapter<>(searchCarActivity.this, android.R.layout.simple_spinner_dropdown_item, cModel);
+                        spModel.setAdapter(modelAdapt);
+
+                    } else {
+                        pbRetrievingData.setVisibility(View.GONE);
+                        buttonSearch.setEnabled(true);
+                        Toast.makeText(searchCarActivity.this, "Error", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    if (!LoginActivity.isConnected(searchCarActivity.this)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(searchCarActivity.this);
+                        builder.setTitle("Connection Error");
+                        builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+                    } else
+                        Toast.makeText(searchCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
+                    pbRetrievingData.setVisibility(View.GONE);
+                    buttonSearch.setEnabled(true);
+                    finish();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (!LoginActivity.isConnected(searchCarActivity.this)) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(searchCarActivity.this);
+                            builder.setTitle("Connection Error");
+                            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+                        } else
+                            Toast.makeText(searchCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
+                        pbRetrievingData.setVisibility(View.GONE);
+                        buttonSearch.setEnabled(true);
+                        finish();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("brandName", carBrand);
+                return params;
+            }
 
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);

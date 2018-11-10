@@ -63,6 +63,8 @@
     <string name="get_my_booking_url">https://dewy-minuses.000webhostapp.com/GetMyBooking.php</string>
     <string name="get_booking_detail_url">https://dewy-minuses.000webhostapp.com/getBookingDetail.php</string>
     <string name="get_car_brand_url">http://dewy-minuses.000webhostapp.com/brand.php</string>
+    <string name="get_car_model_url">https://dewy-minuses.000webhostapp.com/getCarModel.php</string>
+    <string name="get_search_result_url">https://dewy-minuses.000webhostapp.com/getSearchResult.php</string>
     <string-array name="purpose">
         <item>Daily Drive</item>
         <item>Mountain Climbing</item>
@@ -120,6 +122,7 @@
     <string name="get_minMileage">Min Mileage:</string>
     <string name="km">km</string>
     <string name="get_maxMileage">Max Mileage:</string>
+
 
 
 </resources>

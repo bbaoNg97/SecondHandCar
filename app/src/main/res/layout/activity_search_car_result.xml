@@ -7,6 +7,12 @@
     tools:context="my.edu.tarc.secondhandcar.SearchCarResultActivity">
 
 
+    <ProgressBar
+        android:id="@+id/searchingResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <ListView
         android:id="@+id/listViewCarResult"
         android:layout_width="match_parent"
