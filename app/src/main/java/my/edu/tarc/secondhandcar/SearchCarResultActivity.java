@@ -24,14 +24,24 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SearchCarResultActivity extends AppCompatActivity {
 
     private ListView listViewCarResult;
-    private Integer[] IMAGES = {R.drawable.t1, R.drawable.t2, R.drawable.t3};
-    private String[] NAMES = {"Proton Saga", "Proton Vira", "Honda Civic",};
+    //private Integer[] IMAGES = {R.drawable.t1, R.drawable.t2, R.drawable.t3};
+    private ArrayList<String> NAMES = new ArrayList<>();
+    private ArrayList<String> PRICES = new ArrayList<>();
+    private ArrayList<String> COLORS = new ArrayList<>();
+    private ArrayList<String> DESCS = new ArrayList<>();
+    private ArrayList<String> YEARS = new ArrayList<>();
+    private ArrayList<String> CAR_STATUS = new ArrayList<>();
+    private ArrayList<String> CAR_TYPES = new ArrayList<>();
+    private ArrayList<String> MILEAGES = new ArrayList<>();
+    private ArrayList<String> CAR_PHOTOS = new ArrayList<>();
+    private ArrayList<String> DEALER_ID = new ArrayList<>();
     private ProgressBar searchingResult;
 
     @Override
@@ -43,18 +53,11 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
         String carModel = getIntent().getStringExtra("carModel");
         String carBrand = getIntent().getStringExtra("carBrand");
-        getSearchResult(getString(R.string.get_search_result_url), carModel, carBrand);
-        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, IMAGES, NAMES);
+
         searchingResult = (ProgressBar) findViewById(R.id.searchingResult);
         listViewCarResult = (ListView) findViewById(R.id.listViewCarResult);
-        listViewCarResult.setAdapter(adapterCarResult);
-        listViewCarResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent carIntent = new Intent(SearchCarResultActivity.this, CarActivity.class);
-                startActivity(carIntent);
-            }
-        });
+
+        getSearchResult(getString(R.string.get_search_result_url), carModel, carBrand);
 
     }
 
@@ -63,25 +66,46 @@ public class SearchCarResultActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                try{
-                    JSONObject jsonObject=new JSONObject(response);
-                    String success=jsonObject.getString("success");
-                    JSONArray jsonArray=jsonObject.getJSONArray("SEARCH");
-                    if(success.equals("1")){
-
-
-                        for(int i=0;i<jsonArray.length();i++){
-                            JSONObject jsonObj=jsonArray.getJSONObject(i);
-                            jsonObj.getString("");
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String success = jsonObject.getString("success");
+                    JSONArray jsonArray = jsonObject.getJSONArray("SEARCH");
+                    if (success.equals("1")) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObj = jsonArray.getJSONObject(i);
+                            String carName = jsonObj.getString("carName");
+                            String carID = jsonObj.getString("carID");
+                            String dealerID = jsonObj.getString("dealerID");
+                            String price = jsonObj.getString("price");
+                            String color = jsonObj.getString("color");
+                            String desc = jsonObj.getString("desc");
+                            String year = jsonObj.getString("year");
+                            String carStatus = jsonObj.getString("carStatus");
+                            String carType = jsonObj.getString("carType");
+                            String mileage = jsonObj.getString("mileage");
+                            String carPhoto = jsonObj.getString("car_photo");
+                            NAMES.add(carName);
+                            PRICES.add(price);
+                            COLORS.add(color);
+                            DESCS.add(desc);
+                            YEARS.add(year);
+                            CAR_STATUS.add(carStatus);
+                            CAR_TYPES.add(carType);
+                            MILEAGES.add(mileage);
+                            CAR_PHOTOS.add(carPhoto);
+                            DEALER_ID.add(dealerID);
 
                         }
-                    }else{
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES,CAR_PHOTOS,PRICES,COLORS,DESCS,YEARS,CAR_STATUS,CAR_TYPES,MILEAGES,DEALER_ID);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
 
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     checkError(e, SearchCarResultActivity.this);
-                }
 
+                }
+                searchingResult.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -89,7 +113,8 @@ public class SearchCarResultActivity extends AppCompatActivity {
                 checkError(error, SearchCarResultActivity.this);
 
             }
-        }) {
+        }
+        ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -100,6 +125,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(SearchCarResultActivity.this);
         requestQueue.add(stringRequest);
+        searchingResult.setVisibility(View.GONE);
     }
 
     @Override

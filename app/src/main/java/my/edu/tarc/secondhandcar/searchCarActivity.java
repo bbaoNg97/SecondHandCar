@@ -157,6 +157,7 @@ public class searchCarActivity extends AppCompatActivity {
 
     private void getModel(String url, final String carBrand) {
         cModel.clear();
+        //pbRetrievingData.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -172,13 +173,13 @@ public class searchCarActivity extends AppCompatActivity {
                             String model = object.getString("name").trim();
                             cModel.add(model);
                         }
-                        pbRetrievingData.setVisibility(View.GONE);
+
                         buttonSearch.setEnabled(true);
                         ArrayAdapter<String> modelAdapt = new ArrayAdapter<>(searchCarActivity.this, android.R.layout.simple_spinner_dropdown_item, cModel);
                         spModel.setAdapter(modelAdapt);
 
                     } else {
-                        pbRetrievingData.setVisibility(View.GONE);
+
                         buttonSearch.setEnabled(true);
                         Toast.makeText(searchCarActivity.this, "Error", Toast.LENGTH_LONG).show();
                         finish();
@@ -191,11 +192,13 @@ public class searchCarActivity extends AppCompatActivity {
 
                     } else
                         Toast.makeText(searchCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
-                    pbRetrievingData.setVisibility(View.GONE);
+
                     buttonSearch.setEnabled(true);
                     finish();
                 }
+                //pbRetrievingData.setVisibility(View.GONE);
             }
+
         },
                 new Response.ErrorListener() {
                     @Override
@@ -209,8 +212,10 @@ public class searchCarActivity extends AppCompatActivity {
                             Toast.makeText(searchCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
                         pbRetrievingData.setVisibility(View.GONE);
                         buttonSearch.setEnabled(true);
+                        //pbRetrievingData.setVisibility(View.GONE);
                         finish();
                     }
+
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

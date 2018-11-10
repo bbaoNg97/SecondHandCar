@@ -80,7 +80,6 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         bookingLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//TODO: how get the appointment.agentID??
                 Intent bookingDetailIntent = new Intent(context, BookingDetailActivity.class);
                 bookingDetailIntent.putExtra("CarName", carName.getText().toString());
                 bookingDetailIntent.putExtra("appDate", bookingDate.getText().toString());

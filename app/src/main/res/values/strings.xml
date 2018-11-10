@@ -122,7 +122,7 @@
     <string name="get_minMileage">Min Mileage:</string>
     <string name="km">km</string>
     <string name="get_maxMileage">Max Mileage:</string>
-
+    <string name="description">Description</string>
 
 
 </resources>
