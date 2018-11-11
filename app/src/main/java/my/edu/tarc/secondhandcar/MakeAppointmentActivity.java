@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Time;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -47,30 +49,30 @@ import java.util.Map;
 
 public class MakeAppointmentActivity extends AppCompatActivity {
 
-    private TextView tvDate, tvTime,tvSelectedCar,tvPrice;
+    private TextView tvDate, tvTime, tvSelectedCar, tvPrice;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
     private Button btnSendRequest;
     private ProgressBar booking;
-    private String time, custID,price,carName;
+    private String time, custID, price, carName;
     private Date selectedTime;
     SharedPreferences sharePref;
     private String appID, carID;
     RequestQueue requestQueue;
-    List<String> bookingList;
+    List<String> bookingList = new ArrayList<>();
+    ;
     private int totalBooking;
     public static final String TAG = "my.edu.tarc.secondhandcar";
     String nextAppID;
-    Double dPrice;
-    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_appointment);
-
-        bookingList = new ArrayList<>();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title_chooseDateTime);
+
         if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
             builder.setTitle("Connection Error");
@@ -79,17 +81,18 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
-        price=getIntent().getStringExtra("Price");
-        carName=getIntent().getStringExtra("CarName");
-        dPrice=Double.parseDouble(price);
-        price=formatter.format(dPrice);
+        Intent intent = getIntent();
+        carID = intent.getStringExtra("carID");
+        price = getIntent().getStringExtra("Price");
+        carName = getIntent().getStringExtra("CarName");
+
 
         btnSendRequest = (Button) findViewById(R.id.buttonSendAppReq);
         tvDate = (TextView) findViewById(R.id.textViewDate);
         tvTime = (TextView) findViewById(R.id.textViewTime);
         booking = (ProgressBar) findViewById(R.id.booking);
-        tvSelectedCar=(TextView) findViewById(R.id.textViewSelectedCarName);
-        tvPrice=(TextView) findViewById(R.id.textViewSelectedCarPrice);
+        tvSelectedCar = (TextView) findViewById(R.id.textViewSelectedCarName);
+        tvPrice = (TextView) findViewById(R.id.textViewSelectedCarPrice);
 
         tvSelectedCar.setText(carName);
         tvPrice.setText(price);
@@ -246,17 +249,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
                                     //Todo: store date, time, appID,custID,carID,status(pending by default)(no need) ,agentID(no need)
                                     //custID is get,date time also got(strDate, strTime)
-                                    //Todo: get carID(using getString after done choosing car that part)
 
-                                    makeServiceCall(MakeAppointmentActivity.this, getString(R.string.insert_booking_url), nextAppID, strDate, strTime, "C0001", custID);
-
-
-                                    //Todo:send notification to seller app
-                                    //Intent intent = new Intent();
-                                    //intent.setAction("my.edu.tarc.secondhandcar.MY_NOTIFICATION");
-                                    //intent.putExtra("data", "Hello world");
-                                    //sendBroadcast(intent);
-
+                                    makeServiceCall(MakeAppointmentActivity.this, getString(R.string.insert_booking_url), nextAppID, strDate, strTime, carID, custID);
 
                                 }
                             }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -293,21 +287,22 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(response);
                                 String success = jsonObject.getString("success");
                                 String message = jsonObject.getString("message");
-                                //if register successful
+                                //if make appointment successful
                                 if (success.equals("1")) {
-                                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                                    //if success, go to login page
-                                    Intent mainIntent = new Intent(MakeAppointmentActivity.this, MakeAppointmentActivity.class);
-                                    startActivity(mainIntent);
+                                    sendEmail();
+
+                                } else {
+
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                                 }
 
                             } catch (JSONException e) {
 
                                 checkError(e, MakeAppointmentActivity.this);
-                                proceed();
 
                             }
 
+                            proceed();
                         }
                     },
                     new Response.ErrorListener() {
@@ -341,6 +336,22 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void sendEmail() {
+        //TODO: get all agentEmail,pass it in String[] with ","
+        String recipientList = "nglp-wa15@student.tarc.edu.my,bbaong2012@gmail.com";
+        String[] recipients = recipientList.split(",");
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+        intent.putExtra(Intent.EXTRA_COMPONENT_NAME,"testing");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Request for make an appointment at Date Time");
+        intent.putExtra(Intent.EXTRA_TEXT, "Hi, I would like to make an appointment with you at WHAT DATE WHAT TIME with WHAT CAR.\nHope to receive your email.\nThanks!");
+        startActivity(Intent.createChooser(intent, "Choose and email client"));
+        Toast.makeText(MakeAppointmentActivity.this, "Appointment Added!", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     //to count total number of appointment and count the total number of customer to generate ID
@@ -405,15 +416,15 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
         String count = Integer.toString(countAppointment + 1);
         //if total appointment is 0-9
-        if (countAppointment < 10) {
+        if (countAppointment < 9) {
             id = id + "000" + count;
         }
         //if total appointment is 10-99
-        else if (countAppointment >= 10 && countAppointment < 100) {
+        else if (countAppointment >= 9 && countAppointment < 99) {
             id = id + "00" + count;
         }
         //if total appointment is 100-999
-        else if (countAppointment >= 100 && countAppointment < 1000) {
+        else if (countAppointment >= 99 && countAppointment < 999) {
             id = id + "0" + count;
         }
         //if total appointment is more than 1000
@@ -429,5 +440,11 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         tvDate.setEnabled(true);
         tvTime.setEnabled(true);
         btnSendRequest.setEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }

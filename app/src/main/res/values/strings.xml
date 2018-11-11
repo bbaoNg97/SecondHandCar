@@ -51,20 +51,6 @@
     <string name="date">Date:</string>
     <string name="time">Time:</string>
 
-
-
-    <string name="login_url">https://dewy-minuses.000webhostapp.com/Login.php</string>
-    <string name="reg_url">https://dewy-minuses.000webhostapp.com/Registration.php</string>
-    <string name="get_cust_url">https://dewy-minuses.000webhostapp.com/GetCustEmail.php</string>
-    <string name="update_prof_url">https://dewy-minuses.000webhostapp.com/CustUpdateProf.php</string>
-    <string name="update_password_url">https://dewy-minuses.000webhostapp.com/CustUpdatePwd.php</string>
-    <string name="insert_booking_url">https://dewy-minuses.000webhostapp.com/InsertBooking.php</string>
-    <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAppointment.php</string>
-    <string name="get_my_booking_url">https://dewy-minuses.000webhostapp.com/GetMyBooking.php</string>
-    <string name="get_booking_detail_url">https://dewy-minuses.000webhostapp.com/getBookingDetail.php</string>
-    <string name="get_car_brand_url">http://dewy-minuses.000webhostapp.com/brand.php</string>
-    <string name="get_car_model_url">https://dewy-minuses.000webhostapp.com/getCarModel.php</string>
-    <string name="get_search_result_url">https://dewy-minuses.000webhostapp.com/getSearchResult.php</string>
     <string-array name="purpose">
         <item>Daily Drive</item>
         <item>Mountain Climbing</item>
@@ -124,5 +110,18 @@
     <string name="get_maxMileage">Max Mileage:</string>
     <string name="description">Description</string>
 
+    <string name="login_url">https://dewy-minuses.000webhostapp.com/Login.php</string>
+    <string name="reg_url">https://dewy-minuses.000webhostapp.com/Registration.php</string>
+    <string name="get_cust_url">https://dewy-minuses.000webhostapp.com/GetCustEmail.php</string>
+    <string name="update_prof_url">https://dewy-minuses.000webhostapp.com/CustUpdateProf.php</string>
+    <string name="update_password_url">https://dewy-minuses.000webhostapp.com/CustUpdatePwd.php</string>
+    <string name="insert_booking_url">https://dewy-minuses.000webhostapp.com/InsertBooking.php</string>
+    <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAppointment.php</string>
+    <string name="get_my_booking_url">https://dewy-minuses.000webhostapp.com/GetMyBooking.php</string>
+    <string name="get_booking_detail_url">https://dewy-minuses.000webhostapp.com/getBookingDetail.php</string>
+    <string name="get_car_brand_url">http://dewy-minuses.000webhostapp.com/brand.php</string>
+    <string name="get_car_model_url">https://dewy-minuses.000webhostapp.com/getCarModel.php</string>
+    <string name="get_search_result_url">https://dewy-minuses.000webhostapp.com/getSearchResult.php</string>
+    <string name="get_dealer_location_url">https://dewy-minuses.000webhostapp.com/getDealerLocation.php</string>
 
 </resources>

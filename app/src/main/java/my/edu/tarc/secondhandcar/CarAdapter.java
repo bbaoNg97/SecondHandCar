@@ -40,6 +40,8 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
     private Context mContext;
+    private String price;
+    private Double dPrice;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, Context mContext) {
@@ -72,9 +74,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 .into(holder.imageViewShCar);
 
         holder.textViewCarName.setText(mCarBrand.get(position) + " " + mCarName.get(position));
-        Double dPrice = Double.parseDouble(mCarPrice.get(position));
 
-        String price = formatter.format(dPrice);
+        dPrice = Double.parseDouble(mCarPrice.get(position));
+        price = formatter.format(dPrice);
+
         holder.textViewCarPrice.setText(price);
 
 
@@ -84,16 +87,18 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 Log.d(TAG, "onClick:Clicked on: " + mCarName.get(position));
                 Toast.makeText(mContext, mCarName.get(position), Toast.LENGTH_LONG).show();
 
+                dPrice = Double.parseDouble(mCarPrice.get(position));
+                price = formatter.format(dPrice);
+
                 Intent intent = new Intent(mContext, CarActivity.class);
-                intent.putExtra("CarID", mCarId.get(position));
-                intent.putExtra("CarName", mCarName.get(position));
-                intent.putExtra("CarImg", mCarImage.get(position));
-                intent.putExtra("CarBrand", mCarBrand.get(position));
-                intent.putExtra("CarPrice", mCarPrice.get(position));
-                intent.putExtra("CarColor", mCarColor.get(position));
-                intent.putExtra("CarDesc", mCarDesc.get(position));
-                intent.putExtra("CarYear", mCarYear.get(position));
-                intent.putExtra("CarMile", mCarMile.get(position));
+                intent.putExtra("carID", mCarId.get(position));
+                intent.putExtra("carName", mCarBrand.get(position) + " " + mCarName.get(position));
+                intent.putExtra("carPhoto", mCarImage.get(position));;
+                intent.putExtra("carPrice", price);
+                intent.putExtra("carColor", mCarColor.get(position));
+                intent.putExtra("carDesc", mCarDesc.get(position));
+                intent.putExtra("carYear", mCarYear.get(position));
+                intent.putExtra("carMileage", mCarMile.get(position));
                 mContext.startActivity(intent);
             }
         });
@@ -101,7 +106,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mCarName.size();
+        return mCarId.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

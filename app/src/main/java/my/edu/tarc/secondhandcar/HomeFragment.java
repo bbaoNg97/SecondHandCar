@@ -47,6 +47,9 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> mCarDesc = new ArrayList<>();
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
+    private ArrayList<String> mCar_types = new ArrayList<>();
+    private ArrayList<String> mDealerID = new ArrayList<>();
+    private ArrayList<String> mCar_status = new ArrayList<>();
     private String Url = "https://dewy-minuses.000webhostapp.com/sellerCar.php";
 
 
@@ -75,6 +78,9 @@ public class HomeFragment extends Fragment {
         mCarDesc.clear();
         mCarYear.clear();
         mCarMile.clear();
+        mCar_status.clear();
+        mCar_types.clear();
+        mDealerID.clear();
         LoadPic(getView());
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +128,10 @@ public class HomeFragment extends Fragment {
                             String desc = object.getString("desc");
                             String year = object.getString("year");
                             String mileage = object.getString("mileage");
+                            String carStatus;
+                            String carType;
+                            String dealerID;
+
 
                             mCarName.add(name);
                             mCarImage.add(image_data);
@@ -132,6 +142,7 @@ public class HomeFragment extends Fragment {
                             mCarDesc.add(desc);
                             mCarYear.add(year);
                             mCarMile.add(mileage);
+
                         }
                         loadMain.setVisibility(View.GONE);
                         initRecyclerView(v);

@@ -49,21 +49,26 @@ public class searchCarActivity extends AppCompatActivity {
         spBrand = (Spinner) findViewById(R.id.spinnerCarBrand);
         spModel = (Spinner) findViewById(R.id.spinnerCarModel);
         pbRetrievingData = (ProgressBar) findViewById(R.id.retrievingCarData);
+        buttonAdvSearch = (Button) findViewById(R.id.buttonAdvSearch);
+
+        pbRetrievingData.setVisibility(View.VISIBLE);
+        buttonSearch.setEnabled(false);
+        getBrand(getString(R.string.get_car_brand_url));
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String carBrand=spBrand.getSelectedItem().toString();
-                String carModel=spModel.getSelectedItem().toString();
+                String carBrand = spBrand.getSelectedItem().toString();
+                String carModel = spModel.getSelectedItem().toString();
 
                 Intent searchResultIntent = new Intent(searchCarActivity.this, SearchCarResultActivity.class);
-                searchResultIntent.putExtra("carBrand",carBrand);
-                searchResultIntent.putExtra("carModel",carModel);
+                searchResultIntent.putExtra("carBrand", carBrand);
+                searchResultIntent.putExtra("carModel", carModel);
 
                 startActivity(searchResultIntent);
             }
         });
-        buttonAdvSearch = (Button) findViewById(R.id.buttonAdvSearch);
+
         buttonAdvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,8 +77,7 @@ public class searchCarActivity extends AppCompatActivity {
 
             }
         });
-        pbRetrievingData.setVisibility(View.VISIBLE);
-        getBrand(getString(R.string.get_car_brand_url));
+
 
         spBrand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -108,17 +112,14 @@ public class searchCarActivity extends AppCompatActivity {
                             String byear = object.getString("year").trim();
                             brand.add(bname);
                         }
-                        pbRetrievingData.setVisibility(View.GONE);
-                        buttonSearch.setEnabled(true);
                         ArrayAdapter<String> brandAdap = new ArrayAdapter<>(searchCarActivity.this, android.R.layout.simple_spinner_dropdown_item, brand);
                         spBrand.setAdapter(brandAdap);
 
                     } else {
-                        pbRetrievingData.setVisibility(View.GONE);
-                        buttonSearch.setEnabled(true);
                         Toast.makeText(searchCarActivity.this, "Error", Toast.LENGTH_LONG).show();
                         finish();
                     }
+
                 } catch (JSONException e) {
                     if (!LoginActivity.isConnected(searchCarActivity.this)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(searchCarActivity.this);
@@ -127,10 +128,11 @@ public class searchCarActivity extends AppCompatActivity {
 
                     } else
                         Toast.makeText(searchCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
-                    pbRetrievingData.setVisibility(View.GONE);
-                    buttonSearch.setEnabled(true);
+
                     finish();
                 }
+                pbRetrievingData.setVisibility(View.GONE);
+                buttonSearch.setEnabled(true);
             }
         },
                 new Response.ErrorListener() {
@@ -147,9 +149,7 @@ public class searchCarActivity extends AppCompatActivity {
                         buttonSearch.setEnabled(true);
                         finish();
                     }
-                }) {
-
-        };
+                });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
@@ -174,13 +174,11 @@ public class searchCarActivity extends AppCompatActivity {
                             cModel.add(model);
                         }
 
-                        buttonSearch.setEnabled(true);
                         ArrayAdapter<String> modelAdapt = new ArrayAdapter<>(searchCarActivity.this, android.R.layout.simple_spinner_dropdown_item, cModel);
                         spModel.setAdapter(modelAdapt);
 
                     } else {
 
-                        buttonSearch.setEnabled(true);
                         Toast.makeText(searchCarActivity.this, "Error", Toast.LENGTH_LONG).show();
                         finish();
                     }
@@ -193,10 +191,9 @@ public class searchCarActivity extends AppCompatActivity {
                     } else
                         Toast.makeText(searchCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
 
-                    buttonSearch.setEnabled(true);
                     finish();
                 }
-                //pbRetrievingData.setVisibility(View.GONE);
+
             }
 
         },
@@ -210,9 +207,7 @@ public class searchCarActivity extends AppCompatActivity {
 
                         } else
                             Toast.makeText(searchCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
-                        pbRetrievingData.setVisibility(View.GONE);
-                        buttonSearch.setEnabled(true);
-                        //pbRetrievingData.setVisibility(View.GONE);
+
                         finish();
                     }
 

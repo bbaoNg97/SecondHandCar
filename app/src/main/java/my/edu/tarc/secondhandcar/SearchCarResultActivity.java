@@ -42,6 +42,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
     private ArrayList<String> MILEAGES = new ArrayList<>();
     private ArrayList<String> CAR_PHOTOS = new ArrayList<>();
     private ArrayList<String> DEALER_ID = new ArrayList<>();
+    private ArrayList<String> CAR_ID = new ArrayList<>();
     private ProgressBar searchingResult;
 
     @Override
@@ -51,31 +52,49 @@ public class SearchCarResultActivity extends AppCompatActivity {
         setTitle(R.string.title_search_result);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String carModel = getIntent().getStringExtra("carModel");
-        String carBrand = getIntent().getStringExtra("carBrand");
-
         searchingResult = (ProgressBar) findViewById(R.id.searchingResult);
         listViewCarResult = (ListView) findViewById(R.id.listViewCarResult);
 
-        getSearchResult(getString(R.string.get_search_result_url), carModel, carBrand);
+        Intent intent = getIntent();
+        String carBrand = intent.getStringExtra("carBrand");
+        String carModel = intent.getStringExtra("carModel");
+
+        searchingResult.setVisibility(View.VISIBLE);
+        clearList();
+        getSearchResult(getString(R.string.get_search_result_url), carBrand, carModel);
 
     }
 
-    private void getSearchResult(String url, final String carModel, final String carBrand) {
-        searchingResult.setVisibility(View.VISIBLE);
+    private void clearList() {
+        NAMES.clear();
+        PRICES.clear();
+        COLORS.clear();
+        DESCS.clear();
+        YEARS.clear();
+        CAR_STATUS.clear();
+        CAR_TYPES.clear();
+        MILEAGES.clear();
+        CAR_PHOTOS.clear();
+        DEALER_ID.clear();
+        CAR_ID.clear();
+    }
+
+
+    private void getSearchResult(String url, final String brand, final String model) {
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
+                    String message = jsonObject.getString("message");
                     JSONArray jsonArray = jsonObject.getJSONArray("SEARCH");
                     if (success.equals("1")) {
+                        JSONObject jsonObj;
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObj = jsonArray.getJSONObject(i);
+                            jsonObj = jsonArray.getJSONObject(i);
                             String carName = jsonObj.getString("carName");
-                            String carID = jsonObj.getString("carID");
-                            String dealerID = jsonObj.getString("dealerID");
                             String price = jsonObj.getString("price");
                             String color = jsonObj.getString("color");
                             String desc = jsonObj.getString("desc");
@@ -84,6 +103,9 @@ public class SearchCarResultActivity extends AppCompatActivity {
                             String carType = jsonObj.getString("carType");
                             String mileage = jsonObj.getString("mileage");
                             String carPhoto = jsonObj.getString("car_photo");
+                            String dealerID = jsonObj.getString("dealerID");
+                            String carID = jsonObj.getString("carID");
+
                             NAMES.add(carName);
                             PRICES.add(price);
                             COLORS.add(color);
@@ -94,18 +116,18 @@ public class SearchCarResultActivity extends AppCompatActivity {
                             MILEAGES.add(mileage);
                             CAR_PHOTOS.add(carPhoto);
                             DEALER_ID.add(dealerID);
+                            CAR_ID.add(carID);
 
                         }
-                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES,CAR_PHOTOS,PRICES,COLORS,DESCS,YEARS,CAR_STATUS,CAR_TYPES,MILEAGES,DEALER_ID);
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
                         listViewCarResult.setAdapter(adapterCarResult);
                     } else {
-
+                        Toast.makeText(SearchCarResultActivity.this, message, Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     checkError(e, SearchCarResultActivity.this);
-
                 }
-                searchingResult.setVisibility(View.GONE);
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -118,9 +140,9 @@ public class SearchCarResultActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("carBrand", carBrand);
-                params.put("carModel", carModel);
-                return super.getParams();
+                params.put("brandName", brand);
+                params.put("name", model);
+                return params;
             }
         };
         RequestQueue requestQueue = Volley.newRequestQueue(SearchCarResultActivity.this);

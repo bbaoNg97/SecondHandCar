@@ -55,8 +55,7 @@
         <activity
             android:name=".SearchCarResultActivity"></activity>
         <activity
-            android:name=".MakeAppointmentActivity"
-            android:parentActivityName=".CarActivity"></activity>
+            android:name=".MakeAppointmentActivity"></activity>
         <activity
             android:name=".BookingDetailActivity"></activity>
 
