@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +38,8 @@ public class BookingDetailActivity extends AppCompatActivity {
     private ImageView ivCarPhoto;
     private ProgressBar downloadingAppDetail;
     SharedPreferences sharePref;
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    private Double dPrice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,16 +62,22 @@ public class BookingDetailActivity extends AppCompatActivity {
         downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
         btnEditBooking=(Button)findViewById(R.id.buttonEdit);
         downloadingAppDetail.setVisibility(View.GONE);
+
+
+
         Intent intent = getIntent();
         carName = intent.getStringExtra("CarName");
         appDate = intent.getStringExtra("appDate");
         appTime = intent.getStringExtra("appTime");
         price = intent.getStringExtra("price");
+
+        dPrice = Double.parseDouble(price);
+        price = formatter.format(dPrice);
+
         carPhoto = intent.getStringExtra("carPhoto");
         agentID = intent.getStringExtra("agentID");
 
         getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
-
 
     }
 
@@ -102,15 +111,15 @@ public class BookingDetailActivity extends AppCompatActivity {
 
                                 }
 
-                                tvCarName.setText(carName.toString());
-                                tvAppDate.setText(appDate.toString());
-                                tvAppTime.setText(appTime.toString());
-                                tvPrice.setText("RM " + price.toString() + ".00");
+                                tvCarName.setText(carName);
+                                tvAppDate.setText(appDate);
+                                tvAppTime.setText(appTime);
+                                tvPrice.setText(price);
                                 Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
-                                tvDealerLoc.setText(dealerLocation.toString());
-                                tvAgentName.setText(agentName.toString());
-                                tvAgentEmail.setText(agentEmail.toString());
-                                tvAgentContactNo.setText(agentContact.toString());
+                                tvDealerLoc.setText(dealerLocation);
+                                tvAgentName.setText(agentName);
+                                tvAgentEmail.setText(agentEmail);
+                                tvAgentContactNo.setText(agentContact);
                                 downloadingAppDetail.setVisibility(View.GONE);
 
 
@@ -159,6 +168,11 @@ public class BookingDetailActivity extends AppCompatActivity {
     }
     public void onEdit(View v){
         Intent editBookingIntent=new Intent(BookingDetailActivity.this,MakeAppointmentActivity.class);
+        editBookingIntent.putExtra("from","editBooking");
+        editBookingIntent.putExtra("Price",price);
+        editBookingIntent.putExtra("CarName",carName);
+        editBookingIntent.putExtra("appDate",appDate);
+        editBookingIntent.putExtra("appTime",appTime);
         startActivity(editBookingIntent);
     }
 }

@@ -72,7 +72,7 @@ public class CarActivity extends AppCompatActivity {
         price = intent.getStringExtra("carPrice");
         dealerID = intent.getStringExtra("dealerID");
         status = intent.getStringExtra("carStatus");
-       // pbLoading.setVisibility(View.VISIBLE);
+
         getDealerLoc(getString(R.string.get_dealer_location_url), dealerID);
 
 
@@ -83,6 +83,7 @@ public class CarActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent bookingIntent = new Intent(CarActivity.this, MakeAppointmentActivity.class);
+                bookingIntent.putExtra("from","booking");
                 bookingIntent.putExtra("CarName", name);
                 bookingIntent.putExtra("Price", price);
                 bookingIntent.putExtra("carID", carID);

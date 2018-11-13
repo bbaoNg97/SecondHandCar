@@ -123,5 +123,7 @@
     <string name="get_car_model_url">https://dewy-minuses.000webhostapp.com/getCarModel.php</string>
     <string name="get_search_result_url">https://dewy-minuses.000webhostapp.com/getSearchResult.php</string>
     <string name="get_dealer_location_url">https://dewy-minuses.000webhostapp.com/getDealerLocation.php</string>
+    <string name="title_edit_booking">Edit Booking</string>
+    <string name="update_booking">Update booking</string>
 
 </resources>

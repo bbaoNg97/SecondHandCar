@@ -156,6 +156,7 @@ public class searchCarActivity extends AppCompatActivity {
 
 
     private void getModel(String url, final String carBrand) {
+        pbRetrievingData.setVisibility(View.VISIBLE);
         cModel.clear();
         //pbRetrievingData.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -193,7 +194,7 @@ public class searchCarActivity extends AppCompatActivity {
 
                     finish();
                 }
-
+                pbRetrievingData.setVisibility(View.GONE);
             }
 
         },
@@ -207,7 +208,7 @@ public class searchCarActivity extends AppCompatActivity {
 
                         } else
                             Toast.makeText(searchCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
-
+                        pbRetrievingData.setVisibility(View.GONE);
                         finish();
                     }
 

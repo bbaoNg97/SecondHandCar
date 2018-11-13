@@ -57,10 +57,10 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private String time, custID, price, carName;
     private Date selectedTime;
     SharedPreferences sharePref;
-    private String appID, carID;
+    private String appID, carID, appDate, appTime;
     RequestQueue requestQueue;
     List<String> bookingList = new ArrayList<>();
-    ;
+
     private int totalBooking;
     public static final String TAG = "my.edu.tarc.secondhandcar";
     String nextAppID;
@@ -71,7 +71,12 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_appointment);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(R.string.title_chooseDateTime);
+        btnSendRequest = (Button) findViewById(R.id.buttonSendAppReq);
+        tvDate = (TextView) findViewById(R.id.textViewDate);
+        tvTime = (TextView) findViewById(R.id.textViewTime);
+        booking = (ProgressBar) findViewById(R.id.booking);
+        tvSelectedCar = (TextView) findViewById(R.id.textViewSelectedCarName);
+        tvPrice = (TextView) findViewById(R.id.textViewSelectedCarPrice);
 
         if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
@@ -81,18 +86,22 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
+
         Intent intent = getIntent();
+        if (intent.getStringExtra("from").equals("booking")) {
+            setTitle(R.string.title_chooseDateTime);
+        } else {
+            setTitle(R.string.title_edit_booking);
+            appDate = intent.getStringExtra("appDate");
+            appTime = intent.getStringExtra("appTime");
+            tvDate.setText(appDate);
+            tvTime.setText(appTime);
+            btnSendRequest.setText(R.string.update_booking);
+        }
         carID = intent.getStringExtra("carID");
         price = getIntent().getStringExtra("Price");
         carName = getIntent().getStringExtra("CarName");
 
-
-        btnSendRequest = (Button) findViewById(R.id.buttonSendAppReq);
-        tvDate = (TextView) findViewById(R.id.textViewDate);
-        tvTime = (TextView) findViewById(R.id.textViewTime);
-        booking = (ProgressBar) findViewById(R.id.booking);
-        tvSelectedCar = (TextView) findViewById(R.id.textViewSelectedCarName);
-        tvPrice = (TextView) findViewById(R.id.textViewSelectedCarPrice);
 
         tvSelectedCar.setText(carName);
         tvPrice.setText(price);
@@ -184,7 +193,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
                     //date and time can not be null
                     if (strDate.equals("") || strTime.equals("")) {
-                        Toast.makeText(getApplicationContext(), "Error: Please select date and time.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "\t\tInvalid date and time.\nPlease select date and time.", Toast.LENGTH_LONG).show();
                     } else {
                         Date validDate = new Date();
                         Calendar cal = Calendar.getInstance();
@@ -208,15 +217,15 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
                         //check if selected date is before currentDate
                         if (selectedDate.before(currentDate)) {
-                            Toast.makeText(getApplicationContext(), "Error: Date cannot earlier than today.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Date cannot earlier than today.\n\t\t\t\t\t\tPlease try again.", Toast.LENGTH_LONG).show();
                         }
                         //check if selected date is after one month
                         else if (selectedDate.after(validDate)) {
-                            Toast.makeText(getApplicationContext(), "Error: Only can make booking within one month.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Only can make booking within one month.\nPlease try again.", Toast.LENGTH_LONG).show();
                         }
                         //check if booking time is between 9-5pm
                         else if (hour < 9 || hour >= 17) {
-                            Toast.makeText(getApplicationContext(), "Error: Only can book time in between 9am-5pm", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Only can book time in between 9am-5pm\n\t\t\t\t\t\t\t\t\t\tPlease try again.", Toast.LENGTH_LONG).show();
                         }
                         //check connection
                         else if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
@@ -235,12 +244,12 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 }
                             }).create().show();
                         } else {
+                            //TODO: check btn text, if is update booking, use another php, else use the following code
                             AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
                             confirmBuilder.setTitle("Request Confirmation");
                             confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
 
                                     booking.setVisibility(View.VISIBLE);
                                     tvDate.setEnabled(false);
@@ -346,12 +355,13 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:"));
         intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-        intent.putExtra(Intent.EXTRA_COMPONENT_NAME,"testing");
+        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "testing");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Request for make an appointment at Date Time");
         intent.putExtra(Intent.EXTRA_TEXT, "Hi, I would like to make an appointment with you at WHAT DATE WHAT TIME with WHAT CAR.\nHope to receive your email.\nThanks!");
-        startActivity(Intent.createChooser(intent, "Choose and email client"));
+        startActivity(Intent.createChooser(intent, "Choose an email client"));
         Toast.makeText(MakeAppointmentActivity.this, "Appointment Added!", Toast.LENGTH_LONG).show();
         finish();
+
     }
 
     //to count total number of appointment and count the total number of customer to generate ID
