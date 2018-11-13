@@ -57,7 +57,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private String time, custID, price, carName;
     private Date selectedTime;
     SharedPreferences sharePref;
-    private String appID, carID, appDate, appTime;
+    private String appID, carID, appDate, appTime, strDate, strTime;
     RequestQueue requestQueue;
     List<String> bookingList = new ArrayList<>();
 
@@ -92,6 +92,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             setTitle(R.string.title_chooseDateTime);
         } else {
             setTitle(R.string.title_edit_booking);
+            appID = intent.getStringExtra("appID");
             appDate = intent.getStringExtra("appDate");
             appTime = intent.getStringExtra("appTime");
             tvDate.setText(appDate);
@@ -188,8 +189,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
 
-                    final String strDate = tvDate.getText().toString();
-                    final String strTime = tvTime.getText().toString();
+                    strDate = tvDate.getText().toString();
+                    strTime = tvTime.getText().toString();
 
                     //date and time can not be null
                     if (strDate.equals("") || strTime.equals("")) {
@@ -244,32 +245,61 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 }
                             }).create().show();
                         } else {
-                            //TODO: check btn text, if is update booking, use another php, else use the following code
-                            AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
-                            confirmBuilder.setTitle("Request Confirmation");
-                            confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
+                            //if the button is send appointment request
 
-                                    booking.setVisibility(View.VISIBLE);
-                                    tvDate.setEnabled(false);
-                                    tvTime.setEnabled(false);
-                                    btnSendRequest.setEnabled(false);
+                            if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
+                                AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                                confirmBuilder.setTitle("Request Confirmation");
+                                confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    //Todo: store date, time, appID,custID,carID,status(pending by default)(no need) ,agentID(no need)
-                                    //custID is get,date time also got(strDate, strTime)
+                                        booking.setVisibility(View.VISIBLE);
+                                        tvDate.setEnabled(false);
+                                        tvTime.setEnabled(false);
+                                        btnSendRequest.setEnabled(false);
 
-                                    makeServiceCall(MakeAppointmentActivity.this, getString(R.string.insert_booking_url), nextAppID, strDate, strTime, carID, custID);
+                                        //Todo: store date, time, appID,custID,carID,status(pending by default)(no need) ,agentID(no need)
+                                        //custID is get,date time also got(strDate, strTime)
+                                        makeServiceCall(MakeAppointmentActivity.this, getString(R.string.insert_booking_url), nextAppID, strDate, strTime, carID, custID);
 
-                                }
-                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    dialogInterface.cancel();
+                                        dialogInterface.cancel();
 
-                                }
-                            }).create().show();
+                                    }
+                                }).create().show();
+                            }
+                            //if the button name is "Update booking"
+                            else {
+                                AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+                                confirmBuilder.setTitle("Update Confirmation");
+                                confirmBuilder.setMessage(R.string.msg_confirm_updt).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        booking.setVisibility(View.VISIBLE);
+                                        tvDate.setEnabled(false);
+                                        tvTime.setEnabled(false);
+                                        btnSendRequest.setEnabled(false);
+
+                                        updateAppointment(MakeAppointmentActivity.this, getString(R.string.update_app_url), appID);
+
+                                    }
+                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        dialogInterface.cancel();
+
+                                    }
+                                }).create().show();
+
+                            }
+
 
                         }
 
@@ -359,9 +389,12 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, "Request for make an appointment at Date Time");
         intent.putExtra(Intent.EXTRA_TEXT, "Hi, I would like to make an appointment with you at WHAT DATE WHAT TIME with WHAT CAR.\nHope to receive your email.\nThanks!");
         startActivity(Intent.createChooser(intent, "Choose an email client"));
-        Toast.makeText(MakeAppointmentActivity.this, "Appointment Added!", Toast.LENGTH_LONG).show();
+        if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
+            Toast.makeText(MakeAppointmentActivity.this, "Appointment Added.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MakeAppointmentActivity.this, "Appointment Updated.", Toast.LENGTH_LONG).show();
+        }
         finish();
-
     }
 
     //to count total number of appointment and count the total number of customer to generate ID
@@ -417,7 +450,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else {
-            Toast.makeText(MakeAppointmentActivity.this, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MakeAppointmentActivity.this, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -456,5 +489,55 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateAppointment(final Context context, String url, final String appID) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        try {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                String success = jsonObject.getString("success");
+                                String message = jsonObject.getString("message");
+                                //if make appointment successful
+                                if (success.equals("1")) sendEmail();
+                                else Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+                            } catch (JSONException e) {
+                                checkError(e, context);
+                            }
+                            proceed();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            checkError(error, context);
+                            proceed();
+
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    //LHS is from php, RHS is getText there
+                    params.put("appID", appID);
+                    params.put("updateDate", strDate);
+                    params.put("updateTime", strTime);
+                    return params;
+                }
+            };
+
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+            checkError(e, context);
+            proceed();
+
+        }
+
     }
 }

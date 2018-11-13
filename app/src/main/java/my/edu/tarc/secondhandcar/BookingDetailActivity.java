@@ -35,11 +35,13 @@ public class BookingDetailActivity extends AppCompatActivity {
     private Button btnEditBooking;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvDealerLoc, tvAgentName, tvAgentContactNo, tvAgentEmail;
     private String carName, appDate, appTime, price, carPhoto, agentID, custID;
+    private String appID, agentContact, agentName, agentEmail, dealerLocation;
     private ImageView ivCarPhoto;
     private ProgressBar downloadingAppDetail;
     SharedPreferences sharePref;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
     private Double dPrice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +62,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         tvAgentEmail = (TextView) findViewById(R.id.textViewAgentEmail);
         ivCarPhoto = (ImageView) findViewById(R.id.imageViewCarPhoto);
         downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
-        btnEditBooking=(Button)findViewById(R.id.buttonEdit);
+        btnEditBooking = (Button) findViewById(R.id.buttonEdit);
         downloadingAppDetail.setVisibility(View.GONE);
-
 
 
         Intent intent = getIntent();
@@ -94,32 +95,19 @@ public class BookingDetailActivity extends AppCompatActivity {
                             JSONArray jsonArray = jsonObject.getJSONArray("DETAIL");
                             //if HAVE RECORD
                             if (success.equals("1")) {
-                                String agentContact = "";
-                                String agentName = "";
-                                String agentEmail = "";
-                                String dealerLocation = "";
                                 //retrive the record
+                                JSONObject userResponse;
                                 for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject userResponse = jsonArray.getJSONObject(i);
+                                    userResponse = jsonArray.getJSONObject(i);
 
-
+                                    appID = userResponse.getString("appID");
                                     agentContact = userResponse.getString("agentContactNo");
                                     agentName = userResponse.getString("agentName");
                                     agentEmail = userResponse.getString("agentEmail");
                                     dealerLocation = userResponse.getString("dealerLocation");
 
-
                                 }
-
-                                tvCarName.setText(carName);
-                                tvAppDate.setText(appDate);
-                                tvAppTime.setText(appTime);
-                                tvPrice.setText(price);
-                                Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
-                                tvDealerLoc.setText(dealerLocation);
-                                tvAgentName.setText(agentName);
-                                tvAgentEmail.setText(agentEmail);
-                                tvAgentContactNo.setText(agentContact);
+                                retrieveData();
                                 downloadingAppDetail.setVisibility(View.GONE);
 
 
@@ -141,7 +129,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getApplicationContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
+                       // error.printStackTrace();
                         downloadingAppDetail.setVisibility(View.GONE);
 
                     }
@@ -161,18 +149,32 @@ public class BookingDetailActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    private void retrieveData() {
+        tvCarName.setText(carName);
+        tvAppDate.setText(appDate);
+        tvAppTime.setText(appTime);
+        tvPrice.setText(price);
+        Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
+        tvDealerLoc.setText(dealerLocation);
+        tvAgentName.setText(agentName);
+        tvAgentEmail.setText(agentEmail);
+        tvAgentContactNo.setText(agentContact);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
-    public void onEdit(View v){
-        Intent editBookingIntent=new Intent(BookingDetailActivity.this,MakeAppointmentActivity.class);
-        editBookingIntent.putExtra("from","editBooking");
-        editBookingIntent.putExtra("Price",price);
-        editBookingIntent.putExtra("CarName",carName);
-        editBookingIntent.putExtra("appDate",appDate);
-        editBookingIntent.putExtra("appTime",appTime);
+
+    public void onEdit(View v) {
+        Intent editBookingIntent = new Intent(BookingDetailActivity.this, MakeAppointmentActivity.class);
+        editBookingIntent.putExtra("from", "editBooking");
+        editBookingIntent.putExtra("appID",appID);
+        editBookingIntent.putExtra("Price", price);
+        editBookingIntent.putExtra("CarName", carName);
+        editBookingIntent.putExtra("appDate", appDate);
+        editBookingIntent.putExtra("appTime", appTime);
         startActivity(editBookingIntent);
     }
 }

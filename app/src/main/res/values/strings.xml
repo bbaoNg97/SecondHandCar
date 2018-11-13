@@ -125,5 +125,8 @@
     <string name="get_dealer_location_url">https://dewy-minuses.000webhostapp.com/getDealerLocation.php</string>
     <string name="title_edit_booking">Edit Booking</string>
     <string name="update_booking">Update booking</string>
+    <string name="color_indicator">Green - Met, Red - Booked, Pen - Pending</string>
+    <string name="update_app_url">https://dewy-minuses.000webhostapp.com/updateAppointment.php</string>
+    <string name="msg_confirm_updt">Confirm to update booking date time?</string>
 
 </resources>

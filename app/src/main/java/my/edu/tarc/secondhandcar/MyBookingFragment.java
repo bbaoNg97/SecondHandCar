@@ -143,7 +143,7 @@ public class MyBookingFragment extends Fragment {
 
                                     String carName = userResponse.getString("carName");
                                     String price = userResponse.getString("price");
-                                    String appID = userResponse.getString("appID");
+                                   // String appID = userResponse.getString("appID");
                                     String carID = userResponse.getString("carID");
                                     String agentID = userResponse.getString("agentID");
                                     String appDate = userResponse.getString("appDate");
@@ -164,7 +164,7 @@ public class MyBookingFragment extends Fragment {
                                 listViewMyBooking.setAdapter(myBookingAdapter);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
                                 tvTips.setVisibility(View.VISIBLE);
-                                tvTips.setText( "Green - Met, Red - Booked, Pen - Pending");
+                                tvTips.setText( R.string.color_indicator);
                                 downloading.setVisibility(View.GONE);
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
