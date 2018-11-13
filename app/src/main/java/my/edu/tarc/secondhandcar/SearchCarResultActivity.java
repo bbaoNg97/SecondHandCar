@@ -127,13 +127,13 @@ public class SearchCarResultActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     checkError(e, SearchCarResultActivity.this);
                 }
-
+                searchingResult.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 checkError(error, SearchCarResultActivity.this);
-
+                searchingResult.setVisibility(View.GONE);
             }
         }
         ) {
@@ -147,7 +147,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(SearchCarResultActivity.this);
         requestQueue.add(stringRequest);
-        searchingResult.setVisibility(View.GONE);
+
     }
 
     @Override

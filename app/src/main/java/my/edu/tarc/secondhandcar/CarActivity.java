@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -45,6 +46,7 @@ public class CarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car);
         setTitle(R.string.title_car_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imageViewCars = (ImageView) findViewById(R.id.imageViewCars);
         btnMakeAppointment = (Button) findViewById(R.id.buttonAppointment);
@@ -70,18 +72,11 @@ public class CarActivity extends AppCompatActivity {
         price = intent.getStringExtra("carPrice");
         dealerID = intent.getStringExtra("dealerID");
         status = intent.getStringExtra("carStatus");
-        pbLoading.setVisibility(View.VISIBLE);
+       // pbLoading.setVisibility(View.VISIBLE);
         getDealerLoc(getString(R.string.get_dealer_location_url), dealerID);
-        pbLoading.setVisibility(View.GONE);
 
-        textViewName.setText(name);
-        Glide.with(this).load(carPhoto).into(imageViewCars);
-        textViewColor.setText(color);
-        textViewDesc.setText(desc);
-        textViewMileage.setText(mile);
-        textViewYear.setText(year);
-        textViewPrice.setText(price);
-        textViewLocation.setText(dealerLoc);
+
+
 
         btnMakeAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +109,9 @@ public class CarActivity extends AppCompatActivity {
                             JSONObject object = jsonArray.getJSONObject(i);
                             location = object.getString("dealerLoc").trim();
                         }
+
                         dealerLoc = location;
+                        loadData();
                     } else {
                         Toast.makeText(CarActivity.this, message, Toast.LENGTH_LONG).show();
                         finish();
@@ -123,12 +120,14 @@ public class CarActivity extends AppCompatActivity {
                     checkError(e, CarActivity.this);
                     finish();
                 }
+                pbLoading.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 checkError(error, CarActivity.this);
                 finish();
+                pbLoading.setVisibility(View.GONE);
             }
 
         }) {
@@ -142,6 +141,7 @@ public class CarActivity extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+
     }
 
     private void checkError(Exception e, Context context) {
@@ -153,5 +153,21 @@ public class CarActivity extends AppCompatActivity {
         } else {
             Toast.makeText(context, "No Record! \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
+    }
+    private void loadData(){
+        textViewName.setText(name);
+        Glide.with(CarActivity.this).load(carPhoto).into(imageViewCars);
+        textViewColor.setText(color);
+        textViewDesc.setText(desc);
+        textViewMileage.setText(mile);
+        textViewYear.setText(year);
+        textViewPrice.setText(price);
+        textViewLocation.setText(dealerLoc);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }
