@@ -57,6 +57,9 @@ public class MyBookingFragment extends Fragment {
     private ArrayList<String> arrPrice = new ArrayList<>();
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
     private ArrayList<String> arrAgentID = new ArrayList<>();
+    private ArrayList<String> arrAcceptDate = new ArrayList<>();
+    private ArrayList<String> arrAcceptTime = new ArrayList<>();
+    private ArrayList<String> arrAppID = new ArrayList<>();
     private TextView tvTips;
 
     private Button btnSearch;
@@ -90,9 +93,9 @@ public class MyBookingFragment extends Fragment {
         btnSearch = (Button) v.findViewById(R.id.btnSearch);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
-        tvTips=(TextView)v.findViewById(R.id.textViewTips);
+        tvTips = (TextView) v.findViewById(R.id.textViewTips);
 
-        if (custID==null) {
+        if (custID == null) {
             downloading.setVisibility(View.GONE);
             tvCaption.setVisibility(View.VISIBLE);
             tvCaption1.setVisibility(View.VISIBLE);
@@ -117,7 +120,7 @@ public class MyBookingFragment extends Fragment {
 
     }
 
-    private void getAppointment(final Context context, String url) {
+    private void getAppointment(final Context context, final String url) {
         tvTips.setVisibility(View.GONE);
         clearView();
         downloading.setVisibility(View.VISIBLE);
@@ -143,13 +146,15 @@ public class MyBookingFragment extends Fragment {
 
                                     String carName = userResponse.getString("carName");
                                     String price = userResponse.getString("price");
-                                   // String appID = userResponse.getString("appID");
+                                    String appID = userResponse.getString("appID");
                                     String carID = userResponse.getString("carID");
                                     String agentID = userResponse.getString("agentID");
                                     String appDate = userResponse.getString("appDate");
                                     String appTime = userResponse.getString("appTime");
                                     String appStatus = userResponse.getString("appStatus");
                                     String carPhoto = userResponse.getString("car_photo");
+                                    String acceptDate = userResponse.getString("acceptDate");
+                                    String accptTime = userResponse.getString("acceptTime");
 
                                     arrCarNAMES.add(carName);
                                     arrBookingDates.add(appDate);
@@ -158,13 +163,15 @@ public class MyBookingFragment extends Fragment {
                                     arrPrice.add(price);
                                     arrCarPhoto.add(carPhoto);
                                     arrAgentID.add(agentID);
+                                    arrAcceptDate.add(acceptDate);
+                                    arrAcceptTime.add(accptTime);
+                                    arrAppID.add(appID);
 
                                 }
-                                AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity().getApplicationContext(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrAgentID);
-                                listViewMyBooking.setAdapter(myBookingAdapter);
-                                Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
+                                initListVIew(context);
+                                Toast.makeText(context, "Done ! ", Toast.LENGTH_SHORT).show();
                                 tvTips.setVisibility(View.VISIBLE);
-                                tvTips.setText( R.string.color_indicator);
+                                tvTips.setText(R.string.color_indicator);
                                 downloading.setVisibility(View.GONE);
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
@@ -175,7 +182,7 @@ public class MyBookingFragment extends Fragment {
                             }
 
                         } catch (JSONException e) {
-                            Toast.makeText(getActivity(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
                             downloading.setVisibility(View.GONE);
                             e.printStackTrace();
                             btnSearch.setEnabled(true);
@@ -187,7 +194,7 @@ public class MyBookingFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                         downloading.setVisibility(View.GONE);
                         error.printStackTrace();
                         btnSearch.setEnabled(true);
@@ -213,6 +220,11 @@ public class MyBookingFragment extends Fragment {
 
     }
 
+    private void initListVIew(Context context) {
+        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(context, arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrAcceptDate, arrAcceptTime, arrCarPhoto, arrAgentID,arrAppID);
+        listViewMyBooking.setAdapter(myBookingAdapter);
+    }
+
     //for the action bar, add a refresh icon
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -223,7 +235,7 @@ public class MyBookingFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (custID==null) {
+        if (custID == null) {
             tvCaption.setVisibility(View.VISIBLE);
             tvCaption1.setVisibility(View.VISIBLE);
             btnSearch.setEnabled(true);
@@ -238,6 +250,12 @@ public class MyBookingFragment extends Fragment {
         arrBookingTimes.clear();
         arrBookingDates.clear();
         arrCarNAMES.clear();
+        arrPrice.clear();
+        arrAcceptDate.clear();
+        arrAcceptTime.clear();
+        arrCarPhoto.clear();
+        arrAgentID.clear();
+        arrAppID.clear();
     }
 
 

@@ -54,8 +54,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
     private Button btnSendRequest;
     private ProgressBar booking;
-    private String time, custID, price, carName;
-    private Date selectedTime;
+    private String custID, price, carName;
+    //private Date selectedTime;
     SharedPreferences sharePref;
     private String appID, carID, appDate, appTime, strDate, strTime;
     RequestQueue requestQueue;
@@ -134,10 +134,11 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                 int hour = cal.get(Calendar.HOUR);
                 int minute = cal.get(Calendar.MINUTE);
 
+
                 TimePickerDialog dialog = new TimePickerDialog(
                         MakeAppointmentActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mTimeSetListener, hour, minute, false);
+                        mTimeSetListener, hour, minute,false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
 
@@ -161,7 +162,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                 String shTime;
                 SimpleDateFormat shFormatter = new SimpleDateFormat("hh:mm a");
 
-                time = hour + ":" + minute;
+               // time = hour + ":" + minute;
 
                 if (hour >= 12) {
                     hour = hour - 12;
@@ -170,11 +171,9 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
                     shTime = hour + ":" + minute + " AM";
                 }
-
-                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-
-                ParsePosition pos = new ParsePosition(0);
-                selectedTime = formatter.parse(time, pos);
+                //SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                //ParsePosition ps = new ParsePosition(0);
+                //selectedTime = formatter.parse(time, ps);
 
                 //convert time to Date object, and format to String object
                 ParsePosition pos1 = new ParsePosition(0);
@@ -211,6 +210,9 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                         ParsePosition pos = new ParsePosition(0);
                         Date selectedDate = dateFormat.parse(strDate, pos);
 
+                        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
+                        ParsePosition pp=new ParsePosition(0);
+                        Date selectedTime = formatter.parse(strTime, pp);
                         //get the hour from selected time, must between 9am-5pm
                         cal.setTime(selectedTime);
                         int hour = cal.get(Calendar.HOUR_OF_DAY);

@@ -30,18 +30,25 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
     private ArrayList<String> price = new ArrayList<>();
     private ArrayList<String> carPhoto = new ArrayList<>();
     private ArrayList<String> agentID = new ArrayList<>();
-    private String strPrice,strCarPhoto,strAgentID;
+    private ArrayList<String> acceptDate = new ArrayList<>();
+    private ArrayList<String> acceptTime = new ArrayList<>();
+    private ArrayList<String> appID = new ArrayList<>();
+    private String strPrice, strCarPhoto, strAgentID, strBookStatus, strAcceptDate, strAcceptTime,strAppID;
 
-    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times,ArrayList<String> price,ArrayList<String> carPhoto,ArrayList<String> agentID) {
+    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> acceptDate, ArrayList<String> acceptTime, ArrayList<String> carPhoto, ArrayList<String> agentID,ArrayList<String> appID) {
         super(context, R.layout.content_my_booking);
         this.bookingStatus = bookingStatus;
         this.carNames = carNames;
         this.dates = dates;
         this.times = times;
-        this.price=price;
-        this.carPhoto=carPhoto;
-        this.agentID=agentID;
+        this.price = price;
+        this.carPhoto = carPhoto;
+        this.agentID = agentID;
+        this.acceptDate = acceptDate;
+        this.acceptTime = acceptTime;
+        this.appID=appID;
         this.context = context;
+
     }
 
     @Override
@@ -51,7 +58,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.content_my_booking, null, true);
         final TextView carName = (TextView) v.findViewById(R.id.textViewBookingCarName);
@@ -65,28 +72,37 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         carName.setText(carNames.get(position));
         bookingDate.setText(dates.get(position));
         bookingTime.setText(times.get(position));
-        strPrice=price.get(position);
-        strCarPhoto=carPhoto.get(position);
-        strAgentID=agentID.get(position);
-
 
 
         if (bookingStatus.get(position).equals("Met")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_green_status);
-        } else {
+        } else if (bookingStatus.get(position).equals("Booked")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_red_status);
+        } else {
+            imBookingStatus.setImageResource(R.drawable.ic_action_cancel_status);
         }
 
         bookingLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                strPrice = price.get(position);
+                strCarPhoto = carPhoto.get(position);
+                strAgentID = agentID.get(position);
+                strBookStatus = bookingStatus.get(position);
+                strAcceptDate = acceptDate.get(position);
+                strAcceptTime = acceptTime.get(position);
+                strAppID=appID.get(position);
                 Intent bookingDetailIntent = new Intent(context, BookingDetailActivity.class);
                 bookingDetailIntent.putExtra("CarName", carName.getText().toString());
                 bookingDetailIntent.putExtra("appDate", bookingDate.getText().toString());
                 bookingDetailIntent.putExtra("appTime", bookingTime.getText().toString());
                 bookingDetailIntent.putExtra("price", strPrice);
-                bookingDetailIntent.putExtra("carPhoto",strCarPhoto);
-                bookingDetailIntent.putExtra("agentID",strAgentID);
+                bookingDetailIntent.putExtra("carPhoto", strCarPhoto);
+                bookingDetailIntent.putExtra("agentID", strAgentID);
+                bookingDetailIntent.putExtra("bookStatus", strBookStatus);
+                bookingDetailIntent.putExtra("acceptDate", strAcceptDate);
+                bookingDetailIntent.putExtra("acceptTime", strAcceptTime);
+                bookingDetailIntent.putExtra("appID",strAppID);
 
                 context.startActivity(bookingDetailIntent);
             }
