@@ -64,6 +64,7 @@ public class searchCarActivity extends AppCompatActivity {
                 Intent searchResultIntent = new Intent(searchCarActivity.this, SearchCarResultActivity.class);
                 searchResultIntent.putExtra("carBrand", carBrand);
                 searchResultIntent.putExtra("carModel", carModel);
+                searchResultIntent.putExtra("from","searchCar");
 
                 startActivity(searchResultIntent);
             }

@@ -130,5 +130,7 @@
     <string name="msg_confirm_updt">Confirm to update booking date time?</string>
     <string name="cancel_booking">Cancel Booking</string>
     <string name="cancel_booking_url">https://dewy-minuses.000webhostapp.com/cancel_booking.php</string>
+    <string name="get_recommended_car_url">https://dewy-minuses.000webhostapp.com/getRecommCar.php</string>
+    <string name="tip">*Please provide some tips to let us recommend you*</string>
 
 </resources>

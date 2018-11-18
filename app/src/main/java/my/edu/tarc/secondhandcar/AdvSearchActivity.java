@@ -46,7 +46,7 @@ public class AdvSearchActivity extends AppCompatActivity {
     private int maxMileage;
     private int minYear;
     private int maxYear;
-    String colorName;
+    private String colorName, spPurpose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,15 +114,17 @@ public class AdvSearchActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent advSearchCarIntent = new Intent(AdvSearchActivity.this, SearchCarResultActivity.class);
 
+                //pass all selected criteria to searchResultAct
                 advSearchCarIntent.putExtra(MIN_PRICE, minPrice);
                 advSearchCarIntent.putExtra(Max_PRICE, maxPrice);
                 advSearchCarIntent.putExtra(MIN_MILEAGE, minMileage);
                 advSearchCarIntent.putExtra(Max_MILEAGE, maxMileage);
                 advSearchCarIntent.putExtra(MIN_YEAR, minYear);
                 advSearchCarIntent.putExtra(Max_YEAR, maxYear);
-                final String spPurpose = mSpinnerPurpose.getSelectedItem().toString();
-                advSearchCarIntent.putExtra("Purpose", spPurpose.toString());
-                advSearchCarIntent.putExtra("Color", colorName.toString());
+                spPurpose = mSpinnerPurpose.getSelectedItem().toString();
+                advSearchCarIntent.putExtra("Purpose", spPurpose);
+                advSearchCarIntent.putExtra("Color", colorName);
+                advSearchCarIntent.putExtra("from", "recommendCar");
 
 
                 startActivity(advSearchCarIntent);
@@ -185,7 +187,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                 seekBarMaxPrice.setEnabled(true);
                 seekBarMaxPrice.setMax(MAX_PRICE - minPrice);
                 seekBarMaxPrice.setProgress(0);
-                String str=getString(R.string.get_maxPrice) + price;
+                String str = getString(R.string.get_maxPrice) + price;
                 textViewMaxPrice.setText(str);
                 seekBarMaxPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -198,7 +200,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                         String price;
                         Double dPrice = Double.parseDouble(String.valueOf(i));
                         price = formatter.format(dPrice);
-                        String str=getString(R.string.get_maxPrice) + price;
+                        String str = getString(R.string.get_maxPrice) + price;
                         textViewMaxPrice.setText(str);
 
                     }

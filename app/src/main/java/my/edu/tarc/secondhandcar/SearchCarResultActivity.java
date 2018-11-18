@@ -2,13 +2,11 @@ package my.edu.tarc.secondhandcar;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -27,6 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class SearchCarResultActivity extends AppCompatActivity {
 
@@ -44,6 +43,16 @@ public class SearchCarResultActivity extends AppCompatActivity {
     private ArrayList<String> DEALER_ID = new ArrayList<>();
     private ArrayList<String> CAR_ID = new ArrayList<>();
     private ProgressBar searchingResult;
+    private String carBrand, carModel;
+
+    private int minPrice;
+    private int maxPrice;
+    private int minMileage;
+    private int maxMileage;
+    private int minYear;
+    private int maxYear;
+
+    private String colorName, purpose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +63,80 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
         searchingResult = (ProgressBar) findViewById(R.id.searchingResult);
         listViewCarResult = (ListView) findViewById(R.id.listViewCarResult);
+        //TODO link UI
+        //TODO getPurpose convert to carType
+
 
         Intent intent = getIntent();
-        String carBrand = intent.getStringExtra("carBrand");
-        String carModel = intent.getStringExtra("carModel");
+        if (intent.getStringExtra("from").equals("searchCar")) {
+            //just showing search result
+            carBrand = intent.getStringExtra("carBrand");
+            carModel = intent.getStringExtra("carModel");
+            searchingResult.setVisibility(View.VISIBLE);
+            clearList();
+            getSearchResult(getString(R.string.get_search_result_url), carBrand, carModel);
+        } else {
+            //show recommended car
+            minPrice = intent.getIntExtra(AdvSearchActivity.MIN_PRICE, 0);
+            minMileage = intent.getIntExtra(AdvSearchActivity.MIN_MILEAGE, 0);
+            minYear = intent.getIntExtra(AdvSearchActivity.MIN_YEAR, 0);
+            maxPrice = intent.getIntExtra(AdvSearchActivity.Max_PRICE, 0);
+            maxMileage = intent.getIntExtra(AdvSearchActivity.Max_MILEAGE, 0);
+            maxYear = intent.getIntExtra(AdvSearchActivity.Max_YEAR, 0);
+            purpose = intent.getStringExtra("Purpose");
+            colorName = intent.getStringExtra("Color");
+            clearList();
+            getRecommendedCar(SearchCarResultActivity.this, getString(R.string.get_recommended_car_url));
+        }
 
-        searchingResult.setVisibility(View.VISIBLE);
-        clearList();
-        getSearchResult(getString(R.string.get_search_result_url), carBrand, carModel);
 
+    }
+
+    private void getRecommendedCar(Context context, String url) {
+        StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                try{
+                    jsonObject=new JSONObject(response);
+                    String message=jsonObject.getString("message");
+                    String success=jsonObject.getString("success");
+                    JSONArray jsonArr=jsonObject.getJSONArray("RECOMMEND");
+                    if(success.equals("1")){
+                        JSONObject jsonObj;
+                        for(int i=0;i<jsonArr.length();i++){
+                            jsonObj=jsonArr.getJSONObject(i);
+
+                        }
+                    }
+
+                }catch (Exception error){
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String>params=new HashMap<>();
+                params.put("minPrice",minPrice+"");
+                params.put("maxPrice",maxPrice+"");
+                params.put("minMileage",minMileage+"");
+                params.put("maxMileage",maxMileage+"");
+                params.put("minYear",minYear+"");
+                params.put("maxYear",maxYear+"");
+                params.put("color",colorName);
+                //params.put("carType",carType);
+
+                return params;
+            }
+        };
+        RequestQueue reqQueue = Volley.newRequestQueue(context);
+        reqQueue.add(strReq);
     }
 
     private void clearList() {
