@@ -2,7 +2,9 @@ package my.edu.tarc.secondhandcar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +41,8 @@ public class CarActivity extends AppCompatActivity {
     private TextView textViewName, textViewDesc, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation;
     private ProgressBar pbLoading;
     private String carID, name, price, color, desc, year, mile, status, carType, carPhoto, dealerID, dealerLoc;
+    private String custID;
+    SharedPreferences sharePref;
 
 
     @Override
@@ -47,6 +51,9 @@ public class CarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_car);
         setTitle(R.string.title_car_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+        custID = sharePref.getString("custID", null);
 
         imageViewCars = (ImageView) findViewById(R.id.imageViewCars);
         btnMakeAppointment = (Button) findViewById(R.id.buttonAppointment);
@@ -76,22 +83,39 @@ public class CarActivity extends AppCompatActivity {
         getDealerLoc(getString(R.string.get_dealer_location_url), dealerID);
 
 
-
-
         btnMakeAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //check connection
+                    if (!LoginActivity.isConnected(CarActivity.this)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CarActivity.this);
+                    builder.setTitle("Connection Error");
+                    builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+                }
+                //if havent login yet
+                else if (custID == null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CarActivity.this);
+                    builder.setMessage("Please login first").setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent loginIntent = new Intent(CarActivity.this, LoginActivity.class);
+                            startActivity(loginIntent);
+                        }
+                    }).create().show();
+                }
+                    else{
+                    Intent bookingIntent = new Intent(CarActivity.this, MakeAppointmentActivity.class);
+                    bookingIntent.putExtra("from", "booking");
+                    bookingIntent.putExtra("CarName", name);
+                    bookingIntent.putExtra("Price", price);
+                    bookingIntent.putExtra("carID", carID);
+                    startActivity(bookingIntent);
+                    }
 
-                Intent bookingIntent = new Intent(CarActivity.this, MakeAppointmentActivity.class);
-                bookingIntent.putExtra("from","booking");
-                bookingIntent.putExtra("CarName", name);
-                bookingIntent.putExtra("Price", price);
-                bookingIntent.putExtra("carID", carID);
-                startActivity(bookingIntent);
-            }
-        });
+                }
+            });
 
-    }
+        }
 
     private void getDealerLoc(String url, final String dealerID) {
 
@@ -155,7 +179,8 @@ public class CarActivity extends AppCompatActivity {
             Toast.makeText(context, "No Record! \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
-    private void loadData(){
+
+    private void loadData() {
         textViewName.setText(name);
         Glide.with(CarActivity.this).load(carPhoto).into(imageViewCars);
         textViewColor.setText(color);

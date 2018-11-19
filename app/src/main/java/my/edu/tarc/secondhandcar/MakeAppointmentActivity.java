@@ -236,17 +236,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                             builder.setTitle("Connection Error");
                             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
                         }
-                        //if havent login yet
-                        else if (custID == null) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
-                            builder.setMessage("Please login first").setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Intent loginIntent = new Intent(MakeAppointmentActivity.this, LoginActivity.class);
-                                    startActivity(loginIntent);
-                                }
-                            }).create().show();
-                        } else {
+
+                        else {
                             //if the button is send appointment request
 
                             if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {

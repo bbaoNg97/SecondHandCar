@@ -39,13 +39,13 @@ public class AdvSearchActivity extends AppCompatActivity {
     public static final String MIN_YEAR = "minimum year";
     public static final String Max_YEAR = "maximum year ";
 
-    //store the last value
-    private int minPrice;
-    private int maxPrice;
-    private int minMileage;
-    private int maxMileage;
-    private int minYear;
-    private int maxYear;
+    //store the default value
+    private int minPrice=5000;
+    private int maxPrice=5000000;
+    private int minMileage=5000;
+    private int maxMileage=1000000;
+    private int minYear=1950;
+    private int maxYear=2018;
     private String colorName, spPurpose;
 
     @Override
@@ -299,7 +299,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                 seekBarMaxYear.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
+                        maxYear = 0;
                         i = i + minYear;
                         textViewMaxYear.setText("Max Year: " + String.valueOf(i));
                         maxYear = maxYear + i;

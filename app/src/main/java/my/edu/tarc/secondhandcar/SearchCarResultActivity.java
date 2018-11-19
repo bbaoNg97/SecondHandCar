@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +31,7 @@ import java.util.Objects;
 public class SearchCarResultActivity extends AppCompatActivity {
 
     private ListView listViewCarResult;
-    //private Integer[] IMAGES = {R.drawable.t1, R.drawable.t2, R.drawable.t3};
+
     private ArrayList<String> NAMES = new ArrayList<>();
     private ArrayList<String> PRICES = new ArrayList<>();
     private ArrayList<String> COLORS = new ArrayList<>();
@@ -45,12 +46,12 @@ public class SearchCarResultActivity extends AppCompatActivity {
     private ProgressBar searchingResult;
     private String carBrand, carModel;
 
-    private int minPrice;
-    private int maxPrice;
-    private int minMileage;
-    private int maxMileage;
-    private int minYear;
-    private int maxYear;
+    private int minPrice = 0;
+    private int maxPrice = 5000000;
+    private int minMileage = 0;
+    private int maxMileage = 1000000;
+    private int minYear = 1950;
+    private int maxYear = 2018;
 
     private String colorName, purpose;
 
@@ -63,8 +64,6 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
         searchingResult = (ProgressBar) findViewById(R.id.searchingResult);
         listViewCarResult = (ListView) findViewById(R.id.listViewCarResult);
-        //TODO link UI
-        //TODO getPurpose convert to carType
 
 
         Intent intent = getIntent();
@@ -83,8 +82,9 @@ public class SearchCarResultActivity extends AppCompatActivity {
             maxPrice = intent.getIntExtra(AdvSearchActivity.Max_PRICE, 0);
             maxMileage = intent.getIntExtra(AdvSearchActivity.Max_MILEAGE, 0);
             maxYear = intent.getIntExtra(AdvSearchActivity.Max_YEAR, 0);
-            purpose = intent.getStringExtra("Purpose");
+            //   purpose = intent.getStringExtra("Purpose");
             colorName = intent.getStringExtra("Color");
+
             clearList();
             getRecommendedCar(SearchCarResultActivity.this, getString(R.string.get_recommended_car_url));
         }
@@ -97,40 +97,72 @@ public class SearchCarResultActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
-                try{
-                    jsonObject=new JSONObject(response);
-                    String message=jsonObject.getString("message");
-                    String success=jsonObject.getString("success");
-                    JSONArray jsonArr=jsonObject.getJSONArray("RECOMMEND");
-                    if(success.equals("1")){
+                try {
+                    jsonObject = new JSONObject(response);
+                    String message = jsonObject.getString("message");
+                    String success = jsonObject.getString("success");
+                    JSONArray jsonArr = jsonObject.getJSONArray("RECOMMEND");
+                    if (success.equals("1")) {
                         JSONObject jsonObj;
-                        for(int i=0;i<jsonArr.length();i++){
-                            jsonObj=jsonArr.getJSONObject(i);
+                        for (int i = 0; i < jsonArr.length(); i++) {
+                            //TODO: just show only 5 record is enough
+                            jsonObj = jsonArr.getJSONObject(i);
+                            String carName = jsonObj.getString("carName");
+                            String price = jsonObj.getString("price");
+                            String color = jsonObj.getString("color");
+                            String desc = jsonObj.getString("desc");
+                            String year = jsonObj.getString("year");
+                            String carStatus = jsonObj.getString("carStatus");
+                            String carType = jsonObj.getString("carType");
+                            String mileage = jsonObj.getString("mileage");
+                            String carPhoto = jsonObj.getString("car_photo");
+                            String dealerID = jsonObj.getString("dealerID");
+                            String carID = jsonObj.getString("carID");
+
+                            NAMES.add(carName);
+                            PRICES.add(price);
+                            COLORS.add(color);
+                            DESCS.add(desc);
+                            YEARS.add(year);
+                            CAR_STATUS.add(carStatus);
+                            CAR_TYPES.add(carType);
+                            MILEAGES.add(mileage);
+                            CAR_PHOTOS.add(carPhoto);
+                            DEALER_ID.add(dealerID);
+                            CAR_ID.add(carID);
+
 
                         }
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
+
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
+                        Toast.makeText(SearchCarResultActivity.this, message, Toast.LENGTH_LONG).show();
                     }
 
-                }catch (Exception error){
-
+                } catch (Exception error) {
+                    checkError(error, SearchCarResultActivity.this);
                 }
+                searchingResult.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                checkError(error, SearchCarResultActivity.this);
+                searchingResult.setVisibility(View.GONE);
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String>params=new HashMap<>();
-                params.put("minPrice",minPrice+"");
-                params.put("maxPrice",maxPrice+"");
-                params.put("minMileage",minMileage+"");
-                params.put("maxMileage",maxMileage+"");
-                params.put("minYear",minYear+"");
-                params.put("maxYear",maxYear+"");
+                Map<String, String> params = new HashMap<>();
+                params.put("minPrice", minPrice + "");
+                params.put("maxPrice", maxPrice + "");
+                params.put("minMileage", minMileage + "");
+                params.put("maxMileage", maxMileage + "");
+                params.put("minYear", minYear + "");
+                params.put("maxYear", maxYear + "");
                 params.put("color",colorName);
-                //params.put("carType",carType);
+                //   params.put("carType",purpose+"");
 
                 return params;
             }
