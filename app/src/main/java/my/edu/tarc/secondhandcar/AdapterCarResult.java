@@ -1,5 +1,6 @@
 package my.edu.tarc.secondhandcar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,14 +17,16 @@ import com.bumptech.glide.Glide;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Bbao on 17/10/2018.
  */
 
-public class AdapterCarResult extends ArrayAdapter<String> {
+public class AdapterCarResult extends ArrayAdapter<Car> {
 
-    private Context context;
+    private Context mContext;
+    private List<Car> cars = new ArrayList<>();
     private ArrayList<String> carNames = new ArrayList<>();
     private ArrayList<String> carImages = new ArrayList<>();
     private ArrayList<String> car_prices = new ArrayList<>();
@@ -38,9 +41,16 @@ public class AdapterCarResult extends ArrayAdapter<String> {
     private String strName, strImage, strPrice, strColor, strDesc, strYear, strCarStatus, strType, strMileage, strDealerID, strCarID;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
+    public AdapterCarResult(Context context, ArrayList<Car> car) {
+        super(context, R.layout.content_search_result);
+        mContext = context;
+        cars = car;
+    }
+
+
     public AdapterCarResult(Context context, ArrayList<String> carNames, ArrayList<String> car_prices, ArrayList<String> car_colors, ArrayList<String> car_descs, ArrayList<String> car_years, ArrayList<String> car_status, ArrayList<String> car_types, ArrayList<String> mileages, ArrayList<String> carImages, ArrayList<String> dealerID, ArrayList<String> carID) {
         super(context, R.layout.content_search_result);
-        this.context = context;
+        mContext = context;
         this.carNames = carNames;
         this.carImages = carImages;
         this.car_prices = car_prices;
@@ -62,14 +72,15 @@ public class AdapterCarResult extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.content_search_result, null, true);
         final TextView carResult = (TextView) v.findViewById(R.id.textViewCarResult);
         final ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCarResult);
 
-        Glide.with(context)
+      //  final Car currentCar = cars.get(position);
+        Glide.with(mContext)
                 .asBitmap()
-                .load(carImages.get(position))
+                .load( carImages.get(position))
                 .into(imCarResult);
 
         carResult.setText(carNames.get(position));
@@ -93,7 +104,7 @@ public class AdapterCarResult extends ArrayAdapter<String> {
 
                 strType = car_types.get(position);
 
-                Intent carIntent = new Intent(context, CarActivity.class);
+                Intent carIntent = new Intent(mContext, CarActivity.class);
                 carIntent.putExtra("carName", strName);
                 carIntent.putExtra("carPhoto", strImage);
                 carIntent.putExtra("carColor", strColor);
@@ -105,7 +116,7 @@ public class AdapterCarResult extends ArrayAdapter<String> {
                 carIntent.putExtra("dealerID", strDealerID);
                 carIntent.putExtra("carStatus", strCarStatus);
                 carIntent.putExtra("carID", strCarID);
-                context.startActivity(carIntent);
+                mContext.startActivity(carIntent);
             }
         });
         return v;
