@@ -44,7 +44,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
     private ArrayList<String> CAR_PHOTOS = new ArrayList<>();
     private ArrayList<String> DEALER_ID = new ArrayList<>();
     private ArrayList<String> CAR_ID = new ArrayList<>();
-
+    private ArrayList<Car> carArr = new ArrayList<>();
     private ProgressBar searchingResult;
     private String carBrand, carModel;
 
@@ -107,7 +107,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
                     if (success.equals("1")) {
                         JSONObject jsonObj;
 
-                       ArrayList<Car> carArr = new ArrayList<>();
+
                         for (int i = 0; i < jsonArr.length(); i++) {
                             //TODO: just show only 5 record is enough
                             jsonObj = jsonArr.getJSONObject(i);
@@ -123,9 +123,9 @@ public class SearchCarResultActivity extends AppCompatActivity {
                             String dealerID = jsonObj.getString("dealerID");
                             String carID = jsonObj.getString("carID");
 
-                           Car car = new Car( carName, price, color, desc, year, carStatus, carType, mileage, carPhoto, dealerID, carID);
+                            Car car = new Car(carName, price, color, desc, year, carStatus, carType, mileage, carPhoto, dealerID, carID);
 
-                          carArr.add(car);
+                            carArr.add(car);
 
                            /* NAMES.add(carName);
                             PRICES.add(price);
@@ -141,9 +141,9 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
 
                         }
-                         //AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
-                       AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
-                        int tot=adapterCarResult.getCount();
+                        //AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+
                         listViewCarResult.setAdapter(adapterCarResult);
                     } else {
                         Toast.makeText(SearchCarResultActivity.this, message, Toast.LENGTH_LONG).show();
@@ -181,7 +181,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
     }
 
     private void clearList() {
-       // carArr.clear();
+        carArr.clear();
       /*  NAMES.clear();
         PRICES.clear();
         COLORS.clear();
@@ -208,7 +208,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("SEARCH");
                     if (success.equals("1")) {
                         JSONObject jsonObj;
-                        ArrayList<Car> carArr = new ArrayList<>();
+
                         for (int i = 0; i < jsonArray.length(); i++) {
                             jsonObj = jsonArray.getJSONObject(i);
                             String carName = jsonObj.getString("carName");
@@ -224,11 +224,11 @@ public class SearchCarResultActivity extends AppCompatActivity {
                             String carID = jsonObj.getString("carID");
 
                             Car car = new Car(carName, price, color, desc, year, carStatus, carType, mileage, carPhoto, dealerID, carID);
-                            int total=carArr.size();
-                            carArr.add(car);
-                           total=carArr.size();
 
-                            NAMES.add(carName);
+                            carArr.add(car);
+
+
+                            /*NAMES.add(carName);
                             PRICES.add(price);
                             COLORS.add(color);
                             DESCS.add(desc);
@@ -238,11 +238,11 @@ public class SearchCarResultActivity extends AppCompatActivity {
                             MILEAGES.add(mileage);
                             CAR_PHOTOS.add(carPhoto);
                             DEALER_ID.add(dealerID);
-                            CAR_ID.add(carID);
+                            CAR_ID.add(carID);*/
 
                         }
-                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
-                       // AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        //AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
                         listViewCarResult.setAdapter(adapterCarResult);
                     } else {
                         Toast.makeText(SearchCarResultActivity.this, message, Toast.LENGTH_LONG).show();

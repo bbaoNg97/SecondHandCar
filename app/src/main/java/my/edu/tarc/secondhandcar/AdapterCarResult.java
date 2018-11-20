@@ -66,7 +66,7 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
 
     @Override
     public int getCount() {
-        return carID.size();
+        return cars.size();
     }
 
     @NonNull
@@ -77,13 +77,13 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
         final TextView carResult = (TextView) v.findViewById(R.id.textViewCarResult);
         final ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCarResult);
 
-      //  final Car currentCar = cars.get(position);
+      final Car currentCar = cars.get(position);
         Glide.with(mContext)
                 .asBitmap()
-                .load( carImages.get(position))
+                .load( currentCar.getCAR_PHOTOS())
                 .into(imCarResult);
 
-        carResult.setText(carNames.get(position));
+        carResult.setText(currentCar.getNAMES());
 
         ConstraintLayout searchResultLayout = (ConstraintLayout) v.findViewById(R.id.searchResultLayout);
         searchResultLayout.setOnClickListener(new View.OnClickListener() {
@@ -91,18 +91,18 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
             public void onClick(View view) {
 
                 strName = carResult.getText().toString();
-                strImage = carImages.get(position);
-                Double dPrice = Double.parseDouble(car_prices.get(position));
+                strImage = currentCar.getCAR_PHOTOS();
+                Double dPrice = Double.parseDouble(currentCar.getPRICES());
                 strPrice = formatter.format(dPrice);
-                strColor = car_colors.get(position);
-                strMileage = mileages.get(position);
-                strYear = car_years.get(position);
-                strDealerID = dealerID.get(position);
-                strDesc = car_descs.get(position);
-                strCarID = carID.get(position);
-                strCarStatus = car_status.get(position);
+                strColor = currentCar.getCOLORS();
+                strMileage = currentCar.getMILEAGES();
+                strYear = currentCar.getYEARS();
+                strDealerID = currentCar.getDEALER_ID();
+                strDesc = currentCar.getDESCS();
+                strCarID = currentCar.getCAR_ID();
+                strCarStatus = currentCar.getCAR_STATUS();
 
-                strType = car_types.get(position);
+                strType = currentCar.getCAR_TYPES();
 
                 Intent carIntent = new Intent(mContext, CarActivity.class);
                 carIntent.putExtra("carName", strName);
