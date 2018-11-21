@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +28,9 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
 
     private Context mContext;
     private List<Car> cars = new ArrayList<>();
-    private ArrayList<String> carNames = new ArrayList<>();
-    private ArrayList<String> carImages = new ArrayList<>();
-    private ArrayList<String> car_prices = new ArrayList<>();
-    private ArrayList<String> car_colors = new ArrayList<>();
-    private ArrayList<String> car_descs = new ArrayList<>();
-    private ArrayList<String> car_years = new ArrayList<>();
-    private ArrayList<String> car_status = new ArrayList<>();
-    private ArrayList<String> car_types = new ArrayList<>();
-    private ArrayList<String> mileages = new ArrayList<>();
-    private ArrayList<String> dealerID = new ArrayList<>();
-    private ArrayList<String> carID = new ArrayList<>();
     private String strName, strImage, strPrice, strColor, strDesc, strYear, strCarStatus, strType, strMileage, strDealerID, strCarID;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    DecimalFormat decimalFormat=new DecimalFormat("#,###,###,###");
 
     public AdapterCarResult(Context context, ArrayList<Car> car) {
         super(context, R.layout.content_search_result);
@@ -48,21 +39,6 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
     }
 
 
-    public AdapterCarResult(Context context, ArrayList<String> carNames, ArrayList<String> car_prices, ArrayList<String> car_colors, ArrayList<String> car_descs, ArrayList<String> car_years, ArrayList<String> car_status, ArrayList<String> car_types, ArrayList<String> mileages, ArrayList<String> carImages, ArrayList<String> dealerID, ArrayList<String> carID) {
-        super(context, R.layout.content_search_result);
-        mContext = context;
-        this.carNames = carNames;
-        this.carImages = carImages;
-        this.car_prices = car_prices;
-        this.car_colors = car_colors;
-        this.car_descs = car_descs;
-        this.car_years = car_years;
-        this.car_status = car_status;
-        this.car_types = car_types;
-        this.mileages = mileages;
-        this.dealerID = dealerID;
-        this.carID = carID;
-    }
 
     @Override
     public int getCount() {
@@ -92,11 +68,12 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
 
                 strName = carResult.getText().toString();
                 strImage = currentCar.getCAR_PHOTOS();
-                Double dPrice = Double.parseDouble(currentCar.getPRICES());
+                Double dPrice = (double)currentCar.getPRICES();
                 strPrice = formatter.format(dPrice);
                 strColor = currentCar.getCOLORS();
-                strMileage = currentCar.getMILEAGES();
-                strYear = currentCar.getYEARS();
+
+                strMileage = decimalFormat.format(currentCar.getMILEAGES());
+                strYear = currentCar.getYEARS()+"";
                 strDealerID = currentCar.getDEALER_ID();
                 strDesc = currentCar.getDESCS();
                 strCarID = currentCar.getCAR_ID();

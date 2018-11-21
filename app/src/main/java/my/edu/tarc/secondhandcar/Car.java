@@ -2,28 +2,27 @@ package my.edu.tarc.secondhandcar;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
  * Created by bbao_Ng on 20/11/2018.
  */
 
-public class Car{
+public class Car {
 
     private String NAMES;
-    private String PRICES;
+    private int PRICES;
     private String COLORS;
     private String DESCS;
-    private String YEARS;
+    private int YEARS;
     private String CAR_STATUS;
     private String CAR_TYPES;
-    private String MILEAGES;
+    private int MILEAGES;
     private String CAR_PHOTOS;
     private String DEALER_ID;
     private String CAR_ID;
 
-    public Car(String NAMES, String PRICES, String COLORS, String DESCS, String YEARS, String CAR_STATUS, String CAR_TYPES, String MILEAGES, String CAR_PHOTOS, String DEALER_ID, String CAR_ID) {
+    public Car(String NAMES, int PRICES, String COLORS, String DESCS, int YEARS, String CAR_STATUS, String CAR_TYPES, int MILEAGES, String CAR_PHOTOS, String DEALER_ID, String CAR_ID) {
 
         this.NAMES = NAMES;
         this.PRICES = PRICES;
@@ -46,11 +45,11 @@ public class Car{
         this.NAMES = NAMES;
     }
 
-    public String getPRICES() {
+    public int getPRICES() {
         return PRICES;
     }
 
-    public void setPRICES(String PRICES) {
+    public void setPRICES(int PRICES) {
         this.PRICES = PRICES;
     }
 
@@ -70,11 +69,11 @@ public class Car{
         this.DESCS = DESCS;
     }
 
-    public String getYEARS() {
+    public int getYEARS() {
         return YEARS;
     }
 
-    public void setYEARS(String YEARS) {
+    public void setYEARS(int YEARS) {
         this.YEARS = YEARS;
     }
 
@@ -94,11 +93,11 @@ public class Car{
         this.CAR_TYPES = CAR_TYPES;
     }
 
-    public String getMILEAGES() {
+    public int getMILEAGES() {
         return MILEAGES;
     }
 
-    public void setMILEAGES(String MILEAGES) {
+    public void setMILEAGES(int MILEAGES) {
         this.MILEAGES = MILEAGES;
     }
 
@@ -130,6 +129,44 @@ public class Car{
     public String toString() {
         return super.toString();
     }
+
+   /* public int compareTo(@NonNull Car compareCar) {
+
+    }*/
+
+    /*Comparator for sorting the list by Price acsending*/
+
+    public static Comparator<Car> PriceComparator= new Comparator<Car>() {
+        @Override
+        public int compare(Car c1, Car c2) {
+            int carPrice1 = c1.getPRICES();
+            int carPrice2 = c2.getPRICES();
+            return carPrice1 - carPrice2;
+        }
+
+    };
+/*Comparator for sorting the list by Mileage ascending*/
+
+    public static Comparator<Car> MileageComparator = new Comparator<Car>() {
+        @Override
+        public int compare(Car c1, Car c2) {
+            int carMileage1 = c1.getMILEAGES();
+            int carMileage2 = c2.getMILEAGES();
+            return carMileage1 - carMileage2;
+        }
+
+    };
+/*Comparator for sorting the list by Year ascending*/
+
+    public static Comparator<Car> YearComparator = new Comparator<Car>() {
+        @Override
+        public int compare(Car c1, Car c2) {
+            int carYear1 = c1.getYEARS();
+            int carYear2 = c2.getYEARS();
+            return carYear1 - carYear2;
+        }
+
+    };
 
 
 }

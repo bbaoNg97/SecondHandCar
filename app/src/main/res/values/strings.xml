@@ -58,6 +58,11 @@
         <item>Public Transportation (Taxi)</item>
     </string-array>
 
+    <string-array name="sort_by">
+        <item>From low to high</item>
+        <item>From high to low</item>
+    </string-array>
+
     <string name="title_booking_detail">Booking Detail</string>
     <string name="price">Price:</string>
     <string name="dealer_location">Dealer Location:</string>
@@ -132,5 +137,6 @@
     <string name="cancel_booking_url">https://dewy-minuses.000webhostapp.com/cancel_booking.php</string>
     <string name="get_recommended_car_url">https://dewy-minuses.000webhostapp.com/getRecommCar.php</string>
     <string name="tip">*Please provide some tips to let us recommend you*</string>
+    <string name="sort_by">"Sort by : "</string>
 
 </resources>

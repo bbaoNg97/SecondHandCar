@@ -3,12 +3,17 @@ package my.edu.tarc.secondhandcar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,21 +37,12 @@ import java.util.Objects;
 public class SearchCarResultActivity extends AppCompatActivity {
 
     private ListView listViewCarResult;
-
-    private ArrayList<String> NAMES = new ArrayList<>();
-    private ArrayList<String> PRICES = new ArrayList<>();
-    private ArrayList<String> COLORS = new ArrayList<>();
-    private ArrayList<String> DESCS = new ArrayList<>();
-    private ArrayList<String> YEARS = new ArrayList<>();
-    private ArrayList<String> CAR_STATUS = new ArrayList<>();
-    private ArrayList<String> CAR_TYPES = new ArrayList<>();
-    private ArrayList<String> MILEAGES = new ArrayList<>();
-    private ArrayList<String> CAR_PHOTOS = new ArrayList<>();
-    private ArrayList<String> DEALER_ID = new ArrayList<>();
-    private ArrayList<String> CAR_ID = new ArrayList<>();
     private ArrayList<Car> carArr = new ArrayList<>();
     private ProgressBar searchingResult;
+    private TabLayout tabLayout;
     private String carBrand, carModel;
+    private Spinner spinnerSortBy;
+    private TabItem tIYear, tIPrice, tIMileage;
 
     private int minPrice = 0;
     private int maxPrice = 5000000;
@@ -66,35 +62,205 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
         searchingResult = (ProgressBar) findViewById(R.id.searchingResult);
         listViewCarResult = (ListView) findViewById(R.id.listViewCarResult);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        spinnerSortBy = (Spinner) findViewById(R.id.spinnerSortBy);
+        tIPrice = (TabItem) findViewById(R.id.tIPrice);
+        tIYear = (TabItem) findViewById(R.id.tIYear);
+        tIMileage = (TabItem) findViewById(R.id.tIMileage);
 
 
-        Intent intent = getIntent();
-        if (intent.getStringExtra("from").equals("searchCar")) {
-            //just showing search result
-            carBrand = intent.getStringExtra("carBrand");
-            carModel = intent.getStringExtra("carModel");
-            searchingResult.setVisibility(View.VISIBLE);
-            clearList();
-            getSearchResult(getString(R.string.get_search_result_url), carBrand, carModel);
-        } else {
-            //show recommended car
-            minPrice = intent.getIntExtra(AdvSearchActivity.MIN_PRICE, 0);
-            minMileage = intent.getIntExtra(AdvSearchActivity.MIN_MILEAGE, 0);
-            minYear = intent.getIntExtra(AdvSearchActivity.MIN_YEAR, 0);
-            maxPrice = intent.getIntExtra(AdvSearchActivity.Max_PRICE, 0);
-            maxMileage = intent.getIntExtra(AdvSearchActivity.Max_MILEAGE, 0);
-            maxYear = intent.getIntExtra(AdvSearchActivity.Max_YEAR, 0);
-            //   purpose = intent.getStringExtra("Purpose");
-            colorName = intent.getStringExtra("Color");
+        ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource(this, R.array.sort_by, android.R.layout.simple_spinner_item);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSortBy.setAdapter(sortAdapter);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (spinnerSortBy.getSelectedItemPosition() == 0) {
+                    if (tab.getText().equals(getString(R.string.price))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.PriceComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else if (tab.getText().equals(getString(R.string.mileage))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.MileageComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.YearComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    }
 
-            clearList();
-            getRecommendedCar(SearchCarResultActivity.this, getString(R.string.get_recommended_car_url));
-        }
+                } else {
+                    if (tab.getText().equals(getString(R.string.price))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.PriceComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else if (tab.getText().equals(getString(R.string.mileage))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.MileageComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.YearComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    }
 
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if (spinnerSortBy.getSelectedItemPosition() == 0) {
+                    if (tab.getText().equals(getString(R.string.price))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.PriceComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else if (tab.getText().equals(getString(R.string.mileage))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.MileageComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.YearComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    }
+
+                } else {
+                    if (tab.getText().equals(getString(R.string.price))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.PriceComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else if (tab.getText().equals(getString(R.string.mileage))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.MileageComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.YearComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                if (spinnerSortBy.getSelectedItemPosition() == 0) {
+                    if (tab.getText().equals(getString(R.string.price))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.PriceComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else if (tab.getText().equals(getString(R.string.mileage))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.MileageComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Car.YearComparator);
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    }
+
+                } else {
+                    if (tab.getText().equals(getString(R.string.price))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.PriceComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else if (tab.getText().equals(getString(R.string.mileage))) {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.MileageComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    } else {
+                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                        Collections.sort(carArr, Collections.reverseOrder(Car.YearComparator));
+                        listViewCarResult.setAdapter(adapterCarResult);
+                    }
+
+                }
+            }
+        });
+        spinnerSortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = getIntent();
+                int position = i;
+                if (intent.getStringExtra("from").equals("searchCar")) {
+                    //just showing search result
+                    carBrand = intent.getStringExtra("carBrand");
+                    carModel = intent.getStringExtra("carModel");
+                    searchingResult.setVisibility(View.VISIBLE);
+                    clearList();
+                    getSearchResult(getString(R.string.get_search_result_url), carBrand, carModel, position);
+                } else {
+                    //show recommended car
+                    minPrice = intent.getIntExtra(AdvSearchActivity.MIN_PRICE, 0);
+                    minMileage = intent.getIntExtra(AdvSearchActivity.MIN_MILEAGE, 0);
+                    minYear = intent.getIntExtra(AdvSearchActivity.MIN_YEAR, 0);
+                    maxPrice = intent.getIntExtra(AdvSearchActivity.Max_PRICE, 0);
+                    maxMileage = intent.getIntExtra(AdvSearchActivity.Max_MILEAGE, 0);
+                    maxYear = intent.getIntExtra(AdvSearchActivity.Max_YEAR, 0);
+                    //   purpose = intent.getStringExtra("Purpose");
+                    colorName = intent.getStringExtra("Color");
+
+                    clearList();
+                    getRecommendedCar(SearchCarResultActivity.this, getString(R.string.get_recommended_car_url), position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
 
-    private void getRecommendedCar(Context context, String url) {
+
+    private void adaptCompare(CharSequence t) {
+        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+
+        if (t.equals(getString(R.string.year))) {
+            //based on year
+            Collections.sort(carArr, Car.YearComparator);
+
+        } else if (t.equals(getString(R.string.mileage))) {
+
+            //based on milegae
+            Collections.sort(carArr, Car.MileageComparator);
+
+        } else {
+
+            //based on price
+            Collections.sort(carArr, Car.PriceComparator);
+
+        }
+        listViewCarResult.setAdapter(adapterCarResult);
+
+    }
+
+    private void adaptCompareDESC(CharSequence t) {
+        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+
+        if (t.equals(getString(R.string.year))) {
+            //based on year
+            Collections.sort(carArr, Collections.reverseOrder(Car.YearComparator));
+
+        } else if (t.equals(getString(R.string.mileage))) {
+
+            //based on milegae
+            Collections.sort(carArr, Collections.reverseOrder(Car.MileageComparator));
+
+        } else {
+
+            //based on price
+            Collections.sort(carArr, Collections.reverseOrder(Car.PriceComparator));
+        }
+
+        listViewCarResult.setAdapter(adapterCarResult);
+
+    }
+
+
+    private void getRecommendedCar(Context context, String url, final int i) {
         StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -107,18 +273,17 @@ public class SearchCarResultActivity extends AppCompatActivity {
                     if (success.equals("1")) {
                         JSONObject jsonObj;
 
-
                         for (int i = 0; i < jsonArr.length(); i++) {
                             //TODO: just show only 5 record is enough
                             jsonObj = jsonArr.getJSONObject(i);
                             String carName = jsonObj.getString("carName");
-                            String price = jsonObj.getString("price");
+                            int price = jsonObj.getInt("price");
                             String color = jsonObj.getString("color");
                             String desc = jsonObj.getString("desc");
-                            String year = jsonObj.getString("year");
+                            int year = jsonObj.getInt("year");
                             String carStatus = jsonObj.getString("carStatus");
                             String carType = jsonObj.getString("carType");
-                            String mileage = jsonObj.getString("mileage");
+                            int mileage = jsonObj.getInt("mileage");
                             String carPhoto = jsonObj.getString("car_photo");
                             String dealerID = jsonObj.getString("dealerID");
                             String carID = jsonObj.getString("carID");
@@ -127,24 +292,38 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
                             carArr.add(car);
 
-                           /* NAMES.add(carName);
-                            PRICES.add(price);
-                            COLORS.add(color);
-                            DESCS.add(desc);
-                            YEARS.add(year);
-                            CAR_STATUS.add(carStatus);
-                            CAR_TYPES.add(carType);
-                            MILEAGES.add(mileage);
-                            CAR_PHOTOS.add(carPhoto);
-                            DEALER_ID.add(dealerID);
-                            CAR_ID.add(carID);*/
+                        }
+                        if (i == 0) {
+                            if (tabLayout.getSelectedTabPosition() == 0) {
+                                AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                                Collections.sort(carArr, Car.PriceComparator);
+                                listViewCarResult.setAdapter(adapterCarResult);
+                            } else if (tabLayout.getSelectedTabPosition() == 1) {
+                                AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                                Collections.sort(carArr, Car.MileageComparator);
+                                listViewCarResult.setAdapter(adapterCarResult);
+                            } else {
+                                AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                                Collections.sort(carArr, Car.YearComparator);
+                                listViewCarResult.setAdapter(adapterCarResult);
+                            }
 
+                        } else {
+                            if (tabLayout.getSelectedTabPosition() == 0) {
+                                AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                                Collections.sort(carArr, Collections.reverseOrder(Car.PriceComparator));
+                                listViewCarResult.setAdapter(adapterCarResult);
+                            } else if (tabLayout.getSelectedTabPosition() == 1) {
+                                AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                                Collections.sort(carArr, Collections.reverseOrder(Car.MileageComparator));
+                                listViewCarResult.setAdapter(adapterCarResult);
+                            } else {
+                                AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
+                                Collections.sort(carArr, Collections.reverseOrder(Car.YearComparator));
+                                listViewCarResult.setAdapter(adapterCarResult);
+                            }
 
                         }
-                        //AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
-                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
-
-                        listViewCarResult.setAdapter(adapterCarResult);
                     } else {
                         Toast.makeText(SearchCarResultActivity.this, message, Toast.LENGTH_LONG).show();
                     }
@@ -182,21 +361,11 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
     private void clearList() {
         carArr.clear();
-      /*  NAMES.clear();
-        PRICES.clear();
-        COLORS.clear();
-        DESCS.clear();
-        YEARS.clear();
-        CAR_STATUS.clear();
-        CAR_TYPES.clear();
-        MILEAGES.clear();
-        CAR_PHOTOS.clear();
-        DEALER_ID.clear();
-        CAR_ID.clear(); */
+
     }
 
 
-    private void getSearchResult(String url, final String brand, final String model) {
+    private void getSearchResult(String url, final String brand, final String model, final int i) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -212,13 +381,13 @@ public class SearchCarResultActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             jsonObj = jsonArray.getJSONObject(i);
                             String carName = jsonObj.getString("carName");
-                            String price = jsonObj.getString("price");
+                            int price = jsonObj.getInt("price");
                             String color = jsonObj.getString("color");
                             String desc = jsonObj.getString("desc");
-                            String year = jsonObj.getString("year");
+                            int year = jsonObj.getInt("year");
                             String carStatus = jsonObj.getString("carStatus");
                             String carType = jsonObj.getString("carType");
-                            String mileage = jsonObj.getString("mileage");
+                            int mileage = jsonObj.getInt("mileage");
                             String carPhoto = jsonObj.getString("car_photo");
                             String dealerID = jsonObj.getString("dealerID");
                             String carID = jsonObj.getString("carID");
@@ -227,23 +396,49 @@ public class SearchCarResultActivity extends AppCompatActivity {
 
                             carArr.add(car);
 
-
-                            /*NAMES.add(carName);
-                            PRICES.add(price);
-                            COLORS.add(color);
-                            DESCS.add(desc);
-                            YEARS.add(year);
-                            CAR_STATUS.add(carStatus);
-                            CAR_TYPES.add(carType);
-                            MILEAGES.add(mileage);
-                            CAR_PHOTOS.add(carPhoto);
-                            DEALER_ID.add(dealerID);
-                            CAR_ID.add(carID);*/
-
                         }
-                        //AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, NAMES, PRICES, COLORS, DESCS, YEARS, CAR_STATUS, CAR_TYPES, MILEAGES, CAR_PHOTOS, DEALER_ID, CAR_ID);
-                        AdapterCarResult adapterCarResult = new AdapterCarResult(SearchCarResultActivity.this, carArr);
-                        listViewCarResult.setAdapter(adapterCarResult);
+                        if (i == 0) {
+                            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                                @Override
+                                public void onTabSelected(TabLayout.Tab tab) {
+                                    CharSequence t = tab.getText();
+                                    adaptCompare(t);
+
+                                }
+
+                                @Override
+                                public void onTabUnselected(TabLayout.Tab tab) {
+
+                                }
+
+                                @Override
+                                public void onTabReselected(TabLayout.Tab tab) {
+                                    CharSequence t = tab.getText();
+                                    adaptCompare(t);
+
+                                }
+                            });
+
+                        } else {
+                            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                                @Override
+                                public void onTabSelected(TabLayout.Tab tab) {
+                                    CharSequence t = tab.getText();
+                                    adaptCompareDESC(t);
+                                }
+
+                                @Override
+                                public void onTabUnselected(TabLayout.Tab tab) {
+
+                                }
+
+                                @Override
+                                public void onTabReselected(TabLayout.Tab tab) {
+                                    CharSequence t = tab.getText();
+                                    adaptCompareDESC(t);
+                                }
+                            });
+                        }
                     } else {
                         Toast.makeText(SearchCarResultActivity.this, message, Toast.LENGTH_LONG).show();
                     }
@@ -289,4 +484,5 @@ public class SearchCarResultActivity extends AppCompatActivity {
             Toast.makeText(context, "No Record! \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
+
 }
