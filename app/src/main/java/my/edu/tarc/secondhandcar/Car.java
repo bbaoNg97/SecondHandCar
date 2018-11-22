@@ -134,7 +134,7 @@ public class Car {
 
     }*/
 
-    /*Comparator for sorting the list by Price acsending*/
+    /*Comparator for sorting the list by Price */
 
     public static Comparator<Car> PriceComparator= new Comparator<Car>() {
         @Override
@@ -145,7 +145,7 @@ public class Car {
         }
 
     };
-/*Comparator for sorting the list by Mileage ascending*/
+/*Comparator for sorting the list by Mileage */
 
     public static Comparator<Car> MileageComparator = new Comparator<Car>() {
         @Override
@@ -156,7 +156,7 @@ public class Car {
         }
 
     };
-/*Comparator for sorting the list by Year ascending*/
+/*Comparator for sorting the list by Year */
 
     public static Comparator<Car> YearComparator = new Comparator<Car>() {
         @Override

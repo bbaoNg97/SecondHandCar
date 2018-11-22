@@ -1,6 +1,5 @@
 package my.edu.tarc.secondhandcar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -24,20 +23,19 @@ import java.util.List;
  * Created by Bbao on 17/10/2018.
  */
 
-public class AdapterCarResult extends ArrayAdapter<Car> {
+public class AdapterSearchCarResult extends ArrayAdapter<Car> {
 
     private Context mContext;
     private List<Car> cars = new ArrayList<>();
     private String strName, strImage, strPrice, strColor, strDesc, strYear, strCarStatus, strType, strMileage, strDealerID, strCarID;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
-    DecimalFormat decimalFormat=new DecimalFormat("#,###,###,###");
+    DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
 
-    public AdapterCarResult(Context context, ArrayList<Car> car) {
+    public AdapterSearchCarResult(Context context, ArrayList<Car> car) {
         super(context, R.layout.content_search_result);
         mContext = context;
         cars = car;
     }
-
 
 
     @Override
@@ -52,14 +50,15 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
         View v = inflater.inflate(R.layout.content_search_result, null, true);
         final TextView carResult = (TextView) v.findViewById(R.id.textViewCarResult);
         final ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCarResult);
-
-      final Car currentCar = cars.get(position);
+        final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
+        final Car currentCar = cars.get(position);
         Glide.with(mContext)
                 .asBitmap()
-                .load( currentCar.getCAR_PHOTOS())
+                .load(currentCar.getCAR_PHOTOS())
                 .into(imCarResult);
 
         carResult.setText(currentCar.getNAMES());
+        imageViewTop.setVisibility(View.GONE);
 
         ConstraintLayout searchResultLayout = (ConstraintLayout) v.findViewById(R.id.searchResultLayout);
         searchResultLayout.setOnClickListener(new View.OnClickListener() {
@@ -68,12 +67,12 @@ public class AdapterCarResult extends ArrayAdapter<Car> {
 
                 strName = carResult.getText().toString();
                 strImage = currentCar.getCAR_PHOTOS();
-                Double dPrice = (double)currentCar.getPRICES();
+                Double dPrice = (double) currentCar.getPRICES();
                 strPrice = formatter.format(dPrice);
                 strColor = currentCar.getCOLORS();
 
                 strMileage = decimalFormat.format(currentCar.getMILEAGES());
-                strYear = currentCar.getYEARS()+"";
+                strYear = currentCar.getYEARS() + "";
                 strDealerID = currentCar.getDEALER_ID();
                 strDesc = currentCar.getDESCS();
                 strCarID = currentCar.getCAR_ID();
