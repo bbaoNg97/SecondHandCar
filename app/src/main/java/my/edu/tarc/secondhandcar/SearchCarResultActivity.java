@@ -220,7 +220,7 @@ public class SearchCarResultActivity extends AppCompatActivity {
                         JSONObject jsonObj;
 
                         for (int i = 0; i < jsonArr.length(); i++) {
-                            //TODO: just show only 5 record is enough
+
                             jsonObj = jsonArr.getJSONObject(i);
                             String carName = jsonObj.getString("carName");
                             int price = jsonObj.getInt("price");
