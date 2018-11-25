@@ -252,8 +252,6 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                         tvTime.setEnabled(false);
                                         btnSendRequest.setEnabled(false);
 
-                                        //Todo: store date, time, appID,custID,carID,status(pending by default)(no need) ,agentID(no need)
-                                        //custID is get,date time also got(strDate, strTime)
                                         makeServiceCall(MakeAppointmentActivity.this, getString(R.string.insert_booking_url), nextAppID, strDate, strTime, carID, custID);
 
                                     }
@@ -371,7 +369,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     }
 
     private void sendEmail() {
-        //TODO: get all agentEmail,pass it in String[] with ","
+
         String recipientList = "nglp-wa15@student.tarc.edu.my,bbaong2012@gmail.com";
         String[] recipients = recipientList.split(",");
 
@@ -533,4 +531,47 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         }
 
     }
+    //TODO: get all agentEmail,pass it in String[] with ","
+    //to check if there is any redundant customer Email in Insert process, and count the total number of customer to generate ID
+    /*private void getAgentEmail(Context context, String url,String dealerID) {
+        // Instantiate the RequestQueue
+        requestQueue = Volley.newRequestQueue(context);
+
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
+                url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            //everytime i listen to the server, i clear the list
+                            custEmailList.clear();
+
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject userResponse = (JSONObject) response.get(i);
+                                //json object that contains all of the customer in the user table
+                                String strEmail = userResponse.getString("custEmail");
+                                custEmailList.add(strEmail);
+                                totalCust++;
+                            }
+
+
+                        } catch (Exception e) {
+                            checkError(e, RegistrationActivity.this);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        checkError(volleyError, RegistrationActivity.this);
+
+                    }
+                });
+
+        // Set the tag on the request.
+        jsonObjectRequest.setTag(TAG);
+
+        // Add the request to the RequestQueue.
+        requestQueue.add(jsonObjectRequest);
+    }*/
 }
