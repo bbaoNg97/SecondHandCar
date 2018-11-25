@@ -140,5 +140,6 @@
     <string name="sort_by">"Sort by : "</string>
     <string name="generate_qr_code">Generate QR code</string>
     <string name="cancel_book">Cancel booking</string>
+    <string name="caption_qrcode">QR code generated</string>
 
 </resources>

@@ -23,6 +23,7 @@ public class QRcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.caption_qrcode));
         Intent intent = getIntent();
         appID = intent.getStringExtra("appID");
         agentID = intent.getStringExtra("agentID");
@@ -31,7 +32,7 @@ public class QRcodeActivity extends AppCompatActivity {
         //generate QR code
         MultiFormatWriter multiFormatWriter=new MultiFormatWriter();
         try{
-            BitMatrix bitMatrix=multiFormatWriter.encode(appID+","+agentID, BarcodeFormat.QR_CODE,200,200);
+            BitMatrix bitMatrix=multiFormatWriter.encode(appID+"\n"+agentID, BarcodeFormat.QR_CODE,200,200);
             BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
             Bitmap bitmap=barcodeEncoder.createBitmap(bitMatrix);
             ivQRcode.setImageBitmap(bitmap);
