@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,21 +20,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity" />
-
         <activity
             android:name=".ResetPwActivity"
             android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".RegistrationActivity"
             android:parentActivityName=".LoginActivity" />
-        <activity
-            android:name=".ViewProfileActivity"></activity>
+        <activity android:name=".ViewProfileActivity" />
         <activity
             android:name=".EditProfActivity"
             android:parentActivityName=".ViewProfileActivity" />
         <activity
             android:name=".ChangePasswordActivity"
-            android:parentActivityName=".ViewProfileActivity"></activity>
+            android:parentActivityName=".ViewProfileActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,27 +43,20 @@
         <activity android:name=".searchCarActivity" />
         <activity
             android:name=".AdvSearchActivity"
-            android:parentActivityName=".searchCarActivity">
-
-        </activity>
-        <activity
-            android:name=".CarActivity"></activity>
-        <activity
-            android:name=".SearchCarResultActivity"></activity>
-        <activity
-            android:name=".MakeAppointmentActivity"></activity>
-        <activity
-            android:name=".BookingDetailActivity"></activity>
+            android:parentActivityName=".searchCarActivity"></activity>
+        <activity android:name=".CarActivity" />
+        <activity android:name=".SearchCarResultActivity" />
+        <activity android:name=".MakeAppointmentActivity" />
+        <activity android:name=".BookingDetailActivity" />
 
         <receiver android:name=".BookingBroadcastReceiver">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-
             </intent-filter>
         </receiver>
 
+        <activity android:name=".QRcodeActivity"></activity>
     </application>
-
 
 </manifest>

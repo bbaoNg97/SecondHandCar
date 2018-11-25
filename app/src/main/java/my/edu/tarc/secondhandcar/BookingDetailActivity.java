@@ -76,7 +76,8 @@ public class BookingDetailActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-       appID=intent.getStringExtra("appID");
+
+        appID = intent.getStringExtra("appID");
         carName = intent.getStringExtra("CarName");
         appDate = intent.getStringExtra("appDate");
         appTime = intent.getStringExtra("appTime");
@@ -84,10 +85,9 @@ public class BookingDetailActivity extends AppCompatActivity {
         bookStatus = intent.getStringExtra("bookStatus");
         acceptDate = intent.getStringExtra("acceptDate");
         acceptTime = intent.getStringExtra("acceptTime");
-        if(bookStatus.equals("Cancelled")||bookStatus.equals("Met")){
+        if (bookStatus.equals("Cancelled") || bookStatus.equals("Met")) {
             btnEditBooking.setEnabled(false);
-        }
-        else
+        } else
             btnEditBooking.setEnabled(true);
         SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
         ParsePosition pp = new ParsePosition(0);
@@ -127,7 +127,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     userResponse = jsonArray.getJSONObject(i);
 
-                                   // appID = userResponse.getString("appID");
+                                    // appID = userResponse.getString("appID");
                                     agentContact = userResponse.getString("agentContactNo");
                                     agentName = userResponse.getString("agentName");
                                     agentEmail = userResponse.getString("agentEmail");
@@ -203,13 +203,19 @@ public class BookingDetailActivity extends AppCompatActivity {
                             AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
                             //Toast.makeText(BookingDetailActivity.this,"\t\t\t\tCancel booking failed.\nOnly can cancel the booking within 24 hours after the agent accept the booking",Toast.LENGTH_LONG).show();
                             buider.setTitle("Cancel booking failed");
-                            buider.setMessage("Only can cancel the booking within 24 hours after agent has accepted the booking \n( Agent has accepted the booking at "+acceptDate + " " + acceptTime).setNegativeButton("OK",null).create().show();
+                            buider.setMessage("Only can cancel the booking within 24 hours after agent has accepted the booking \n( Agent has accepted the booking at " + acceptDate + " " + acceptTime).setNegativeButton("OK", null).create().show();
                         } else {
-                            cancelBooking(BookingDetailActivity.this,getString(R.string.cancel_booking_url), appID, agentID);
+                            cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
                         }
 
                     }
                 }).setNegativeButton("No", null).create().show();
+                return true;
+            case R.id.generateCode:
+                Intent intent=new Intent(BookingDetailActivity.this,QRcodeActivity.class);
+                intent.putExtra("appID",appID);
+                intent.putExtra("agentID",agentID);
+                startActivity(intent);
                 return true;
             default:
                 onBackPressed();
@@ -282,14 +288,23 @@ public class BookingDetailActivity extends AppCompatActivity {
     }
 
     public void onEdit(View v) {
-        Intent editBookingIntent = new Intent(BookingDetailActivity.this, MakeAppointmentActivity.class);
-        editBookingIntent.putExtra("from", "editBooking");
-        editBookingIntent.putExtra("appID", appID);
-        editBookingIntent.putExtra("Price", price);
-        editBookingIntent.putExtra("CarName", carName);
-        editBookingIntent.putExtra("appDate", appDate);
-        editBookingIntent.putExtra("appTime", appTime);
-        startActivity(editBookingIntent);
+        if (currentDateTime.after(validDateTime)) {
+            AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
+            //Toast.makeText(BookingDetailActivity.this,"\t\t\t\tCancel booking failed.\nOnly can cancel the booking within 24 hours after the agent accept the booking",Toast.LENGTH_LONG).show();
+            buider.setTitle("Edit booking denied");
+            buider.setMessage("Only can edit the booking within 24 hours after agent has accepted the booking \n( Agent has accepted the booking at " + acceptDate + " " + acceptTime).setNegativeButton("OK", null).create().show();
+        }
+        else{
+            Intent editBookingIntent = new Intent(BookingDetailActivity.this, MakeAppointmentActivity.class);
+            editBookingIntent.putExtra("from", "editBooking");
+            editBookingIntent.putExtra("appID", appID);
+            editBookingIntent.putExtra("Price", price);
+            editBookingIntent.putExtra("CarName", carName);
+            editBookingIntent.putExtra("appDate", appDate);
+            editBookingIntent.putExtra("appTime", appTime);
+            startActivity(editBookingIntent);
+        }
+
     }
 
     @Override
@@ -299,6 +314,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         }
         return super.onCreateOptionsMenu(menu);
     }
+
     private void proceed() {
         downloadingAppDetail.setVisibility(View.GONE);
         btnEditBooking.setEnabled(true);

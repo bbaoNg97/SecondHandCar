@@ -138,5 +138,7 @@
     <string name="get_recommended_car_url">https://dewy-minuses.000webhostapp.com/getRecommCar.php</string>
     <string name="tip">*Please provide some tips to let us recommend you*</string>
     <string name="sort_by">"Sort by : "</string>
+    <string name="generate_qr_code">Generate QR code</string>
+    <string name="cancel_book">Cancel booking</string>
 
 </resources>
