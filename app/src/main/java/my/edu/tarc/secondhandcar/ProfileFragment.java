@@ -81,7 +81,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        //inflater.inflate(R.menu.action_bar_login,menu);
         //to do layout setting
         boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
         //check if it has been logged in
@@ -131,7 +130,6 @@ public class ProfileFragment extends Fragment {
                 return false;
             }
         } catch (Exception e) {
-            //Toast.makeText(getActivity().getApplicationContext(), "Please login first", Toast.LENGTH_LONG).show();
             return false;
         }
 

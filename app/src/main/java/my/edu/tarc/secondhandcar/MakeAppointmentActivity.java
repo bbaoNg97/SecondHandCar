@@ -57,9 +57,10 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private String custID, price, carName;
     //private Date selectedTime;
     SharedPreferences sharePref;
-    private String appID, carID, appDate, appTime, strDate, strTime;
+    private String appID, carID, appDate, appTime, strDate, strTime, strDealerID, agentEmail;
     RequestQueue requestQueue;
     List<String> bookingList = new ArrayList<>();
+    private ArrayList<String> arrAgentEmail = new ArrayList<>();
 
     private int totalBooking;
     public static final String TAG = "my.edu.tarc.secondhandcar";
@@ -88,6 +89,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         custID = sharePref.getString("custID", null);
 
         Intent intent = getIntent();
+        strDealerID = intent.getStringExtra("dealerID");
         if (intent.getStringExtra("from").equals("booking")) {
             setTitle(R.string.title_chooseDateTime);
         } else {
@@ -95,6 +97,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             appID = intent.getStringExtra("appID");
             appDate = intent.getStringExtra("appDate");
             appTime = intent.getStringExtra("appTime");
+
             tvDate.setText(appDate);
             tvTime.setText(appTime);
             btnSendRequest.setText(R.string.update_booking);
@@ -109,6 +112,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         proceed();
 
         getAllAppointment(MakeAppointmentActivity.this, getString(R.string.get_appointment_url));
+        getAllAgentEmail(MakeAppointmentActivity.this, getString(R.string.get_agent_url), strDealerID);
         tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,7 +142,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                 TimePickerDialog dialog = new TimePickerDialog(
                         MakeAppointmentActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mTimeSetListener, hour, minute,false);
+                        mTimeSetListener, hour, minute, false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
 
@@ -162,7 +166,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                 String shTime;
                 SimpleDateFormat shFormatter = new SimpleDateFormat("hh:mm a");
 
-               // time = hour + ":" + minute;
+                // time = hour + ":" + minute;
 
                 if (hour >= 12) {
                     hour = hour - 12;
@@ -211,7 +215,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                         Date selectedDate = dateFormat.parse(strDate, pos);
 
                         SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
-                        ParsePosition pp=new ParsePosition(0);
+                        ParsePosition pp = new ParsePosition(0);
                         Date selectedTime = formatter.parse(strTime, pp);
                         //get the hour from selected time, must between 9am-5pm
                         cal.setTime(selectedTime);
@@ -235,9 +239,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                             AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
                             builder.setTitle("Connection Error");
                             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
-                        }
-
-                        else {
+                        } else {
                             //if the button is send appointment request
 
                             if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
@@ -306,6 +308,64 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         });
     }
 
+
+    private void getAllAgentEmail(final Context context, String url, final String strDealerID) {
+        arrAgentEmail.clear();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+                            //String message = jsonObject.getString("message");
+                            JSONArray jsonArray = jsonObject.getJSONArray("EMAIL");
+                            //if HAVE RECORD
+                            if (success.equals("1")) {
+                                //retrive the record
+                                JSONObject userResponse;
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    userResponse = jsonArray.getJSONObject(i);
+                                    agentEmail = userResponse.getString("agentEmail");
+
+                                    arrAgentEmail.add(agentEmail + ",");
+                                }
+
+
+                            } else {
+                                Toast.makeText(context, "No record", Toast.LENGTH_LONG).show();
+
+                            }
+
+                        } catch (JSONException e) {
+                            Toast.makeText(getApplicationContext(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+
+
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //LHS is from php, RHS is getText there
+                params.put("dealerID", strDealerID);
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
     private void makeServiceCall(final Context context, String url, final String appID, final String appDate, final String appTime, final String carID, final String custID) {
         RequestQueue queue = Volley.newRequestQueue(context);
         try {
@@ -370,15 +430,24 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
     private void sendEmail() {
 
-        String recipientList = "nglp-wa15@student.tarc.edu.my,bbaong2012@gmail.com";
-        String[] recipients = recipientList.split(",");
+        String Recipient = arrAgentEmail.toString().replace("[", "").replace("]", "");
+        String[] recipients = Recipient.split(",");
+        String strDate, strTime, strCar, strSender;
+        strDate = tvDate.getText().toString();
+        strTime = tvTime.getText().toString();
+        strSender = sharePref.getString("custName", null);
 
+        strCar = tvSelectedCar.getText().toString();
+        String title = "Request for make an appointment at " + strDate + " " + strTime;
+        String msg = "Hi, I would like to make an appointment with you at " + strDate + " "
+                + strTime + "with " + strCar + ".\nHope to receive your email.\nThanks!" +
+                "\nRegards,\n" + strSender;
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:"));
         intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "testing");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Request for make an appointment at Date Time");
-        intent.putExtra(Intent.EXTRA_TEXT, "Hi, I would like to make an appointment with you at WHAT DATE WHAT TIME with WHAT CAR.\nHope to receive your email.\nThanks!");
+        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "Appointment");
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, msg);
         startActivity(Intent.createChooser(intent, "Choose an email client"));
         if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
             Toast.makeText(MakeAppointmentActivity.this, "Appointment Added.", Toast.LENGTH_LONG).show();
@@ -493,7 +562,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(response);
                                 String success = jsonObject.getString("success");
                                 String message = jsonObject.getString("message");
-                                //if make appointment successful
+                                //if update appointment successful
                                 if (success.equals("1")) sendEmail();
                                 else Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
@@ -531,47 +600,6 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         }
 
     }
-    //TODO: get all agentEmail,pass it in String[] with ","
-    //to check if there is any redundant customer Email in Insert process, and count the total number of customer to generate ID
-    /*private void getAgentEmail(Context context, String url,String dealerID) {
-        // Instantiate the RequestQueue
-        requestQueue = Volley.newRequestQueue(context);
-
-        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
-                url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            //everytime i listen to the server, i clear the list
-                            custEmailList.clear();
-
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject userResponse = (JSONObject) response.get(i);
-                                //json object that contains all of the customer in the user table
-                                String strEmail = userResponse.getString("custEmail");
-                                custEmailList.add(strEmail);
-                                totalCust++;
-                            }
 
 
-                        } catch (Exception e) {
-                            checkError(e, RegistrationActivity.this);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        checkError(volleyError, RegistrationActivity.this);
-
-                    }
-                });
-
-        // Set the tag on the request.
-        jsonObjectRequest.setTag(TAG);
-
-        // Add the request to the RequestQueue.
-        requestQueue.add(jsonObjectRequest);
-    }*/
 }

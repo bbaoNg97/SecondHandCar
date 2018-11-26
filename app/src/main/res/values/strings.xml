@@ -122,6 +122,7 @@
     <string name="update_password_url">https://dewy-minuses.000webhostapp.com/CustUpdatePwd.php</string>
     <string name="insert_booking_url">https://dewy-minuses.000webhostapp.com/InsertBooking.php</string>
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAppointment.php</string>
+    <string name="get_agent_url">https://dewy-minuses.000webhostapp.com/getAgent.php</string>
     <string name="get_my_booking_url">https://dewy-minuses.000webhostapp.com/GetMyBooking.php</string>
     <string name="get_booking_detail_url">https://dewy-minuses.000webhostapp.com/getBookingDetail.php</string>
     <string name="get_car_brand_url">http://dewy-minuses.000webhostapp.com/brand.php</string>
@@ -141,5 +142,6 @@
     <string name="generate_qr_code">Generate QR code</string>
     <string name="cancel_book">Cancel booking</string>
     <string name="caption_qrcode">QR code generated</string>
+    <string name="title_search_car">Search Car</string>
 
 </resources>

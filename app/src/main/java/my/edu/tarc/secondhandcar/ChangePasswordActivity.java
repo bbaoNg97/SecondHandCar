@@ -66,18 +66,25 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String strCurrentPw = etCurrentPw.getText().toString();
+                String strNewPw = etNewPw.getText().toString();
+                String strConfPw = etConfirmPw.getText().toString();
+
                 if (!LoginActivity.isConnected(ChangePasswordActivity.this)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
                     builder.setTitle("Connection Error");
                     builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+                } else if (strCurrentPw.isEmpty()) {
+                    etCurrentPw.setError("Please enter current password");
+                } else if (strNewPw.isEmpty()) {
+                    etNewPw.setError("Please enter new password");
+                } else if (strConfPw.isEmpty()) {
+                    etConfirmPw.setError("Please enter confirm password");
                 } else if (!strCurrentPw.equals(currentPw)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
                     builder.setTitle("Incorrect Current Password");
                     builder.setMessage("Wrong current password.\nPlease try again ").setNegativeButton("Retry", null).create().show();
                     etCurrentPw.requestFocus();
                 } else {
-                    String strNewPw = etNewPw.getText().toString();
-                    String strConfPw = etConfirmPw.getText().toString();
                     if (!strNewPw.equals(strConfPw)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
                         builder.setTitle("Incorrect Password");

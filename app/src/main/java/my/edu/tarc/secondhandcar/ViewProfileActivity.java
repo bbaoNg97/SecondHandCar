@@ -16,8 +16,9 @@ import android.widget.Toast;
 
 public class ViewProfileActivity extends AppCompatActivity {
 
-    TextView textViewEditProf, textViewCustEmail, textViewCustID, textViewCustContactNo, textViewCustName;
-    Button buttonChangePw;
+    private TextView textViewEditProf, textViewCustEmail, textViewCustID, textViewCustContactNo, textViewCustName;
+    private Button buttonChangePw;
+    private String  id,email,name,contactNo;
 
 
 
@@ -37,29 +38,6 @@ public class ViewProfileActivity extends AppCompatActivity {
         textViewCustContactNo = (TextView) findViewById(R.id.textViewCustContNo);
         textViewCustEmail = (TextView) findViewById(R.id.textViewCustEmail);
         buttonChangePw = (Button) findViewById(R.id.buttonChangePw);
-
-
-        try {
-            //get share preference after login
-            SharedPreferences sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
-
-            String id = sharePref.getString("custID", null);
-            String email = sharePref.getString("custEmail", null);
-            String name = sharePref.getString("custName", null);
-            String contactNo = sharePref.getString("custContactNo", null);
-
-            textViewCustID.setText(id.toString());
-            textViewCustContactNo.setText(contactNo.toString());
-            textViewCustEmail.setText(email.toString());
-            textViewCustName.setText(name.toString());
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(ViewProfileActivity.this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
-        }
-
-
         //in the bracket, the first(attribute), the second is (id), the third constant (getPackageName())
         textViewEditProf = (TextView) findViewById(getResources().getIdentifier("textViewEditProf", "id", getPackageName()));
         textViewEditProf.setOnClickListener(new View.OnClickListener() {
@@ -90,5 +68,31 @@ public class ViewProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+            //get share preference after login
+            SharedPreferences sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+
+            id = sharePref.getString("custID", null);
+            email = sharePref.getString("custEmail", null);
+            name = sharePref.getString("custName", null);
+            contactNo = sharePref.getString("custContactNo", null);
+
+            textViewCustID.setText(id);
+            textViewCustContactNo.setText(contactNo);
+            textViewCustEmail.setText(email);
+            textViewCustName.setText(name);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(ViewProfileActivity.this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+
     }
 }

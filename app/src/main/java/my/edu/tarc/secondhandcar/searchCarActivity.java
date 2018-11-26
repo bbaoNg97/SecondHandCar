@@ -41,9 +41,8 @@ public class searchCarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_car);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.search_action_bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.title_search_car));
 
         buttonSearch = (Button) findViewById(R.id.buttonSearchCar);
         spBrand = (Spinner) findViewById(R.id.spinnerCarBrand);

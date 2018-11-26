@@ -87,7 +87,7 @@ public class CarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //check connection
-                    if (!LoginActivity.isConnected(CarActivity.this)) {
+                if (!LoginActivity.isConnected(CarActivity.this)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(CarActivity.this);
                     builder.setTitle("Connection Error");
                     builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
@@ -102,20 +102,20 @@ public class CarActivity extends AppCompatActivity {
                             startActivity(loginIntent);
                         }
                     }).create().show();
-                }
-                    else{
+                } else {
                     Intent bookingIntent = new Intent(CarActivity.this, MakeAppointmentActivity.class);
                     bookingIntent.putExtra("from", "booking");
                     bookingIntent.putExtra("CarName", name);
                     bookingIntent.putExtra("Price", price);
                     bookingIntent.putExtra("carID", carID);
+                    bookingIntent.putExtra("dealerID", dealerID);
                     startActivity(bookingIntent);
-                    }
-
                 }
-            });
 
-        }
+            }
+        });
+
+    }
 
     private void getDealerLoc(String url, final String dealerID) {
 

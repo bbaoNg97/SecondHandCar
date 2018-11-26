@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private String name;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,19 +40,19 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         name = sharePref.getString("custName", null);
 
-        mMainFrame=(FrameLayout)findViewById(R.id.main_fram);
-        mMainNav=(BottomNavigationView)findViewById(R.id.main_nav);
+        mMainFrame = (FrameLayout) findViewById(R.id.main_fram);
+        mMainNav = (BottomNavigationView) findViewById(R.id.main_nav);
 
-        homeFragment= new HomeFragment();
-        loanCalcFragment=new LoanCalcFragment();
-        profileFragment= new ProfileFragment();
-        myBookingFragment=new MyBookingFragment();
+        homeFragment = new HomeFragment();
+        loanCalcFragment = new LoanCalcFragment();
+        profileFragment = new ProfileFragment();
+        myBookingFragment = new MyBookingFragment();
 
 
         setFragment(homeFragment);
         setTitle(R.string.title_home);
 
-        if(!isConnected()){
+        if (!isConnected()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Connection Error");
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
@@ -62,13 +61,39 @@ public class MainActivity extends AppCompatActivity {
         mMainNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        setTitle(R.string.title_home);
+                        setFragment(homeFragment);
+                        return;
+
+                    case R.id.nav_loanCalc:
+                        setTitle(R.string.title_loanCalc);
+                        setFragment(loanCalcFragment);
+                        return;
+
+                    case R.id.nav_appointment:
+                        setTitle(R.string.title_appointment);
+                        setFragment(myBookingFragment);
+                        return;
+
+                    case R.id.nav_profile:
+                        setTitle(R.string.title_profile);
+                        setFragment(profileFragment);
+                        return;
+
+                    default:
+                        return;
+
+                }
 
             }
         });
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+
+                switch (item.getItemId()) {
                     case R.id.nav_home:
                         setTitle(R.string.title_home);
                         setFragment(homeFragment);
@@ -81,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.nav_appointment:
                         setTitle(R.string.title_appointment);
-                        setFragment( myBookingFragment);
+                        setFragment(myBookingFragment);
                         return true;
 
                     case R.id.nav_profile:
@@ -97,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     //to check network connectivity
     private boolean isConnected() {
         ConnectivityManager cm =
@@ -108,12 +134,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setFragment(Fragment fragement) {
-        FragmentTransaction fragmentTransaction =getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_fram,fragement);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_fram, fragement);
         fragmentTransaction.commit();
     }
-    private void switchFrag(MenuItem item){
 
 
-    }
 }

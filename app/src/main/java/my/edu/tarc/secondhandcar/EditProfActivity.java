@@ -36,7 +36,7 @@ public class EditProfActivity extends AppCompatActivity {
     public String email, id, name, contactNo;
     private ProgressBar updating;
     SharedPreferences sharePref;
-
+    SharedPreferences.Editor editor;
     RequestQueue queue;
 
     @Override
@@ -60,13 +60,13 @@ public class EditProfActivity extends AppCompatActivity {
         btnUpdate = (Button) findViewById(R.id.buttonUpdateProf);
         updating = (ProgressBar) findViewById(R.id.updating);
 
-        tvCustID.setText(id.toString());
-        tvCustEmail.setText(email.toString());
-        etCustName.setText(name.toString());
-        etCustContact.setText(contactNo.toString());
+        tvCustID.setText(id);
+        tvCustEmail.setText(email);
+        etCustName.setText(name);
+        etCustContact.setText(contactNo);
         updating.setVisibility(View.INVISIBLE);
 
-        if(!LoginActivity.isConnected(EditProfActivity.this)){
+        if (!LoginActivity.isConnected(EditProfActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(EditProfActivity.this);
             builder.setTitle("Connection Error");
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
@@ -79,19 +79,39 @@ public class EditProfActivity extends AppCompatActivity {
                 updating.setVisibility(View.VISIBLE);
                 etCustName.setEnabled(false);
                 etCustContact.setEnabled(false);
-                if(!LoginActivity.isConnected(EditProfActivity.this)){
+                if (!LoginActivity.isConnected(EditProfActivity.this)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditProfActivity.this);
                     builder.setTitle("Connection Error");
                     builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
                     proceed();
 
-                }
-                else{
+                } else {
                     try {
                         name = etCustName.getText().toString();
                         contactNo = etCustContact.getText().toString();
+                        //check ContactNo digit
+                        //case1: if contact no is 011
+                        String con=contactNo.substring(2, 3);
+                        if (con.equals("1")) {
+                            //if range is between 11-12
+                            if (contactNo.length() >= 11 && contactNo.length() <= 12) {
+                                makeServiceCall(EditProfActivity.this, getString(R.string.update_prof_url), id);
+                            } else {
+                                Toast.makeText(EditProfActivity.this, "Invalid contact number.\nPlease try again.", Toast.LENGTH_LONG).show();
+                                proceed();
+                            }
+                        }
+                        //case 2: if contact no is not 011
+                        else {
+                            //if digit is more than 11 or less than 11
+                            if (contactNo.length() > 11 || contactNo.length() < 11) {
+                                Toast.makeText(EditProfActivity.this, "Invalid digit range of contact number.\nPlease try again.", Toast.LENGTH_LONG).show();
+                                proceed();
+                            } else {
+                                makeServiceCall(EditProfActivity.this, getString(R.string.update_prof_url), id);
+                            }
+                        }
 
-                        makeServiceCall(EditProfActivity.this, getString(R.string.update_prof_url), id);
                     } catch (Exception e) {
                         Toast.makeText(EditProfActivity.this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
                         proceed();
@@ -121,10 +141,10 @@ public class EditProfActivity extends AppCompatActivity {
 
                                 if (success.equals("1")) {//UPDATED success
 
-                                    SharedPreferences.Editor editor=getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                                    SharedPreferences.Editor editor = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
                                     editor.putString("custName", name);
                                     editor.putString("custContactNo", contactNo);
-                                    editor.commit();
+                                    editor.apply();
 
                                     Toast.makeText(EditProfActivity.this, message, Toast.LENGTH_LONG).show();
                                     onBackPressed();
@@ -172,7 +192,7 @@ public class EditProfActivity extends AppCompatActivity {
         }
     }
 
-    private void proceed(){
+    private void proceed() {
         updating.setVisibility(View.GONE);
         etCustName.setEnabled(true);
         etCustContact.setEnabled(true);

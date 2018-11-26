@@ -46,8 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView textViewSignUp, textViewReset;
     ProgressBar loading;
 
-
-    //RequestQueue queue;
     View v;
     SharedPreferences.Editor editor;
 
