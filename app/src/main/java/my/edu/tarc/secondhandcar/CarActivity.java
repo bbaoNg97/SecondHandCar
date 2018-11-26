@@ -160,6 +160,7 @@ public class CarActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("dealerID", dealerID);
+                params.put("carID", carID);
                 return params;
             }
 
