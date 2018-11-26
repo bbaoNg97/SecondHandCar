@@ -41,7 +41,7 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     private Button btnEditBooking;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvDealerLoc, tvAgentName, tvAgentContactNo, tvAgentEmail;
-    private String carName, appDate, appTime, price, carPhoto, agentID, custID, bookStatus;
+    private String carName, appDate, appTime, price, carPhoto, agentID, custID, bookStatus, dealerID;
     private String appID, agentContact, agentName, agentEmail, dealerLocation, acceptDate, acceptTime;
     private ImageView ivCarPhoto;
     private ProgressBar downloadingAppDetail;
@@ -57,9 +57,6 @@ public class BookingDetailActivity extends AppCompatActivity {
         setTitle(R.string.title_booking_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
-        custID = sharePref.getString("custID", null);
-
         tvCarName = (TextView) findViewById(R.id.textViewCarName);
         tvAppDate = (TextView) findViewById(R.id.textViewAppDate);
         tvAppTime = (TextView) findViewById(R.id.textViewAppTime);
@@ -71,41 +68,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         ivCarPhoto = (ImageView) findViewById(R.id.imageViewCarPhoto);
         downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
         btnEditBooking = (Button) findViewById(R.id.buttonEdit);
-
         downloadingAppDetail.setVisibility(View.GONE);
-
-
-        Intent intent = getIntent();
-
-        appID = intent.getStringExtra("appID");
-        carName = intent.getStringExtra("CarName");
-        appDate = intent.getStringExtra("appDate");
-        appTime = intent.getStringExtra("appTime");
-        price = intent.getStringExtra("price");
-        bookStatus = intent.getStringExtra("bookStatus");
-        acceptDate = intent.getStringExtra("acceptDate");
-        acceptTime = intent.getStringExtra("acceptTime");
-        if (bookStatus.equals("Cancelled") || bookStatus.equals("Met")) {
-            btnEditBooking.setEnabled(false);
-        } else
-            btnEditBooking.setEnabled(true);
-        SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
-        ParsePosition pp = new ParsePosition(0);
-        currentDateTime = new Date();
-        //store the accept date time, if want to cancel booking,can check if it can be cancelled
-        acceptDateTime = shFormatter.parse(acceptDate + " " + acceptTime, pp);
-        //to make sure the valid cancel booking date time is in the 24 hours
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(acceptDateTime);
-        cal.add(Calendar.HOUR_OF_DAY, 24);
-        validDateTime = cal.getTime();
-
-        dPrice = Double.parseDouble(price);
-        price = formatter.format(dPrice);
-        carPhoto = intent.getStringExtra("carPhoto");
-        agentID = intent.getStringExtra("agentID");
-
-        getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
 
     }
 
@@ -118,7 +81,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
-                            //String message = jsonObject.getString("message");
+
                             JSONArray jsonArray = jsonObject.getJSONArray("DETAIL");
                             //if HAVE RECORD
                             if (success.equals("1")) {
@@ -132,7 +95,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                                     agentName = userResponse.getString("agentName");
                                     agentEmail = userResponse.getString("agentEmail");
                                     dealerLocation = userResponse.getString("dealerLocation");
-
+                                    dealerID = userResponse.getString("dealerID");
                                 }
                                 retrieveData();
                                 downloadingAppDetail.setVisibility(View.GONE);
@@ -212,9 +175,9 @@ public class BookingDetailActivity extends AppCompatActivity {
                 }).setNegativeButton("No", null).create().show();
                 return true;
             case R.id.generateCode:
-                Intent intent=new Intent(BookingDetailActivity.this,QRcodeActivity.class);
-                intent.putExtra("appID",appID);
-                intent.putExtra("agentID",agentID);
+                Intent intent = new Intent(BookingDetailActivity.this, QRcodeActivity.class);
+                intent.putExtra("appID", appID);
+                intent.putExtra("agentID", agentID);
                 startActivity(intent);
                 return true;
             default:
@@ -293,15 +256,18 @@ public class BookingDetailActivity extends AppCompatActivity {
             //Toast.makeText(BookingDetailActivity.this,"\t\t\t\tCancel booking failed.\nOnly can cancel the booking within 24 hours after the agent accept the booking",Toast.LENGTH_LONG).show();
             buider.setTitle("Edit booking denied");
             buider.setMessage("Only can edit the booking within 24 hours after agent has accepted the booking \n( Agent has accepted the booking at " + acceptDate + " " + acceptTime).setNegativeButton("OK", null).create().show();
-        }
-        else{
+        } else {
             Intent editBookingIntent = new Intent(BookingDetailActivity.this, MakeAppointmentActivity.class);
+            SharedPreferences.Editor editor=sharePref.edit();
+            editor.putString("appDate",appDate);
+            editor.putString("appTime",appTime);
+            editor.apply();
             editBookingIntent.putExtra("from", "editBooking");
             editBookingIntent.putExtra("appID", appID);
             editBookingIntent.putExtra("Price", price);
             editBookingIntent.putExtra("CarName", carName);
-            editBookingIntent.putExtra("appDate", appDate);
-            editBookingIntent.putExtra("appTime", appTime);
+            editBookingIntent.putExtra("dealerID", dealerID);
+            editBookingIntent.putExtra("agentEmail",agentEmail);
             startActivity(editBookingIntent);
         }
 
@@ -318,5 +284,44 @@ public class BookingDetailActivity extends AppCompatActivity {
     private void proceed() {
         downloadingAppDetail.setVisibility(View.GONE);
         btnEditBooking.setEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+        custID = sharePref.getString("custID", null);
+        appDate = sharePref.getString("appDate",null);
+        appTime = sharePref.getString("appTime",null);
+
+        Intent intent = getIntent();
+
+        appID = intent.getStringExtra("appID");
+        carName = intent.getStringExtra("CarName");
+        price = intent.getStringExtra("price");
+        bookStatus = intent.getStringExtra("bookStatus");
+        acceptDate = intent.getStringExtra("acceptDate");
+        acceptTime = intent.getStringExtra("acceptTime");
+        carPhoto = intent.getStringExtra("carPhoto");
+        agentID = intent.getStringExtra("agentID");
+        if (bookStatus.equals("Cancelled") || bookStatus.equals("Met")) {
+            btnEditBooking.setEnabled(false);
+        } else
+            btnEditBooking.setEnabled(true);
+
+        SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+        ParsePosition pp = new ParsePosition(0);
+        currentDateTime = new Date();
+        //store the accept date time, if want to cancel booking,can check if it can be cancelled
+        acceptDateTime = shFormatter.parse(acceptDate + " " + acceptTime, pp);
+        //to make sure the valid cancel booking date time is in the 24 hours
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(acceptDateTime);
+        cal.add(Calendar.HOUR_OF_DAY, 24);
+        validDateTime = cal.getTime();
+
+        dPrice = Double.parseDouble(price);
+        price = formatter.format(dPrice);
+        getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
     }
 }

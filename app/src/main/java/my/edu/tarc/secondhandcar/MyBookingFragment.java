@@ -87,23 +87,11 @@ public class MyBookingFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_booking, container, false);
-        sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
-        custID = sharePref.getString("custID", null);
         downloading = (ProgressBar) v.findViewById(R.id.downloadBooking);
         btnSearch = (Button) v.findViewById(R.id.btnSearch);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
         tvTips = (TextView) v.findViewById(R.id.textViewTips);
-
-        if (custID == null) {
-            downloading.setVisibility(View.GONE);
-            tvCaption.setVisibility(View.VISIBLE);
-            tvCaption1.setVisibility(View.VISIBLE);
-            btnSearch.setEnabled(true);
-        } else {
-            getAppointment(getActivity(), getString(R.string.get_my_booking_url));
-        }
-
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,5 +246,20 @@ public class MyBookingFragment extends Fragment {
         arrAppID.clear();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+        custID = sharePref.getString("custID", null);
+
+        if (custID == null) {
+            downloading.setVisibility(View.GONE);
+            tvCaption.setVisibility(View.VISIBLE);
+            tvCaption1.setVisibility(View.VISIBLE);
+            btnSearch.setEnabled(true);
+        } else {
+            getAppointment(getActivity(), getString(R.string.get_my_booking_url));
+        }
+    }
 }

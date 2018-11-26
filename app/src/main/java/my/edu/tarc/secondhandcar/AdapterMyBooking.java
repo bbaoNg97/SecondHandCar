@@ -93,9 +93,12 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
                 strAcceptTime = acceptTime.get(position);
                 strAppID=appID.get(position);
                 Intent bookingDetailIntent = new Intent(context, BookingDetailActivity.class);
+                SharedPreferences sharePref=context.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharePref.edit();
+                editor.putString("appDate",bookingDate.getText().toString());
+                editor.putString("appTime",bookingTime.getText().toString());
+                editor.apply();
                 bookingDetailIntent.putExtra("CarName", carName.getText().toString());
-                bookingDetailIntent.putExtra("appDate", bookingDate.getText().toString());
-                bookingDetailIntent.putExtra("appTime", bookingTime.getText().toString());
                 bookingDetailIntent.putExtra("price", strPrice);
                 bookingDetailIntent.putExtra("carPhoto", strCarPhoto);
                 bookingDetailIntent.putExtra("agentID", strAgentID);

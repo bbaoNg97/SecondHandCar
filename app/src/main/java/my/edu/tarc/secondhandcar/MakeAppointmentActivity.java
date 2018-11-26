@@ -57,7 +57,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private String custID, price, carName;
     //private Date selectedTime;
     SharedPreferences sharePref;
-    private String appID, carID, appDate, appTime, strDate, strTime, strDealerID, agentEmail;
+    private String appID, carID, appDate, appTime, strDate, strTime, strDealerID, agentEmail,currentAgentEmail;
     RequestQueue requestQueue;
     List<String> bookingList = new ArrayList<>();
     private ArrayList<String> arrAgentEmail = new ArrayList<>();
@@ -87,17 +87,20 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
+        appDate = sharePref.getString("appDate",null);
+        appTime = sharePref.getString("appTime",null);
 
         Intent intent = getIntent();
         strDealerID = intent.getStringExtra("dealerID");
+        currentAgentEmail=intent.getStringExtra("agentEmail");
+        //if is from booking
         if (intent.getStringExtra("from").equals("booking")) {
             setTitle(R.string.title_chooseDateTime);
-        } else {
+        }
+        // if is from edit booking
+        else {
             setTitle(R.string.title_edit_booking);
             appID = intent.getStringExtra("appID");
-            appDate = intent.getStringExtra("appDate");
-            appTime = intent.getStringExtra("appTime");
-
             tvDate.setText(appDate);
             tvTime.setText(appTime);
             btnSendRequest.setText(R.string.update_booking);
@@ -110,7 +113,6 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         tvSelectedCar.setText(carName);
         tvPrice.setText(price);
         proceed();
-
         getAllAppointment(MakeAppointmentActivity.this, getString(R.string.get_appointment_url));
         getAllAgentEmail(MakeAppointmentActivity.this, getString(R.string.get_agent_url), strDealerID);
         tvDate.setOnClickListener(new View.OnClickListener() {
@@ -379,7 +381,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 String message = jsonObject.getString("message");
                                 //if make appointment successful
                                 if (success.equals("1")) {
-                                    sendEmail();
+                                    sendEmailToAll();
 
                                 } else {
 
@@ -428,7 +430,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
     }
 
-    private void sendEmail() {
+    private void sendEmailToAll() {
 
         String Recipient = arrAgentEmail.toString().replace("[", "").replace("]", "");
         String[] recipients = Recipient.split(",");
@@ -438,9 +440,38 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         strSender = sharePref.getString("custName", null);
 
         strCar = tvSelectedCar.getText().toString();
-        String title = "Request for make an appointment at " + strDate + " " + strTime;
-        String msg = "Hi, I would like to make an appointment with you at " + strDate + " "
-                + strTime + "with " + strCar + ".\nHope to receive your email.\nThanks!" +
+        String title = "Request for making appointment on car review";
+        String msg = "Hi,\nI would like to make an appointment with you at " + strDate + " "
+                + strTime + " with " + strCar + ".\nHope to receive your email.\nThanks!" +
+                "\nRegards,\n" + strSender;
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "Appointment");
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, msg);
+        startActivity(Intent.createChooser(intent, "Choose an email client"));
+        if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
+            Toast.makeText(MakeAppointmentActivity.this, "Appointment Added.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MakeAppointmentActivity.this, "Appointment Updated.", Toast.LENGTH_LONG).show();
+        }
+        finish();
+    }
+
+    private void sendEmail() {
+        //TODO: get previous date time, and updated date time
+
+        String Recipient = currentAgentEmail;
+        String[] recipients = Recipient.split(",");
+        String strDate, strTime, strCar, strSender;
+        strDate = tvDate.getText().toString();
+        strTime = tvTime.getText().toString();
+        strSender = sharePref.getString("custName", null);
+        strCar = tvSelectedCar.getText().toString();
+        String title = "Updating appointment on car review ";
+        String msg = "Hi,\nThe appointment date time is updated to " + strDate + " "
+                + strTime + " with " + strCar + ".\nHope to receive your email.\nThanks!" +
                 "\nRegards,\n" + strSender;
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:"));
@@ -563,7 +594,13 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 String success = jsonObject.getString("success");
                                 String message = jsonObject.getString("message");
                                 //if update appointment successful
-                                if (success.equals("1")) sendEmail();
+                                if (success.equals("1")) {
+                                    SharedPreferences.Editor editor =sharePref.edit();
+                                    editor.putString("appDate",strDate);
+                                    editor.putString("appTime",strTime);
+                                    editor.apply();
+                                    sendEmail();
+                                }
                                 else Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
                             } catch (JSONException e) {
@@ -601,5 +638,9 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+    }
 }
