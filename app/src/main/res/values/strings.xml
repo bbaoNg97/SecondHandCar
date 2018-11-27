@@ -25,7 +25,8 @@
 
     <string name="forgot_password">Forgot password?</string>
     <string name="reset_your_password">Reset your password</string>
-    <string name="change_password">Change Password</string>
+    <string name="caption_reset_password">Enter your email address and we will send you an email to reset your password</string>
+    <string name="change_password">Reset Password</string>
     <string name="confirmPw">Confirm Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="current_password">Current Password</string>
@@ -33,8 +34,8 @@
     <string name="loan_calculator">Loan Calculator</string>
     <string name="my_booking">My Booking</string>
     <string name="searchbtn">Search your desired car</string>
-    <string name="car_brand">Car Brand: </string>
-    <string name="car_model">Car Model: </string>
+    <string name="car_brand">"Car Brand  : "</string>
+    <string name="car_model">"Car Model : "</string>
     <string name="recommendCar">Recommend me a car</string>
     <string name="price_range">Price Range</string>
     <string name="mileage">Mileage</string>
@@ -99,7 +100,7 @@
     <string name="title_car_detail">Car Details</string>
     <string name="title_edit_prof">Edit Profile</string>
     <string name="title_reg">Registration</string>
-    <string name="title_reset_pw">Reset Password</string>
+    <string name="title_reset_pw">Password Recovery</string>
     <string name="back">Back</string>
 
     <string name="cust_id">Customer ID: </string>
