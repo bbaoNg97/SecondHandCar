@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +42,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
         setTitle(R.string.change_password);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //get share preference
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         currentPw = sharePref.getString("password", null);
@@ -196,4 +198,14 @@ public class ChangePasswordActivity extends AppCompatActivity {
         btnSave.setEnabled(true);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 }

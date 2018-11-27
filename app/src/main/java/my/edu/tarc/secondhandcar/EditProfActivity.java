@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.Button;
@@ -44,7 +46,7 @@ public class EditProfActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_prof);
         setTitle(R.string.title_edit_prof);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //get share preference
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         email = sharePref.getString("custEmail", null);
@@ -91,7 +93,7 @@ public class EditProfActivity extends AppCompatActivity {
                         contactNo = etCustContact.getText().toString();
                         //check ContactNo digit
                         //case1: if contact no is 011
-                        String con=contactNo.substring(2, 3);
+                        String con = contactNo.substring(2, 3);
                         if (con.equals("1")) {
                             //if range is between 11-12
                             if (contactNo.length() >= 11 && contactNo.length() <= 12) {
@@ -198,4 +200,14 @@ public class EditProfActivity extends AppCompatActivity {
         etCustContact.setEnabled(true);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 }

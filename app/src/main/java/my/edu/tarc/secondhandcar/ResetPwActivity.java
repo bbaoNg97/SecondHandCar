@@ -50,6 +50,7 @@ public class ResetPwActivity extends AppCompatActivity {
         checkingEmail = (ProgressBar) findViewById(R.id.checkingEmail);
         checkingEmail.setVisibility(View.GONE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getCustomer(getApplicationContext(), getString(R.string.get_cust_url));
 
     }
 
@@ -66,9 +67,8 @@ public class ResetPwActivity extends AppCompatActivity {
         } else if (etEmailAddr.getText().toString().isEmpty()) {
             etEmailAddr.setError("Please fill in your email address");
         } else {
-            getCustomer(getApplicationContext(), getString(R.string.get_cust_url));
             if (foundEmail(email)) {
-                Toast.makeText(ResetPwActivity.this, "Email sent!Please Check your mailbox to reset password", Toast.LENGTH_LONG).show();
+                Toast.makeText(ResetPwActivity.this, "Email sent!Please check your mailbox to reset password", Toast.LENGTH_LONG).show();
                 Intent loginIntent = new Intent(ResetPwActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
             } else {
@@ -134,7 +134,7 @@ public class ResetPwActivity extends AppCompatActivity {
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else {
-            Toast.makeText(context, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Send email failed. \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -160,6 +160,7 @@ public class ResetPwActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
+
         return super.onOptionsItemSelected(item);
     }
 }

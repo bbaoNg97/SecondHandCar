@@ -119,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLogin(final String email, final String pw) {
-        //Customer customer = new Customer();
         loading.setVisibility(View.VISIBLE);
         buttonLogin.setEnabled(false);
         textViewSignUp.setEnabled(false);
@@ -140,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                     String contactNo = "";
                     String email = "";
                     String pw = "";
-
+                    //if login success
                     if (success.equals("1")) {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object = jsonArray.getJSONObject(i);

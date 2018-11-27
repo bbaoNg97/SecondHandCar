@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.icu.text.DecimalFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,12 +42,12 @@ public class AdvSearchActivity extends AppCompatActivity {
     public static final String Max_YEAR = "maximum year ";
 
     //store the default value
-    private int minPrice=5000;
-    private int maxPrice=5000000;
-    private int minMileage=5000;
-    private int maxMileage=1000000;
-    private int minYear=1950;
-    private int maxYear=2018;
+    private int minPrice = 5000;
+    private int maxPrice = 5000000;
+    private int minMileage = 5000;
+    private int maxMileage = 1000000;
+    private int minYear = 1950;
+    private int maxYear = 2018;
     private String colorName, spPurpose;
 
     @Override
@@ -58,7 +60,7 @@ public class AdvSearchActivity extends AppCompatActivity {
 
         mSpinnerColor = (Spinner) findViewById(R.id.spinnerColor);
         setTitle(R.string.title_adv_search);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         spinnerColorName = new String[]{"All", "White", "Black", "Silver", "Red", "Blue", "Brown",
                 "Yellow", "Green", "Purple", "Others"};
@@ -324,5 +326,16 @@ public class AdvSearchActivity extends AppCompatActivity {
 
     private String getFormatedAmount(int amount) {
         return NumberFormat.getNumberInstance(Locale.ENGLISH).format(amount);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -27,8 +27,8 @@ public class ProfileFragment extends Fragment {
     private TextView tvWelcome, tvAboutUs, tvRateUs, tvShareApp;
     private Button btnLogout;
     private TableLayout tlWelcome;
-    private String name;
-    boolean loggedIn = false;
+    private String name, custID;
+    SharedPreferences sharePref;
 
 
     public ProfileFragment() {
@@ -43,16 +43,16 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         tvWelcome = (TextView) v.findViewById(R.id.textViewWelcome);
         btnLogout = (Button) v.findViewById(R.id.buttonLogout);
         tlWelcome = (TableLayout) v.findViewById(R.id.tableLayoutWelcome);
-
-
         btnLogout = (Button) v.findViewById(R.id.buttonLogout);
+        sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,15 +62,18 @@ public class ProfileFragment extends Fragment {
                 user.putString("custEmail", null);
                 user.putString("password", null);
                 user.putString("custContactNo", null);
+
                 user.apply();
 
-                HomeFragment fragmentMain = new HomeFragment();
-                FragmentManager fManager = getFragmentManager();
-                FragmentTransaction fTransaction=fManager.beginTransaction();
-                fTransaction.replace(R.id.main_fram,fragmentMain);
-                fTransaction.addToBackStack(null);
-                fTransaction.commit();
-                Toast.makeText(getActivity(),"Logout Success",Toast.LENGTH_SHORT).show();
+                //HomeFragment fragmentMain = new HomeFragment();
+                //FragmentManager fManager = getFragmentManager();
+                //FragmentTransaction fTransaction = fManager.beginTransaction();
+                //fTransaction.replace(R.id.main_fram, fragmentMain);
+                //fTransaction.addToBackStack(null);
+                //fTransaction.commit();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Toast.makeText(getActivity(), "Logout Success", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
             }
         });
 
@@ -135,5 +138,28 @@ public class ProfileFragment extends Fragment {
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+        //success case
+        getActivity().invalidateOptionsMenu();
+        custID = sharePref.getString("custID", null);
+        try {
+            if (custID.equals(null)) {
+                btnLogout.setVisibility(View.GONE);
+                tvWelcome.setVisibility(View.GONE);
+            } else {
+                btnLogout.setVisibility(View.VISIBLE);
+                tvWelcome.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            btnLogout.setVisibility(View.GONE);
+            tvWelcome.setVisibility(View.GONE);
+        }
+
+
+    }
 
 }

@@ -49,9 +49,9 @@ public class searchCarActivity extends AppCompatActivity {
         spModel = (Spinner) findViewById(R.id.spinnerCarModel);
         pbRetrievingData = (ProgressBar) findViewById(R.id.retrievingCarData);
         buttonAdvSearch = (Button) findViewById(R.id.buttonAdvSearch);
-
-        pbRetrievingData.setVisibility(View.VISIBLE);
         buttonSearch.setEnabled(false);
+        pbRetrievingData.setVisibility(View.VISIBLE);
+
         getBrand(getString(R.string.get_car_brand_url));
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +94,7 @@ public class searchCarActivity extends AppCompatActivity {
     }
 
     private void getBrand(String url) {
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -132,7 +133,7 @@ public class searchCarActivity extends AppCompatActivity {
                     finish();
                 }
                 pbRetrievingData.setVisibility(View.GONE);
-                buttonSearch.setEnabled(true);
+
             }
         },
                 new Response.ErrorListener() {
@@ -156,6 +157,7 @@ public class searchCarActivity extends AppCompatActivity {
 
 
     private void getModel(String url, final String carBrand) {
+        buttonSearch.setEnabled(false);
         pbRetrievingData.setVisibility(View.VISIBLE);
         cModel.clear();
         //pbRetrievingData.setVisibility(View.VISIBLE);
@@ -195,6 +197,7 @@ public class searchCarActivity extends AppCompatActivity {
                     finish();
                 }
                 pbRetrievingData.setVisibility(View.GONE);
+                buttonSearch.setEnabled(true);
             }
 
         },
