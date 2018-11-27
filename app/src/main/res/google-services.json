@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "644698731214",
+    "firebase_url": "https://secondhandcar-f57d6.firebaseio.com",
+    "project_id": "secondhandcar-f57d6",
+    "storage_bucket": "secondhandcar-f57d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644698731214:android:b6b504635f9bc494",
+        "android_client_info": {
+          "package_name": "my.edu.tarc.secondhandcar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644698731214-hl4enp3e2hjfjjn6dj9911uh58mlgn65.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "my.edu.tarc.secondhandcar",
+            "certificate_hash": "67a74f01642a0aa665a74619db64de31ac94e125"
+          }
+        },
+        {
+          "client_id": "644698731214-9q330fuurjgud7sedfee698chtnnrqnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBei0VDy3va6nmKj90VGsTb1ROXQCDCdX4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644698731214-9q330fuurjgud7sedfee698chtnnrqnr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
