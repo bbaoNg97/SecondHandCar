@@ -38,7 +38,7 @@ public class PromAdapter extends RecyclerView.Adapter<PromAdapter.ViewHolder> {
     private ArrayList<String> mDiscount = new ArrayList<>();
     private Context mContext;
     private String price, Nprice;
-    private Double dPrice, oPrice;
+    private Double dPrice, oPrice,Rate;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     public PromAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarType, ArrayList<String> mDealerID, ArrayList<String> mStatus, ArrayList<String> mCarYear, ArrayList<String> mCarMile, ArrayList<String> mDiscount, Context mContext) {
@@ -79,7 +79,7 @@ public class PromAdapter extends RecyclerView.Adapter<PromAdapter.ViewHolder> {
 
         dPrice = Double.parseDouble(mCarPrice.get(position));
         price = formatter.format(dPrice);
-        Double Rate = Double.parseDouble(mDiscount.get(position));
+        Rate = Double.parseDouble(mDiscount.get(position));
 
         holder.textViewNormalPrice.setText(price);
 
@@ -93,6 +93,9 @@ public class PromAdapter extends RecyclerView.Adapter<PromAdapter.ViewHolder> {
 
                 dPrice = Double.parseDouble(mCarPrice.get(position));
                 price = formatter.format(dPrice);
+                Rate = Double.parseDouble(mDiscount.get(position));
+                oPrice = dPrice - (dPrice * Rate / 100);
+                Nprice = formatter.format(oPrice);
 
                 Intent intent = new Intent(mContext, CarActivity.class);
                 intent.putExtra("carID", mCarId.get(position));

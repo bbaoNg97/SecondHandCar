@@ -88,6 +88,20 @@ public class HomeFragment extends Fragment {
         loadMain = (ProgressBar) v.findViewById(R.id.loadMain);
 
 
+        clearAll();
+        LoadPic(getView());
+
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(getActivity(), searchCarActivity.class);
+                startActivity(searchIntent);
+            }
+        });
+        return v;
+    }
+
+    private void clearAll() {
         mCarName.clear();
         mCarImage.clear();
         mCarId.clear();
@@ -100,16 +114,20 @@ public class HomeFragment extends Fragment {
         mStatus.clear();
         mCarType.clear();
         mDealerID.clear();
-        LoadPic(getView());
 
-        buttonSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent searchIntent = new Intent(getActivity(), searchCarActivity.class);
-                startActivity(searchIntent);
-            }
-        });
-        return v;
+        mCarName1.clear();
+        mCarImage1.clear();
+        mCarId1.clear();
+        mCarBrand1.clear();
+        mCarPrice1.clear();
+        mCarColor1.clear();
+        mCarDesc1.clear();
+        mCarYear1.clear();
+        mCarMile1.clear();
+        mStatus1.clear();
+        mCarType1.clear();
+        mDealerID1.clear();
+        mDiscount1.clear();
     }
 
     private void initRecyclerView(View v) {
