@@ -5,9 +5,15 @@
     <color name="colorAccent">#FF4081</color>
 
 
-    <color name="colorWhite">#ffffff</color>
+    <color name="White">#ffffff</color>
     <color name="colorWhiteTran">#80ffffff</color>
-    <color name="colorBlack">#000000</color>
+    <color name="Black">#000000</color>
     <color name="Red">#FF2C2C</color>
+    <color name="Blue">#0022FF</color>
+    <color name="Yellow">#EFFF00</color>
+    <color name="Silver">#C0C0C0</color>
+    <color name="Brown">#A52A2A</color>
+    <color name="Green">#008000</color>
+    <color name="Purple">#800080</color>
 
 </resources>

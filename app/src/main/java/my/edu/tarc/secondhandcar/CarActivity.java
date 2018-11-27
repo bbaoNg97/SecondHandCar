@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -31,17 +32,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.security.AccessController.getContext;
 
 public class CarActivity extends AppCompatActivity {
 
     private ImageView imageViewCars;
     private Button btnMakeAppointment;
-    private TextView textViewName, textViewDesc, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation;
+    private TextView textViewName, textViewDealerName, textViewDealerAddress, textViewDesc, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation;
     private ProgressBar pbLoading;
-    private String carID, name, price, color, desc, year, mile, status, carType, carPhoto, dealerID, dealerLoc;
+    private String carID, name, price, color, desc, year, mile, status, carType, carPhoto, dealerID, dealerLoc, dealerAddress, dealerName;
     private String custID;
+
+    DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
     SharedPreferences sharePref;
 
 
@@ -64,6 +70,8 @@ public class CarActivity extends AppCompatActivity {
         textViewName = (TextView) findViewById(R.id.textViewName);
         textViewYear = (TextView) findViewById(R.id.textViewYear);
         textViewLocation = (TextView) findViewById(R.id.textViewLocation);
+        textViewDealerName = (TextView) findViewById(R.id.textViewDealerName);
+        textViewDealerAddress = (TextView) findViewById(R.id.textViewDealerAddress);
 
         pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 
@@ -74,6 +82,7 @@ public class CarActivity extends AppCompatActivity {
         color = intent.getStringExtra("carColor");
         desc = intent.getStringExtra("carDesc");
         mile = intent.getStringExtra("carMileage");
+        mile=decimalFormat.format(Integer.parseInt(mile));
         carType = intent.getStringExtra("carType");
         year = intent.getStringExtra("carYear");
         price = intent.getStringExtra("carPrice");
@@ -129,13 +138,13 @@ public class CarActivity extends AppCompatActivity {
                     String message = jsonObject.getString("message");
                     JSONArray jsonArray = jsonObject.getJSONArray("LOCATION");
                     if (success.equals("1")) {
-                        String location = "";
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject object = jsonArray.getJSONObject(i);
-                            location = object.getString("dealerLoc").trim();
-                        }
 
-                        dealerLoc = location;
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        dealerLoc = object.getString("dealerLoc").trim();
+                        dealerAddress = object.getString("dealerAddress").trim();
+                        dealerName = object.getString("dealerName").trim();
+
+
                         loadData();
                     } else {
                         Toast.makeText(CarActivity.this, message, Toast.LENGTH_LONG).show();
@@ -182,14 +191,20 @@ public class CarActivity extends AppCompatActivity {
     }
 
     private void loadData() {
+        int colorResId = getResources().getColor(getResources().getIdentifier(color, "color", getPackageName()));
+        textViewColor.setTextColor(colorResId);
+        if (color.equals("White"))
+            textViewColor.setBackgroundResource(R.color.Black);
         textViewName.setText(name);
         Glide.with(CarActivity.this).load(carPhoto).into(imageViewCars);
         textViewColor.setText(color);
         textViewDesc.setText(desc);
-        textViewMileage.setText(mile);
+        textViewMileage.setText(mile + " KM");
         textViewYear.setText(year);
         textViewPrice.setText(price);
         textViewLocation.setText(dealerLoc);
+        textViewDealerName.setText(dealerName);
+        textViewDealerAddress.setText(dealerAddress);
     }
 
     @Override

@@ -68,7 +68,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Car For You"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/Black"
                 android:textSize="20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonSearch" />
@@ -76,7 +76,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewMainCar"
                 android:layout_width="0dp"
-                android:layout_height="190dp"
+                android:layout_height="195dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -97,7 +97,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="45dp"
                 android:text="Promotional Car"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/Black"
                 android:textSize="20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recyclerViewMainCar" />
@@ -105,7 +105,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewReco"
                 android:layout_width="0dp"
-                android:layout_height="190dp"
+                android:layout_height="195dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"

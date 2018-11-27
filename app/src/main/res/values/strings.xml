@@ -113,7 +113,7 @@
     <string name="get_minMileage">Min Mileage:</string>
     <string name="km">km</string>
     <string name="get_maxMileage">Max Mileage:</string>
-    <string name="description">Description</string>
+    <string name="description">Description :</string>
 
     <string name="login_url">https://dewy-minuses.000webhostapp.com/Login.php</string>
     <string name="reg_url">https://dewy-minuses.000webhostapp.com/Registration.php</string>

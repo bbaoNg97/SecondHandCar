@@ -29,7 +29,6 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
     private List<Car> cars = new ArrayList<>();
     private String strName, strImage, strPrice, strColor, strDesc, strYear, strCarStatus, strType, strMileage, strDealerID, strCarID;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
-    DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
 
     public AdapterRecommendCar(Context context, ArrayList<Car> car) {
         super(context, R.layout.content_search_result);
@@ -85,8 +84,7 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
                 Double dPrice = (double) currentCar.getPRICES();
                 strPrice = formatter.format(dPrice);
                 strColor = currentCar.getCOLORS();
-
-                strMileage = decimalFormat.format(currentCar.getMILEAGES());
+                strMileage = String.valueOf(currentCar.getMILEAGES());
                 strYear = currentCar.getYEARS() + "";
                 strDealerID = currentCar.getDEALER_ID();
                 strDesc = currentCar.getDESCS();

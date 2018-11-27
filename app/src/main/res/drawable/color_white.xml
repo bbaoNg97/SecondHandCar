@@ -5,7 +5,7 @@
     android:innerRadius="0dp"
     android:thickness="20dp">
 
-    <solid android:color="@color/colorWhite"></solid>
+    <solid android:color="@color/White"></solid>
 
 
 </shape>

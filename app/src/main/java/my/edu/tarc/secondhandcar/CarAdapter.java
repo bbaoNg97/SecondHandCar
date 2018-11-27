@@ -37,6 +37,9 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private ArrayList<String> mCarPrice = new ArrayList<>();
     private ArrayList<String> mCarColor = new ArrayList<>();
     private ArrayList<String> mCarDesc = new ArrayList<>();
+    private ArrayList<String> mCarType = new ArrayList<>();
+    private ArrayList<String> mDealerID = new ArrayList<>();
+    private ArrayList<String> mStatus = new ArrayList<>();
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
     private Context mContext;
@@ -44,7 +47,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private Double dPrice;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
-    public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, Context mContext) {
+    public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarType, ArrayList<String> mDealerID, ArrayList<String> mStatus, ArrayList<String> mCarYear, ArrayList<String> mCarMile, Context mContext) {
         this.mCarName = mCarName;
         this.mCarImage = mCarImage;
         this.mCarId = mCarId;
@@ -52,10 +55,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
         this.mCarPrice = mCarPrice;
         this.mCarColor = mCarColor;
         this.mCarDesc = mCarDesc;
+        this.mCarType = mCarType;
+        this.mDealerID = mDealerID;
+        this.mStatus = mStatus;
         this.mCarYear = mCarYear;
         this.mCarMile = mCarMile;
         this.mContext = mContext;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -90,15 +97,19 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 dPrice = Double.parseDouble(mCarPrice.get(position));
                 price = formatter.format(dPrice);
 
+
                 Intent intent = new Intent(mContext, CarActivity.class);
                 intent.putExtra("carID", mCarId.get(position));
                 intent.putExtra("carName", mCarBrand.get(position) + " " + mCarName.get(position));
-                intent.putExtra("carPhoto", mCarImage.get(position));;
+                intent.putExtra("carPhoto", mCarImage.get(position));
                 intent.putExtra("carPrice", price);
                 intent.putExtra("carColor", mCarColor.get(position));
                 intent.putExtra("carDesc", mCarDesc.get(position));
                 intent.putExtra("carYear", mCarYear.get(position));
                 intent.putExtra("carMileage", mCarMile.get(position));
+                intent.putExtra("dealerID", mDealerID.get(position));
+                intent.putExtra("carType", mCarType.get(position));
+                intent.putExtra("carStatus", mStatus.get(position));
                 mContext.startActivity(intent);
             }
         });

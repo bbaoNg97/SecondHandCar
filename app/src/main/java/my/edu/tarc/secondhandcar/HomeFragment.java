@@ -47,10 +47,10 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> mCarDesc = new ArrayList<>();
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
-    private ArrayList<String> mCar_types = new ArrayList<>();
+    private ArrayList<String> mCarType = new ArrayList<>();
     private ArrayList<String> mDealerID = new ArrayList<>();
-    private ArrayList<String> mCar_status = new ArrayList<>();
-    private String Url = "https://dewy-minuses.000webhostapp.com/sellerCar.php";
+    private ArrayList<String> mStatus = new ArrayList<>();
+    private String Url = "https://dewy-minuses.000webhostapp.com/CustGetCar.php";
 
 
     public HomeFragment() {
@@ -78,8 +78,8 @@ public class HomeFragment extends Fragment {
         mCarDesc.clear();
         mCarYear.clear();
         mCarMile.clear();
-        mCar_status.clear();
-        mCar_types.clear();
+        mStatus.clear();
+        mCarType.clear();
         mDealerID.clear();
         LoadPic(getView());
 
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment {
 
     private void initRecyclerView(View v) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarYear, mCarMile, getActivity());
+        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarType,mDealerID,mStatus,mCarYear, mCarMile, getActivity());
         recyclerViewMainCar.setLayoutManager(layoutManager);
         recyclerViewMainCar.setAdapter(adapter);
         recyclerViewReco.setAdapter(adapter);
@@ -128,11 +128,15 @@ public class HomeFragment extends Fragment {
                             String desc = object.getString("desc");
                             String year = object.getString("year");
                             String mileage = object.getString("mileage");
-                            String carStatus;
-                            String carType;
-                            String dealerID;
+                            String carStatus=object.getString("status");
+                            String carType=object.getString("type");
+                            String dealerID=object.getString("dealerID");
 
 
+
+                            mStatus.add(carStatus);
+                            mCarType.add(carType);
+                            mDealerID.add(dealerID);
                             mCarName.add(name);
                             mCarImage.add(image_data);
                             mCarId.add(carID);
@@ -168,7 +172,6 @@ public class HomeFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("dealerid", "D0001");
                 return params;
             }
         };
