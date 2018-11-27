@@ -64,6 +64,7 @@ public class ProfileFragment extends Fragment {
                 user.putString("custContactNo", null);
                 user.apply();
 
+
                 HomeFragment fragmentMain = new HomeFragment();
                 FragmentManager fManager = getFragmentManager();
                 FragmentTransaction fTransaction=fManager.beginTransaction();

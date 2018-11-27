@@ -25,7 +25,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +54,21 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> mCarType = new ArrayList<>();
     private ArrayList<String> mDealerID = new ArrayList<>();
     private ArrayList<String> mStatus = new ArrayList<>();
+
+
+    private ArrayList<String> mCarName1 = new ArrayList<>();
+    private ArrayList<String> mCarImage1 = new ArrayList<>();
+    private ArrayList<String> mCarId1 = new ArrayList<>();
+    private ArrayList<String> mCarBrand1 = new ArrayList<>();
+    private ArrayList<String> mCarPrice1 = new ArrayList<>();
+    private ArrayList<String> mCarColor1 = new ArrayList<>();
+    private ArrayList<String> mCarDesc1 = new ArrayList<>();
+    private ArrayList<String> mCarYear1 = new ArrayList<>();
+    private ArrayList<String> mCarMile1 = new ArrayList<>();
+    private ArrayList<String> mCarType1 = new ArrayList<>();
+    private ArrayList<String> mDealerID1 = new ArrayList<>();
+    private ArrayList<String> mStatus1 = new ArrayList<>();
+    private ArrayList<String> mDiscount1 = new ArrayList<>();
     private String Url = "https://dewy-minuses.000webhostapp.com/CustGetCar.php";
 
 
@@ -95,10 +114,11 @@ public class HomeFragment extends Fragment {
 
     private void initRecyclerView(View v) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarType,mDealerID,mStatus,mCarYear, mCarMile, getActivity());
+        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarType, mDealerID, mStatus, mCarYear, mCarMile, getActivity());
+        PromAdapter adapter1=new PromAdapter(mCarName1, mCarImage1, mCarId1, mCarBrand1, mCarPrice1, mCarColor1, mCarDesc1, mCarType1, mDealerID1, mStatus1, mCarYear1, mCarMile1,mDiscount1, getActivity());
         recyclerViewMainCar.setLayoutManager(layoutManager);
         recyclerViewMainCar.setAdapter(adapter);
-        recyclerViewReco.setAdapter(adapter);
+        recyclerViewReco.setAdapter(adapter1);
 
 
     }
@@ -114,6 +134,7 @@ public class HomeFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
                     JSONArray jsonArray = jsonObject.getJSONArray("car");
+                    JSONArray jsonArray1 = jsonObject.getJSONArray("promotion");
                     if (success.equals("1")) {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object = jsonArray.getJSONObject(i);
@@ -128,10 +149,9 @@ public class HomeFragment extends Fragment {
                             String desc = object.getString("desc");
                             String year = object.getString("year");
                             String mileage = object.getString("mileage");
-                            String carStatus=object.getString("status");
-                            String carType=object.getString("type");
-                            String dealerID=object.getString("dealerID");
-
+                            String carStatus = object.getString("status");
+                            String carType = object.getString("type");
+                            String dealerID = object.getString("dealerID");
 
 
                             mStatus.add(carStatus);
@@ -148,6 +168,51 @@ public class HomeFragment extends Fragment {
                             mCarMile.add(mileage);
 
                         }
+
+                        for (int i = 0; i < jsonArray1.length(); i++) {
+                            JSONObject object = jsonArray1.getJSONObject(i);
+
+                            //follow index
+                            String carID = object.getString("id");
+                            String name = object.getString("name");
+                            String image_data = object.getString("imageUrl");
+                            String brand = object.getString("brand");
+                            String price = object.getString("price");
+                            String color = object.getString("color");
+                            String desc = object.getString("desc");
+                            String year = object.getString("year");
+                            String mileage = object.getString("mileage");
+                            String carStatus = object.getString("status");
+                            String carType = object.getString("type");
+                            String dealerID = object.getString("dealerID");
+                            String discountRate = object.getString("discountRate");
+                            String endDate = object.getString("endDate");
+
+                            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                Date date = formatter1.parse(endDate);
+                                Date today = Calendar.getInstance().getTime();
+                                if (date.after(today)) {
+                                    mStatus1.add(carStatus);
+                                    mCarType1.add(carType);
+                                    mDealerID1.add(dealerID);
+                                    mCarName1.add(name);
+                                    mCarImage1.add(image_data);
+                                    mCarId1.add(carID);
+                                    mCarBrand1.add(brand);
+                                    mCarPrice1.add(price);
+                                    mCarColor1.add(color);
+                                    mCarDesc1.add(desc);
+                                    mCarYear1.add(year);
+                                    mCarMile1.add(mileage);
+                                    mDiscount1.add(discountRate);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
                         loadMain.setVisibility(View.GONE);
                         initRecyclerView(v);
 
