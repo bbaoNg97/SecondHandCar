@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
         myBookingFragment = new MyBookingFragment();
 
 
-        setFragment(homeFragment);
-        setTitle(R.string.title_home);
+        setHome();
 
         if (!isConnected()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -121,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setHome() {
+        setFragment(homeFragment);
+        setTitle(R.string.title_home);
     }
 
     //to check network connectivity
