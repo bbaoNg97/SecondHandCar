@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -382,6 +383,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 //if make appointment successful
                                 if (success.equals("1")) {
                                     sendEmailToAll();
+
 
                                 } else {
 

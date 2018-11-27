@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,10 +47,9 @@ public class ResetPwActivity extends AppCompatActivity {
         custEmailList = new ArrayList<>();
         btnReset = (Button) findViewById(R.id.buttonReset);
         etEmailAddr = (EditText) findViewById(R.id.editTextEmail);
-        checkingEmail=(ProgressBar)findViewById(R.id.checkingEmail);
-
+        checkingEmail = (ProgressBar) findViewById(R.id.checkingEmail);
         checkingEmail.setVisibility(View.GONE);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -62,14 +63,15 @@ public class ResetPwActivity extends AppCompatActivity {
             builder.setTitle("Connection Error");
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
-        }else{
+        } else if (etEmailAddr.getText().toString().isEmpty()) {
+            etEmailAddr.setError("Please fill in your email address");
+        } else {
             getCustomer(getApplicationContext(), getString(R.string.get_cust_url));
-            if(foundEmail(email)){
-                Toast.makeText(ResetPwActivity.this,"Email sent!Please Check your mailbox to reset password",Toast.LENGTH_LONG).show();
-                Intent loginIntent=new Intent(ResetPwActivity.this,LoginActivity.class);
+            if (foundEmail(email)) {
+                Toast.makeText(ResetPwActivity.this, "Email sent!Please Check your mailbox to reset password", Toast.LENGTH_LONG).show();
+                Intent loginIntent = new Intent(ResetPwActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
-            }
-            else{
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ResetPwActivity.this);
                 builder.setTitle("Incorrect Email");
                 builder.setMessage("The email entered is not in the record.\nPlease try again").setNegativeButton("Retry", null).create().show();
@@ -135,6 +137,7 @@ public class ResetPwActivity extends AppCompatActivity {
             Toast.makeText(context, "Register failed! \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
+
     //to check if the email entered is repeated or not
     public boolean foundEmail(String emails) {
         //check whether the username exist or not
@@ -147,5 +150,16 @@ public class ResetPwActivity extends AppCompatActivity {
             }
         }
         return found;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }
