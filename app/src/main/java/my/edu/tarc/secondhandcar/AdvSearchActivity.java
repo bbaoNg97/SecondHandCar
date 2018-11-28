@@ -42,12 +42,12 @@ public class AdvSearchActivity extends AppCompatActivity {
     public static final String Max_YEAR = "maximum year ";
 
     //store the default value
-    private int minPrice = 5000;
-    private int maxPrice = 5000000;
-    private int minMileage = 5000;
-    private int maxMileage = 1000000;
-    private int minYear = 1950;
-    private int maxYear = 2018;
+    private int minPrice;
+    private int maxPrice;
+    private int minMileage;
+    private int maxMileage;
+    private int minYear;
+    private int maxYear;
     private String colorName, spPurpose;
 
     @Override
@@ -57,7 +57,6 @@ public class AdvSearchActivity extends AppCompatActivity {
 
         //link spinner UI
         mSpinnerPurpose = (Spinner) findViewById(R.id.spinnerPurpose);
-
         mSpinnerColor = (Spinner) findViewById(R.id.spinnerColor);
         setTitle(R.string.title_adv_search);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,23 +71,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                 , R.drawable.color_purple, R.drawable.color_others};
 
 
-        AdapterCustomColor mAdapterCustomColor = new AdapterCustomColor(AdvSearchActivity.this, spinnerColorName, spinnerColor);
-        mSpinnerColor.setAdapter(mAdapterCustomColor);
-
-
-        mSpinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //Toast.makeText(AdvSearchActivity.this, spinnerColorName[i], Toast.LENGTH_SHORT).show();
-                colorName = spinnerColorName[i].toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
+        //TODO: will be deleted
         ArrayAdapter<CharSequence> purposeAdapter = ArrayAdapter.createFromResource(this, R.array.purpose, android.R.layout.simple_spinner_item);
         purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerPurpose.setAdapter(purposeAdapter);
@@ -108,12 +91,12 @@ public class AdvSearchActivity extends AppCompatActivity {
         textViewMaxMileage = (TextView) findViewById(R.id.textViewMaxMileage);
         textViewMinYear = (TextView) findViewById(R.id.textViewMinYear);
         textViewMaxYear = (TextView) findViewById(R.id.textViewMaxYear);
-
         buttonAdvSearchCar = (Button) findViewById(R.id.buttonAdvSearchCar);
 
         buttonAdvSearchCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent advSearchCarIntent = new Intent(AdvSearchActivity.this, SearchCarResultActivity.class);
 
                 //pass all selected criteria to searchResultAct
@@ -124,7 +107,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                 advSearchCarIntent.putExtra(MIN_YEAR, minYear);
                 advSearchCarIntent.putExtra(Max_YEAR, maxYear);
                 spPurpose = mSpinnerPurpose.getSelectedItem().toString();
-                advSearchCarIntent.putExtra("Purpose", spPurpose);
+                //advSearchCarIntent.putExtra("Purpose", spPurpose);
                 advSearchCarIntent.putExtra("Color", colorName);
                 advSearchCarIntent.putExtra("from", "recommendCar");
 
@@ -134,26 +117,59 @@ public class AdvSearchActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private String getFormatedAmount(int amount) {
+        return NumberFormat.getNumberInstance(Locale.ENGLISH).format(amount);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //store the default value
+        minPrice = 5000;
+        maxPrice = 5000000;
+        minMileage = 5000;
+        maxMileage = 1000000;
+        minYear = 1950;
+        maxYear = 2018;
+        colorName = "All";
+        setSeekBar();
+        buttonAdvSearchCar.setEnabled(true);
+        AdapterCustomColor mAdapterCustomColor = new AdapterCustomColor(AdvSearchActivity.this, spinnerColorName, spinnerColor);
+        mSpinnerColor.setAdapter(mAdapterCustomColor);
+
+        mSpinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(AdvSearchActivity.this, spinnerColorName[i], Toast.LENGTH_SHORT).show();
+                colorName = spinnerColorName[i];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
-        //set maximum value for price, mileage, and year
-        seekBarMinPrice.setProgress(0);
-        seekBarMinPrice.setMax(4995000);
-        seekBarMinPrice.incrementProgressBy(5000);
-
-        seekBarMinMileage.setProgress(0);
-        seekBarMinMileage.setMax(995000);
-        seekBarMinMileage.incrementProgressBy(5000);
-
-        seekBarMinYear.setProgress(0);
-        //2018-1950 is 68
-        seekBarMinYear.setMax(68);
-
-
-        //seek bar for max value cannot be triggered, must set the minimum value first
-        seekBarMaxPrice.setEnabled(false);
-        seekBarMaxMileage.setEnabled(false);
-        seekBarMaxYear.setEnabled(false);
+        textViewMinPrice.setText(getString(R.string.min_price_rm_5000));
+        textViewMinYear.setText(getString(R.string.min_year_1950));
+        textViewMinMileage.setText(getString(R.string.min_mileage_5000_km));
+        textViewMaxMileage.setText(getString(R.string.max_mileage_km));
+        textViewMaxPrice.setText(getString(R.string.max_price_rm));
+        textViewMaxYear.setText(getString(R.string.max_year));
 
         seekBarMinPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -170,7 +186,8 @@ public class AdvSearchActivity extends AppCompatActivity {
                 Double dPrice = Double.parseDouble(String.valueOf(i));
                 price = formatter.format(dPrice);
 
-                textViewMinPrice.setText(getString(R.string.get_minPrice) + price);
+                String msg = getString(R.string.get_minPrice) + price;
+                textViewMinPrice.setText(msg);
                 minPrice = i;
 
 
@@ -183,6 +200,7 @@ public class AdvSearchActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                buttonAdvSearchCar.setEnabled(false);
                 String price;
                 Double dPrice = Double.parseDouble(String.valueOf(minPrice));
                 price = formatter.format(dPrice);
@@ -209,12 +227,12 @@ public class AdvSearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        maxPrice = 5000000;
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        buttonAdvSearchCar.setEnabled(true);
 
                     }
                 });
@@ -245,6 +263,7 @@ public class AdvSearchActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                buttonAdvSearchCar.setEnabled(false);
                 seekBarMaxMileage.setEnabled(true);
                 seekBarMaxMileage.setMax(MAX_MILEAGE - minMileage);
                 seekBarMaxMileage.setProgress(0);
@@ -264,12 +283,12 @@ public class AdvSearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        maxMileage = 1000000;
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        buttonAdvSearchCar.setEnabled(true);
                     }
                 });
 
@@ -277,13 +296,12 @@ public class AdvSearchActivity extends AppCompatActivity {
         });
 
         seekBarMinYear.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
                 i = i + 1950;
-                textViewMinYear.setText("Min Year: " + String.valueOf(i));
+                String msg = getString(R.string.min_year) + String.valueOf(i);
+                textViewMinYear.setText(msg);
                 minYear = i;
             }
 
@@ -294,48 +312,64 @@ public class AdvSearchActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                buttonAdvSearchCar.setEnabled(false);
                 seekBarMaxYear.setEnabled(true);
-                textViewMaxYear.setText("Max Year: " + String.valueOf(minYear));
+                String msg = getString(R.string.max_year) + String.valueOf(minYear);
+                textViewMaxYear.setText(msg);
                 seekBarMaxYear.setMax(MAX_YEAR - minYear);
                 seekBarMaxYear.setProgress(0);
                 seekBarMaxYear.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                        maxYear = 0;
+
                         i = i + minYear;
-                        textViewMaxYear.setText("Max Year: " + String.valueOf(i));
+                        String msg = getString(R.string.max_year) + String.valueOf(i);
+                        textViewMaxYear.setText(msg);
+                        maxYear = 0;
                         maxYear = maxYear + i;
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        maxYear = 2018;
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        buttonAdvSearchCar.setEnabled(true);
                     }
                 });
 
 
             }
         });
+    }
+
+    private void setSeekBar() {
+        //set maximum value for price, mileage, and year
+        seekBarMinPrice.setProgress(0);
+        seekBarMinPrice.setMax(4995000);
+        seekBarMinPrice.incrementProgressBy(5000);
+
+        seekBarMinMileage.setProgress(0);
+        seekBarMinMileage.setMax(995000);
+        seekBarMinMileage.incrementProgressBy(5000);
+
+        seekBarMinYear.setProgress(0);
+        //2018-1950 is 68
+        seekBarMinYear.setMax(68);
+
+        //seek bar for max value change to initial point
+        seekBarMaxPrice.setProgress(0);
+        seekBarMaxMileage.setProgress(0);
+        seekBarMaxYear.setProgress(0);
+
+        //seek bar for max value cannot be triggered, must set the minimum value first
+        seekBarMaxPrice.setEnabled(false);
+        seekBarMaxMileage.setEnabled(false);
+        seekBarMaxYear.setEnabled(false);
 
     }
 
-    private String getFormatedAmount(int amount) {
-        return NumberFormat.getNumberInstance(Locale.ENGLISH).format(amount);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -144,5 +144,6 @@
     <string name="cancel_book">Cancel booking</string>
     <string name="caption_qrcode">QR code generated</string>
     <string name="title_search_car">Search Car</string>
+    <string name="min_year">Min Year:</string>
 
 </resources>
