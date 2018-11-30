@@ -4,22 +4,15 @@ package my.edu.tarc.secondhandcar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,7 +25,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -42,7 +34,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -60,7 +51,8 @@ public class MyBookingFragment extends Fragment {
     private ArrayList<String> arrAcceptDate = new ArrayList<>();
     private ArrayList<String> arrAcceptTime = new ArrayList<>();
     private ArrayList<String> arrAppID = new ArrayList<>();
-    private TextView tvTips;
+    private TextView tvTips1Met,tvTips2Booked,tvTips3Cancelled,tvTips4Pending;
+    private ImageView iv1Met,iv2Booked,iv3Cancelled,iv4Pending;
 
     private Button btnSearch;
 
@@ -91,7 +83,15 @@ public class MyBookingFragment extends Fragment {
         btnSearch = (Button) v.findViewById(R.id.btnSearch);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
-        tvTips = (TextView) v.findViewById(R.id.textViewTips);
+        tvTips1Met = (TextView) v.findViewById(R.id.textViewTips1);
+        tvTips2Booked = (TextView) v.findViewById(R.id.textViewTips2);
+        tvTips3Cancelled = (TextView) v.findViewById(R.id.textViewTips3);
+        tvTips4Pending = (TextView) v.findViewById(R.id.textViewTips4);
+        iv1Met=(ImageView)v.findViewById(R.id.imageViewG);
+        iv2Booked=(ImageView)v.findViewById(R.id.imageViewR);
+        iv3Cancelled=(ImageView)v.findViewById(R.id.imageViewCr);
+        iv4Pending=(ImageView)v.findViewById(R.id.imageViewP);
+
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,14 +102,14 @@ public class MyBookingFragment extends Fragment {
         });
 
         listViewMyBooking = (ListView) v.findViewById(R.id.listViewBooking);
-
-
         return v;
 
     }
 
     private void getAppointment(final Context context, final String url) {
-        tvTips.setVisibility(View.GONE);
+        //TODO: pending also needed
+        clearTips();
+
         clearView();
         downloading.setVisibility(View.VISIBLE);
         btnSearch.setEnabled(false);
@@ -158,8 +158,8 @@ public class MyBookingFragment extends Fragment {
                                 }
                                 initListVIew(context);
                                 Toast.makeText(context, "Done ! ", Toast.LENGTH_SHORT).show();
-                                tvTips.setVisibility(View.VISIBLE);
-                                tvTips.setText(R.string.color_indicator);
+                                showTips();
+
                                 downloading.setVisibility(View.GONE);
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
@@ -186,7 +186,7 @@ public class MyBookingFragment extends Fragment {
                         downloading.setVisibility(View.GONE);
                         error.printStackTrace();
                         btnSearch.setEnabled(true);
-                        tvTips.setVisibility(View.VISIBLE);
+                        showTips();
 
                     }
 
@@ -262,4 +262,25 @@ public class MyBookingFragment extends Fragment {
             getAppointment(getActivity(), getString(R.string.get_my_booking_url));
         }
     }
+    private void showTips(){
+        tvTips1Met.setVisibility(View.VISIBLE);
+        tvTips2Booked.setVisibility(View.VISIBLE);
+        tvTips3Cancelled.setVisibility(View.VISIBLE);
+        tvTips4Pending.setVisibility(View.VISIBLE);
+        iv1Met.setVisibility(View.VISIBLE);
+        iv2Booked.setVisibility(View.VISIBLE);
+        iv3Cancelled.setVisibility(View.VISIBLE);
+        iv4Pending.setVisibility(View.VISIBLE);
+    }
+    private void clearTips(){
+        tvTips1Met.setVisibility(View.GONE);
+        tvTips2Booked.setVisibility(View.GONE);
+        tvTips3Cancelled.setVisibility(View.GONE);
+        tvTips4Pending.setVisibility(View.GONE);
+        iv1Met.setVisibility(View.GONE);
+        iv2Booked.setVisibility(View.GONE);
+        iv3Cancelled.setVisibility(View.GONE);
+        iv4Pending.setVisibility(View.GONE);
+    }
+
 }

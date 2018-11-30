@@ -133,7 +133,6 @@
     <string name="get_dealer_location_url">https://dewy-minuses.000webhostapp.com/getDealerLocation.php</string>
     <string name="title_edit_booking">Edit Booking</string>
     <string name="update_booking">Update booking</string>
-    <string name="color_indicator">Green - Met, Red - Booked, Cross - Cancelled</string>
     <string name="update_app_url">https://dewy-minuses.000webhostapp.com/updateAppointment.php</string>
     <string name="msg_confirm_updt">Confirm to update booking date time?</string>
     <string name="cancel_booking">Cancel Booking</string>
@@ -147,5 +146,10 @@
     <string name="title_search_car">Search Car</string>
 
     <string name="recommend">Recommend me</string>
+    <string name="title_recommended_car">Recommended Cars</string>
+    <string name="tips1Met">- Met</string>
+    <string name="tips2Booked">- Booked</string>
+    <string name="tips3Cancelled">- Cancelled</string>
+    <string name="tips4Pending">- Pending</string>
 
 </resources>
