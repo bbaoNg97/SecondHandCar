@@ -53,20 +53,22 @@ public class SearchCarResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_car_result);
-        setTitle(R.string.title_search_result);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         searchingResult = (ProgressBar) findViewById(R.id.searchingResult);
         listViewCarResult = (ListView) findViewById(R.id.listViewCarResult);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         spinnerSortBy = (Spinner) findViewById(R.id.spinnerSortBy);
-
+        String title = "";
         Intent intent = getIntent();
         if (intent.getStringExtra("from").equals("searchCar")) {
             //just showing search result
             carBrand = intent.getStringExtra("carBrand");
             carModel = intent.getStringExtra("carModel");
             searchingResult.setVisibility(View.VISIBLE);
+            title = getString(R.string.search_result) + ": " + carBrand + " " + carModel;
+
             //temp: use in spinner,and adapter
             temp = "SearchCar";
         } else {
@@ -79,10 +81,12 @@ public class SearchCarResultActivity extends AppCompatActivity {
             maxYear = intent.getIntExtra(AdvSearchActivity.Max_YEAR, 0);
             //   purpose = intent.getStringExtra("Purpose");
             colorName = intent.getStringExtra("Color");
-
+            title = "Recommended Car";
             //temp: use in spinner,and adapter
             temp = "RecommendCar";
         }
+        setTitle(title);
+
         ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource(this, R.array.sort_by, android.R.layout.simple_spinner_item);
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSortBy.setAdapter(sortAdapter);
@@ -111,7 +115,6 @@ public class SearchCarResultActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
         spinnerSortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

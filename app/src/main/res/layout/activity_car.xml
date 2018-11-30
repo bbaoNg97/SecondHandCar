@@ -246,7 +246,7 @@
                     tools:layout_editor_absoluteY="81dp">
 
                     <TextView
-                        android:id="@+id/textViewYear"
+                        android:id="@+id/textViewResultYear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"

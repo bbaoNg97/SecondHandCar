@@ -19,9 +19,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Bbao on 17/10/2018.
- */
 
 public class AdapterRecommendCar extends ArrayAdapter<Car> {
 
@@ -49,6 +46,8 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
         View v = inflater.inflate(R.layout.content_search_result, null, true);
         final TextView carResult = (TextView) v.findViewById(R.id.textViewCarResult);
         final ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCarResult);
+        final TextView tvResultPrice=(TextView)v.findViewById(R.id.textViewResultPrice);
+        final TextView tvResultYear=(TextView)v.findViewById(R.id.textViewResultYear);
         final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
         final Car currentCar = cars.get(position);
         Glide.with(mContext)
@@ -56,8 +55,17 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
                 .load(currentCar.getCAR_PHOTOS())
                 .into(imCarResult);
 
-        carResult.setText(currentCar.getNAMES());
 
+
+        strYear = currentCar.getYEARS() + "";
+        tvResultYear.setText(strYear);
+
+        Double dPrice = (double) currentCar.getPRICES();
+        strPrice = formatter.format(dPrice);
+        tvResultPrice.setText(strPrice);
+
+
+        carResult.setText(currentCar.getNAMES());
         if (position == 0) {
             imageViewTop.setImageResource(R.drawable.top1);
         }

@@ -1,18 +1,14 @@
 package my.edu.tarc.secondhandcar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -36,8 +32,6 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.security.AccessController.getContext;
-
 public class CarActivity extends AppCompatActivity {
 
     private ImageView imageViewCars;
@@ -55,7 +49,7 @@ public class CarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car);
-        setTitle(R.string.title_car_detail);
+        setTitle( R.string.title_car_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
@@ -68,7 +62,7 @@ public class CarActivity extends AppCompatActivity {
         textViewColor = (TextView) findViewById(R.id.textViewColor);
         textViewMileage = (TextView) findViewById(R.id.textViewMileage);
         textViewName = (TextView) findViewById(R.id.textViewName);
-        textViewYear = (TextView) findViewById(R.id.textViewYear);
+        textViewYear = (TextView) findViewById(R.id.textViewResultYear);
         textViewLocation = (TextView) findViewById(R.id.textViewLocation);
         textViewDealerName = (TextView) findViewById(R.id.textViewDealerName);
         textViewDealerAddress = (TextView) findViewById(R.id.textViewDealerAddress);
@@ -199,7 +193,8 @@ public class CarActivity extends AppCompatActivity {
         Glide.with(CarActivity.this).load(carPhoto).into(imageViewCars);
         textViewColor.setText(color);
         textViewDesc.setText(desc);
-        textViewMileage.setText(mile + " KM");
+        String mileMsg=mile + " KM";
+        textViewMileage.setText(mileMsg);
         textViewYear.setText(year);
         textViewPrice.setText(price);
         textViewLocation.setText(dealerLoc);

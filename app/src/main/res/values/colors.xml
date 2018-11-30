@@ -16,5 +16,6 @@
     <color name="Green">#008000</color>
     <color name="Purple">#800080</color>
     <color name="Grey">#808080</color>
+    <color name="Other">#000000</color>
 
 </resources>
