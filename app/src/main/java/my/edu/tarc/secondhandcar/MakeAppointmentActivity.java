@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MakeAppointmentActivity extends AppCompatActivity {
@@ -93,10 +94,12 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         strDealerID = intent.getStringExtra("dealerID");
-        currentAgentEmail=intent.getStringExtra("agentEmail");
         //if is from booking
         if (intent.getStringExtra("from").equals("booking")) {
             setTitle(R.string.title_chooseDateTime);
+
+            currentAgentEmail=intent.getStringExtra("agentEmail");
+
         }
         // if is from edit booking
         else {
@@ -109,13 +112,13 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         carID = intent.getStringExtra("carID");
         price = getIntent().getStringExtra("Price");
         carName = getIntent().getStringExtra("CarName");
-
+        getAllAgentEmail(MakeAppointmentActivity.this, getString(R.string.get_agent_url), strDealerID);
 
         tvSelectedCar.setText(carName);
         tvPrice.setText(price);
         proceed();
         getAllAppointment(MakeAppointmentActivity.this, getString(R.string.get_appointment_url));
-        getAllAgentEmail(MakeAppointmentActivity.this, getString(R.string.get_agent_url), strDealerID);
+
         tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -199,8 +202,12 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                     strTime = tvTime.getText().toString();
 
                     //date and time can not be null
-                    if (strDate.equals("") || strTime.equals("")) {
-                        Toast.makeText(getApplicationContext(), "\t\tInvalid date and time.\nPlease select date and time.", Toast.LENGTH_LONG).show();
+                    if (strDate.equals("") ){
+                        Toast.makeText(getApplicationContext(), "\t\t\t\tInvalid date.\nPlease select booking date.", Toast.LENGTH_LONG).show();
+
+                    }else if(strTime.equals("")){
+                        Toast.makeText(getApplicationContext(), "\t\t\t\tInvalid time.\nPlease select booking time.", Toast.LENGTH_LONG).show();
+
                     } else {
                         Date validDate = new Date();
                         Calendar cal = Calendar.getInstance();
@@ -227,15 +234,24 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
                         //check if selected date is before currentDate
                         if (selectedDate.before(currentDate)) {
-                            Toast.makeText(getApplicationContext(), "Date cannot earlier than today.\n\t\t\t\t\t\tPlease try again.", Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder=new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            builder.setTitle("Invalid Date");
+                            builder.setMessage("The booking date should be after today.\nPlease try again.");
+                            builder.setNegativeButton("Retry",null).create().show();
                         }
                         //check if selected date is after one month
                         else if (selectedDate.after(validDate)) {
-                            Toast.makeText(getApplicationContext(), "Only can make booking within one month.\nPlease try again.", Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder=new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            builder.setTitle("Invalid Month");
+                            builder.setMessage("Only can make booking within one month.\nPlease try again.");
+                            builder.setNegativeButton("Retry",null).create().show();
                         }
                         //check if booking time is between 9-5pm
                         else if (hour < 9 || hour >= 17) {
-                            Toast.makeText(getApplicationContext(), "Only can book time in between 9am-5pm\n\t\t\t\t\t\t\t\t\t\tPlease try again.", Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder=new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            builder.setTitle("Invalid Time");
+                            builder.setMessage("Only can book time at working hour ( 9am - 5pm ).\nPlease try again.");
+                            builder.setNegativeButton("Retry",null).create().show();
                         }
                         //check connection
                         else if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
@@ -248,7 +264,9 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                             if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
                                 AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(MakeAppointmentActivity.this);
                                 confirmBuilder.setTitle("Request Confirmation");
-                                confirmBuilder.setMessage("Confirm to send request?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                confirmBuilder.setMessage("Confirm to send request?\n(You may edit booking date time while waiting agent accept, but once " +
+                                        "the agent accepted your boking request, you may not be able to change the date time again)\n" +
+                                        "Are you sure? ").setCancelable(false).setPositiveButton("Sure", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -260,7 +278,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                         makeServiceCall(MakeAppointmentActivity.this, getString(R.string.insert_booking_url), nextAppID, strDate, strTime, carID, custID);
 
                                     }
-                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -382,7 +400,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 String message = jsonObject.getString("message");
                                 //if make appointment successful
                                 if (success.equals("1")) {
-                                    sendEmailToAll();
+                                   sendEmailToAll();
 
 
                                 } else {
@@ -464,7 +482,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private void sendEmail() {
         //TODO: get previous date time, and updated date time
 
-        String Recipient = currentAgentEmail;
+        String Recipient = arrAgentEmail.toString().replace("[", "").replace("]", "");
         String[] recipients = Recipient.split(",");
         String strDate, strTime, strCar, strSender;
         strDate = tvDate.getText().toString();

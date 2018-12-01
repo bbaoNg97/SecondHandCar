@@ -33,9 +33,11 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
     private ArrayList<String> acceptDate = new ArrayList<>();
     private ArrayList<String> acceptTime = new ArrayList<>();
     private ArrayList<String> appID = new ArrayList<>();
-    private String strPrice, strCarPhoto, strAgentID, strBookStatus, strAcceptDate, strAcceptTime,strAppID;
+    private ArrayList<String> dealerLocation = new ArrayList<>();
+    private ArrayList<String> dealerID = new ArrayList<>();
+    private String strPrice, strCarPhoto, strAgentID, strBookStatus, strAcceptDate, strAcceptTime, strAppID,strDealerLocation,strDealerID;
 
-    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> acceptDate, ArrayList<String> acceptTime, ArrayList<String> carPhoto, ArrayList<String> agentID,ArrayList<String> appID) {
+    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> acceptDate, ArrayList<String> acceptTime, ArrayList<String> carPhoto, ArrayList<String> agentID ,ArrayList<String> appID ,ArrayList<String> dealerLocation,ArrayList<String> dealerID) {
         super(context, R.layout.content_my_booking);
         this.bookingStatus = bookingStatus;
         this.carNames = carNames;
@@ -46,7 +48,9 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         this.agentID = agentID;
         this.acceptDate = acceptDate;
         this.acceptTime = acceptTime;
-        this.appID=appID;
+        this.appID = appID;
+        this.dealerLocation=dealerLocation;
+        this.dealerID=dealerID;
         this.context = context;
 
     }
@@ -73,14 +77,20 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         bookingDate.setText(dates.get(position));
         bookingTime.setText(times.get(position));
 
-
-        if (bookingStatus.get(position).equals("Met")) {
-            imBookingStatus.setImageResource(R.drawable.ic_action_green_status);
-        } else if (bookingStatus.get(position).equals("Booked")) {
-            imBookingStatus.setImageResource(R.drawable.ic_action_red_status);
-        } else {
-            imBookingStatus.setImageResource(R.drawable.ic_action_cancel_status);
+        switch (bookingStatus.get(position).toString()) {
+            case "Met":
+                imBookingStatus.setImageResource(R.drawable.ic_action_green_status);
+                break;
+            case "Booked":
+                imBookingStatus.setImageResource(R.drawable.ic_action_red_status);
+                break;
+            case "Cancelled":
+                imBookingStatus.setImageResource(R.drawable.ic_action_cancel_status);
+                break;
+            default:
+                imBookingStatus.setImageResource(R.drawable.ic_action_edit_status);
         }
+
 
         bookingLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,12 +101,14 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
                 strBookStatus = bookingStatus.get(position);
                 strAcceptDate = acceptDate.get(position);
                 strAcceptTime = acceptTime.get(position);
-                strAppID=appID.get(position);
+                strAppID = appID.get(position);
+                strDealerLocation=dealerLocation.get(position);
+                strDealerID=dealerID.get(position);
                 Intent bookingDetailIntent = new Intent(context, BookingDetailActivity.class);
-                SharedPreferences sharePref=context.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharePref.edit();
-                editor.putString("appDate",bookingDate.getText().toString());
-                editor.putString("appTime",bookingTime.getText().toString());
+                SharedPreferences sharePref = context.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharePref.edit();
+                editor.putString("appDate", bookingDate.getText().toString());
+                editor.putString("appTime", bookingTime.getText().toString());
                 editor.apply();
                 bookingDetailIntent.putExtra("CarName", carName.getText().toString());
                 bookingDetailIntent.putExtra("price", strPrice);
@@ -105,7 +117,10 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
                 bookingDetailIntent.putExtra("bookStatus", strBookStatus);
                 bookingDetailIntent.putExtra("acceptDate", strAcceptDate);
                 bookingDetailIntent.putExtra("acceptTime", strAcceptTime);
-                bookingDetailIntent.putExtra("appID",strAppID);
+                bookingDetailIntent.putExtra("appID", strAppID);
+                bookingDetailIntent.putExtra("dealerLocation", strDealerLocation);
+                bookingDetailIntent.putExtra("dealerID", strDealerID);
+
 
                 context.startActivity(bookingDetailIntent);
             }

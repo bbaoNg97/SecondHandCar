@@ -41,8 +41,14 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     private Button btnEditBooking;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvDealerLoc, tvAgentName, tvAgentContactNo, tvAgentEmail;
-    private String carName, appDate, appTime, price, carPhoto, agentID, custID, bookStatus, dealerID;
-    private String appID, agentContact, agentName, agentEmail, dealerLocation, acceptDate, acceptTime;
+    private String carName, appDate, appTime, price, carPhoto,  custID, bookStatus, dealerID;
+    private String appID;
+    private String agentContact = "-";
+    private String agentName = "-";
+    private String agentEmail = "-";
+    private String dealerLocation;
+    private String reason;
+    private String agentID="";
     private ImageView ivCarPhoto;
     private ProgressBar downloadingAppDetail;
     SharedPreferences sharePref;
@@ -161,15 +167,19 @@ public class BookingDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        //if the current dateTime is after the valid date time that want to cancel
-                        if (currentDateTime.after(validDateTime)) {
-                            AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
-                            //Toast.makeText(BookingDetailActivity.this,"\t\t\t\tCancel booking failed.\nOnly can cancel the booking within 24 hours after the agent accept the booking",Toast.LENGTH_LONG).show();
-                            buider.setTitle("Cancel booking failed");
-                            buider.setMessage("Only can cancel the booking within 24 hours after agent has accepted the booking \n( Agent has accepted the booking at " + acceptDate + " " + acceptTime).setNegativeButton("OK", null).create().show();
-                        } else {
+                        //check status, can cancel booking at Pending status without reason
+                        if(bookStatus.equals("Pending")){
                             cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
                         }
+                        //if the status is Booked, customer have to provide reason
+                        else{
+                            //TODO: provide valid reason by doing spinner
+                            reason="Emergency case happened";
+                            cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
+                        }
+                        //but if cancel booking at booked status, have to ask for valid reason
+                       // cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
+
 
                     }
                 }).setNegativeButton("No", null).create().show();
@@ -232,6 +242,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
                     params.put("appID", appID);
                     params.put("agentID", agentID);
+                    params.put("cancelReason",reason);
 
                     return params;
                 }
@@ -251,31 +262,26 @@ public class BookingDetailActivity extends AppCompatActivity {
     }
 
     public void onEdit(View v) {
-        if (currentDateTime.after(validDateTime)) {
-            AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
-            //Toast.makeText(BookingDetailActivity.this,"\t\t\t\tCancel booking failed.\nOnly can cancel the booking within 24 hours after the agent accept the booking",Toast.LENGTH_LONG).show();
-            buider.setTitle("Edit booking denied");
-            buider.setMessage("Only can edit the booking within 24 hours after agent has accepted the booking \n( Agent has accepted the booking at " + acceptDate + " " + acceptTime).setNegativeButton("OK", null).create().show();
-        } else {
-            Intent editBookingIntent = new Intent(BookingDetailActivity.this, MakeAppointmentActivity.class);
-            SharedPreferences.Editor editor=sharePref.edit();
-            editor.putString("appDate",appDate);
-            editor.putString("appTime",appTime);
-            editor.apply();
-            editBookingIntent.putExtra("from", "editBooking");
-            editBookingIntent.putExtra("appID", appID);
-            editBookingIntent.putExtra("Price", price);
-            editBookingIntent.putExtra("CarName", carName);
-            editBookingIntent.putExtra("dealerID", dealerID);
-            editBookingIntent.putExtra("agentEmail",agentEmail);
-            startActivity(editBookingIntent);
-        }
 
+        Intent editBookingIntent = new Intent(BookingDetailActivity.this, MakeAppointmentActivity.class);
+        SharedPreferences.Editor editor = sharePref.edit();
+        editor.putString("appDate", appDate);
+        editor.putString("appTime", appTime);
+        editor.apply();
+        editBookingIntent.putExtra("from", "editBooking");
+        editBookingIntent.putExtra("appID", appID);
+        editBookingIntent.putExtra("Price", price);
+        editBookingIntent.putExtra("CarName", carName);
+        editBookingIntent.putExtra("dealerID", dealerID);
+        startActivity(editBookingIntent);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (bookStatus.toString().equals("Booked")) {
+        if (bookStatus.equals("Pending")) {
+            getMenuInflater().inflate(R.menu.action_bar_only_cancel_book, menu);
+        } else if (bookStatus.equals("Booked")) {
             getMenuInflater().inflate(R.menu.action_bar_cancel, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -291,8 +297,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         super.onResume();
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
-        appDate = sharePref.getString("appDate",null);
-        appTime = sharePref.getString("appTime",null);
+        appDate = sharePref.getString("appDate", null);
+        appTime = sharePref.getString("appTime", null);
 
         Intent intent = getIntent();
 
@@ -300,28 +306,25 @@ public class BookingDetailActivity extends AppCompatActivity {
         carName = intent.getStringExtra("CarName");
         price = intent.getStringExtra("price");
         bookStatus = intent.getStringExtra("bookStatus");
-        acceptDate = intent.getStringExtra("acceptDate");
-        acceptTime = intent.getStringExtra("acceptTime");
         carPhoto = intent.getStringExtra("carPhoto");
         agentID = intent.getStringExtra("agentID");
-        if (bookStatus.equals("Cancelled") || bookStatus.equals("Met")) {
-            btnEditBooking.setEnabled(false);
-        } else
-            btnEditBooking.setEnabled(true);
+        dealerLocation = intent.getStringExtra("dealerLocation");
+        dealerID = intent.getStringExtra("dealerID");
 
-        SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
-        ParsePosition pp = new ParsePosition(0);
-        currentDateTime = new Date();
-        //store the accept date time, if want to cancel booking,can check if it can be cancelled
-        acceptDateTime = shFormatter.parse(acceptDate + " " + acceptTime, pp);
-        //to make sure the valid cancel booking date time is in the 24 hours
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(acceptDateTime);
-        cal.add(Calendar.HOUR_OF_DAY, 24);
-        validDateTime = cal.getTime();
 
         dPrice = Double.parseDouble(price);
         price = formatter.format(dPrice);
-        getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
+
+        if (bookStatus.equals("Pending")) {                             //pending status can edit booking date time, while other status cannot
+            btnEditBooking.setEnabled(true);
+            retrieveData();                             //directly get booking detail without retrieving dealer detail
+        } else {
+            //if it is Booked, Met, Cancelled
+            btnEditBooking.setVisibility(View.INVISIBLE);
+            //get apppointment and Dealer detail
+            getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
+        }
+
+
     }
 }

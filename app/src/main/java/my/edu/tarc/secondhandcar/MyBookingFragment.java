@@ -51,8 +51,10 @@ public class MyBookingFragment extends Fragment {
     private ArrayList<String> arrAcceptDate = new ArrayList<>();
     private ArrayList<String> arrAcceptTime = new ArrayList<>();
     private ArrayList<String> arrAppID = new ArrayList<>();
-    private TextView tvTips1Met,tvTips2Booked,tvTips3Cancelled,tvTips4Pending;
-    private ImageView iv1Met,iv2Booked,iv3Cancelled,iv4Pending;
+    private ArrayList<String> arrDealerLocation = new ArrayList<>();
+    private ArrayList<String> arrDealerID = new ArrayList<>();
+    private TextView tvTips1Met, tvTips2Booked, tvTips3Cancelled, tvTips4Pending;
+    private ImageView iv1Met, iv2Booked, iv3Cancelled, iv4Pending;
 
     private Button btnSearch;
 
@@ -87,10 +89,10 @@ public class MyBookingFragment extends Fragment {
         tvTips2Booked = (TextView) v.findViewById(R.id.textViewTips2);
         tvTips3Cancelled = (TextView) v.findViewById(R.id.textViewTips3);
         tvTips4Pending = (TextView) v.findViewById(R.id.textViewTips4);
-        iv1Met=(ImageView)v.findViewById(R.id.imageViewG);
-        iv2Booked=(ImageView)v.findViewById(R.id.imageViewR);
-        iv3Cancelled=(ImageView)v.findViewById(R.id.imageViewCr);
-        iv4Pending=(ImageView)v.findViewById(R.id.imageViewP);
+        iv1Met = (ImageView) v.findViewById(R.id.imageViewG);
+        iv2Booked = (ImageView) v.findViewById(R.id.imageViewR);
+        iv3Cancelled = (ImageView) v.findViewById(R.id.imageViewCr);
+        iv4Pending = (ImageView) v.findViewById(R.id.imageViewP);
 
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +145,8 @@ public class MyBookingFragment extends Fragment {
                                     String carPhoto = userResponse.getString("car_photo");
                                     String acceptDate = userResponse.getString("acceptDate");
                                     String accptTime = userResponse.getString("acceptTime");
-
+                                    String dealerLocation = userResponse.getString("dealerLocation");
+                                    String dealerID = userResponse.getString("dealerID");
                                     arrCarNAMES.add(carName);
                                     arrBookingDates.add(appDate);
                                     arrBookingTimes.add(appTime);
@@ -154,6 +157,8 @@ public class MyBookingFragment extends Fragment {
                                     arrAcceptDate.add(acceptDate);
                                     arrAcceptTime.add(accptTime);
                                     arrAppID.add(appID);
+                                    arrDealerLocation.add(dealerLocation);
+                                    arrDealerID.add(dealerID);
 
                                 }
                                 initListVIew(context);
@@ -209,7 +214,7 @@ public class MyBookingFragment extends Fragment {
     }
 
     private void initListVIew(Context context) {
-        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(context, arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrAcceptDate, arrAcceptTime, arrCarPhoto, arrAgentID,arrAppID);
+        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(context, arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrAcceptDate, arrAcceptTime, arrCarPhoto, arrAgentID, arrAppID, arrDealerLocation, arrDealerID);
         listViewMyBooking.setAdapter(myBookingAdapter);
     }
 
@@ -262,7 +267,8 @@ public class MyBookingFragment extends Fragment {
             getAppointment(getActivity(), getString(R.string.get_my_booking_url));
         }
     }
-    private void showTips(){
+
+    private void showTips() {
         tvTips1Met.setVisibility(View.VISIBLE);
         tvTips2Booked.setVisibility(View.VISIBLE);
         tvTips3Cancelled.setVisibility(View.VISIBLE);
@@ -272,7 +278,8 @@ public class MyBookingFragment extends Fragment {
         iv3Cancelled.setVisibility(View.VISIBLE);
         iv4Pending.setVisibility(View.VISIBLE);
     }
-    private void clearTips(){
+
+    private void clearTips() {
         tvTips1Met.setVisibility(View.GONE);
         tvTips2Booked.setVisibility(View.GONE);
         tvTips3Cancelled.setVisibility(View.GONE);
