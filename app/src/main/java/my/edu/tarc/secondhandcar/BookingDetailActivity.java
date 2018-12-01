@@ -4,15 +4,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,14 +45,14 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     private Button btnEditBooking;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvDealerLoc, tvAgentName, tvAgentContactNo, tvAgentEmail;
-    private String carName, appDate, appTime, price, carPhoto,  custID, bookStatus, dealerID;
+    private String carName, appDate, appTime, price, carPhoto, custID, bookStatus, dealerID;
     private String appID;
     private String agentContact = "-";
     private String agentName = "-";
     private String agentEmail = "-";
     private String dealerLocation;
-    private String reason;
-    private String agentID="";
+    private String reason = "none";
+    private String agentID = "-";
     private ImageView ivCarPhoto;
     private ProgressBar downloadingAppDetail;
     SharedPreferences sharePref;
@@ -96,7 +100,6 @@ public class BookingDetailActivity extends AppCompatActivity {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     userResponse = jsonArray.getJSONObject(i);
 
-                                    // appID = userResponse.getString("appID");
                                     agentContact = userResponse.getString("agentContactNo");
                                     agentName = userResponse.getString("agentName");
                                     agentEmail = userResponse.getString("agentEmail");
@@ -168,18 +171,33 @@ public class BookingDetailActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         //check status, can cancel booking at Pending status without reason
-                        if(bookStatus.equals("Pending")){
+                        if (bookStatus.equals("Pending")) {
+
                             cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
                         }
                         //if the status is Booked, customer have to provide reason
-                        else{
-                            //TODO: provide valid reason by doing spinner
-                            reason="Emergency case happened";
-                            cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
-                        }
-                        //but if cancel booking at booked status, have to ask for valid reason
-                       // cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
+                        else {
 
+                            //provide valid reason in alertdialog
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(BookingDetailActivity.this);
+                            alertDialog.setTitle("Enter Cancel Booking Reason");
+                            alertDialog.setMessage("Please state down the reason of cancel booking. ");
+                            final ArrayAdapter<CharSequence> reasonAdapter = ArrayAdapter.createFromResource(BookingDetailActivity.this, R.array.cancel_reason, android.R.layout.simple_spinner_item);
+                            //using drop down list to let the customer choose a reason( prevent they type meaningless reason )
+                            reasonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            final Spinner spReason = new Spinner(BookingDetailActivity.this);
+                            spReason.setLayoutParams(new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT));
+                            spReason.setAdapter(reasonAdapter);
+                            alertDialog.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    reason = spReason.getSelectedItem().toString();
+                                    cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
+                                }
+                            }).setNegativeButton("Back", null);
+                            alertDialog.setView(spReason).create().show();
+
+                        }
 
                     }
                 }).setNegativeButton("No", null).create().show();
@@ -242,7 +260,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
                     params.put("appID", appID);
                     params.put("agentID", agentID);
-                    params.put("cancelReason",reason);
+                    params.put("cancelReason", reason);
 
                     return params;
                 }
@@ -299,7 +317,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         custID = sharePref.getString("custID", null);
         appDate = sharePref.getString("appDate", null);
         appTime = sharePref.getString("appTime", null);
-
+        //set the default agentID to '-'
+        agentID = "-";
         Intent intent = getIntent();
 
         appID = intent.getStringExtra("appID");
@@ -307,7 +326,6 @@ public class BookingDetailActivity extends AppCompatActivity {
         price = intent.getStringExtra("price");
         bookStatus = intent.getStringExtra("bookStatus");
         carPhoto = intent.getStringExtra("carPhoto");
-        agentID = intent.getStringExtra("agentID");
         dealerLocation = intent.getStringExtra("dealerLocation");
         dealerID = intent.getStringExtra("dealerID");
 
@@ -322,6 +340,7 @@ public class BookingDetailActivity extends AppCompatActivity {
             //if it is Booked, Met, Cancelled
             btnEditBooking.setVisibility(View.INVISIBLE);
             //get apppointment and Dealer detail
+            agentID = intent.getStringExtra("agentID");
             getAppointmentDetail(this, getString(R.string.get_booking_detail_url), custID, agentID);
         }
 

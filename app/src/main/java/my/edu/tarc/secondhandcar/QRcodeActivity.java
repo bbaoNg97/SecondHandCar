@@ -32,7 +32,7 @@ public class QRcodeActivity extends AppCompatActivity {
         //generate QR code
         MultiFormatWriter multiFormatWriter=new MultiFormatWriter();
         try{
-            BitMatrix bitMatrix=multiFormatWriter.encode(appID+","+agentID, BarcodeFormat.QR_CODE,200,200);
+            BitMatrix bitMatrix=multiFormatWriter.encode(appID+","+agentID, BarcodeFormat.QR_CODE,300,300);
             BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
             Bitmap bitmap=barcodeEncoder.createBitmap(bitMatrix);
             ivQRcode.setImageBitmap(bitmap);

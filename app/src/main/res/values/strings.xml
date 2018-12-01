@@ -64,6 +64,12 @@
         <item>From high to low</item>
     </string-array>
 
+    <string-array name="cancel_reason">
+        <item>Emergency</item>
+        <item>Not interested in this car anymore</item>
+        <item>Selected wrong car</item>
+    </string-array>
+
     <string name="title_booking_detail">Booking Detail</string>
     <string name="price">Price:</string>
     <string name="dealer_location">Dealer Location:</string>
@@ -151,5 +157,8 @@
     <string name="tips2Booked">- Booked</string>
     <string name="tips3Cancelled">- Cancelled</string>
     <string name="tips4Pending">- Pending</string>
+    <string name="qrcode_msg">*This QR code is only for agent to scan*</string>
+    <string name="qrcode_msg1" >*Please show to your agent when meet up*</string>
+    <string name="scan_me">SCAN ME</string>
 
 </resources>
