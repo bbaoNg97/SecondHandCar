@@ -37,10 +37,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -59,7 +61,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private String custID, price, carName;
     //private Date selectedTime;
     SharedPreferences sharePref;
-    private String appID, carID, appDate, appTime, strDate, strTime, strDealerID, agentEmail,currentAgentEmail;
+    private String appID, carID, appDate, appTime, strDate, strTime, strDealerID, agentEmail, currentAgentEmail;
+
     RequestQueue requestQueue;
     List<String> bookingList = new ArrayList<>();
     private ArrayList<String> arrAgentEmail = new ArrayList<>();
@@ -89,8 +92,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         custID = sharePref.getString("custID", null);
-        appDate = sharePref.getString("appDate",null);
-        appTime = sharePref.getString("appTime",null);
+        appDate = sharePref.getString("appDate", null);
+        appTime = sharePref.getString("appTime", null);
 
         Intent intent = getIntent();
         strDealerID = intent.getStringExtra("dealerID");
@@ -98,7 +101,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         if (intent.getStringExtra("from").equals("booking")) {
             setTitle(R.string.title_chooseDateTime);
 
-            currentAgentEmail=intent.getStringExtra("agentEmail");
+            currentAgentEmail = intent.getStringExtra("agentEmail");
 
         }
         // if is from edit booking
@@ -202,10 +205,10 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                     strTime = tvTime.getText().toString();
 
                     //date and time can not be null
-                    if (strDate.equals("") ){
+                    if (strDate.equals("")) {
                         Toast.makeText(getApplicationContext(), "\t\t\t\tInvalid date.\nPlease select booking date.", Toast.LENGTH_LONG).show();
 
-                    }else if(strTime.equals("")){
+                    } else if (strTime.equals("")) {
                         Toast.makeText(getApplicationContext(), "\t\t\t\tInvalid time.\nPlease select booking time.", Toast.LENGTH_LONG).show();
 
                     } else {
@@ -234,24 +237,24 @@ public class MakeAppointmentActivity extends AppCompatActivity {
 
                         //check if selected date is before currentDate
                         if (selectedDate.before(currentDate)) {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
                             builder.setTitle("Invalid Date");
                             builder.setMessage("The booking date should be after today.\nPlease try again.");
-                            builder.setNegativeButton("Retry",null).create().show();
+                            builder.setNegativeButton("Retry", null).create().show();
                         }
                         //check if selected date is after one month
                         else if (selectedDate.after(validDate)) {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
                             builder.setTitle("Invalid Month");
                             builder.setMessage("Only can make booking within one month.\nPlease try again.");
-                            builder.setNegativeButton("Retry",null).create().show();
+                            builder.setNegativeButton("Retry", null).create().show();
                         }
                         //check if booking time is between 9-5pm
                         else if (hour < 9 || hour >= 17) {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(MakeAppointmentActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
                             builder.setTitle("Invalid Time");
                             builder.setMessage("Only can book time at working hour ( 9am - 5pm ).\nPlease try again.");
-                            builder.setNegativeButton("Retry",null).create().show();
+                            builder.setNegativeButton("Retry", null).create().show();
                         }
                         //check connection
                         else if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
@@ -350,7 +353,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                     userResponse = jsonArray.getJSONObject(i);
                                     agentEmail = userResponse.getString("agentEmail");
 
-                                    arrAgentEmail.add(agentEmail + ",");
+                                    arrAgentEmail.add(agentEmail);
                                 }
 
 
@@ -400,8 +403,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 String message = jsonObject.getString("message");
                                 //if make appointment successful
                                 if (success.equals("1")) {
-                                   sendEmailToAll();
-
+                                    sendEmailToAll();
 
                                 } else {
 
@@ -453,59 +455,42 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     private void sendEmailToAll() {
 
         String Recipient = arrAgentEmail.toString().replace("[", "").replace("]", "");
-        String[] recipients = Recipient.split(",");
-        String strDate, strTime, strCar, strSender;
+        List<String> recipients = Arrays.asList(Recipient.split("\\s*,\\s*"));
+        String strDate, strTime, strCar, strSenderEmail, strSenderPw, strSender;
         strDate = tvDate.getText().toString();
         strTime = tvTime.getText().toString();
+        strSenderEmail = sharePref.getString("custEmail", null);
+        strSenderPw = sharePref.getString("password", null);
         strSender = sharePref.getString("custName", null);
 
         strCar = tvSelectedCar.getText().toString();
-        String title = "Request for making appointment on car review";
-        String msg = "Hi,\nI would like to make an appointment with you at " + strDate + " "
+        String subject = "Request for making appointment on car review";
+        String body = "Hi,\nI would like to make an appointment with you at " + strDate + " "
                 + strTime + " with " + strCar + ".\nHope to receive your email.\nThanks!" +
                 "\nRegards,\n" + strSender;
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"));
-        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "Appointment");
-        intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        intent.putExtra(Intent.EXTRA_TEXT, msg);
-        startActivity(Intent.createChooser(intent, "Choose an email client"));
-        if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
-            Toast.makeText(MakeAppointmentActivity.this, "Appointment Added.", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(MakeAppointmentActivity.this, "Appointment Updated.", Toast.LENGTH_LONG).show();
-        }
-        finish();
+        SendMailTask smt = new SendMailTask(MakeAppointmentActivity.this);
+        smt.execute(strSenderEmail, strSenderPw, recipients, subject, body);
+
+
     }
 
-    private void sendEmail() {
-        //TODO: get previous date time, and updated date time
-
+    private void sendUpdateEmail() {
         String Recipient = arrAgentEmail.toString().replace("[", "").replace("]", "");
-        String[] recipients = Recipient.split(",");
-        String strDate, strTime, strCar, strSender;
+        List<String> recipients = Arrays.asList(Recipient.split("\\s*,\\s*"));
+        String strDate, strTime, strCar, strSender,strSenderEmail,strSenderPw;
         strDate = tvDate.getText().toString();
         strTime = tvTime.getText().toString();
+        strSenderEmail = sharePref.getString("custEmail", null);
+        strSenderPw = sharePref.getString("password", null);
         strSender = sharePref.getString("custName", null);
         strCar = tvSelectedCar.getText().toString();
-        String title = "Updating appointment on car review ";
-        String msg = "Hi,\nThe appointment date time is updated to " + strDate + " "
+        String subject = "Updating appointment on car review ";
+        String body = "Hi,\nThe appointment date time is updated to " + strDate + " "
                 + strTime + " with " + strCar + ".\nHope to receive your email.\nThanks!" +
                 "\nRegards,\n" + strSender;
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"));
-        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "Appointment");
-        intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        intent.putExtra(Intent.EXTRA_TEXT, msg);
-        startActivity(Intent.createChooser(intent, "Choose an email client"));
-        if (btnSendRequest.getText().toString().equals(getString(R.string.send_appointment_request))) {
-            Toast.makeText(MakeAppointmentActivity.this, "Appointment Added.", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(MakeAppointmentActivity.this, "Appointment Updated.", Toast.LENGTH_LONG).show();
-        }
-        finish();
+
+        SendMailTask smt = new SendMailTask(MakeAppointmentActivity.this);
+        smt.execute(strSenderEmail, strSenderPw, recipients, subject, body);
     }
 
     //to count total number of appointment and count the total number of customer to generate ID
@@ -555,13 +540,14 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     }
 
     private void checkError(Exception e, Context context) {
-        if (!LoginActivity.isConnected(MakeAppointmentActivity.this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MakeAppointmentActivity.this);
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else {
-            Toast.makeText(MakeAppointmentActivity.this, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -615,13 +601,12 @@ public class MakeAppointmentActivity extends AppCompatActivity {
                                 String message = jsonObject.getString("message");
                                 //if update appointment successful
                                 if (success.equals("1")) {
-                                    SharedPreferences.Editor editor =sharePref.edit();
-                                    editor.putString("appDate",strDate);
-                                    editor.putString("appTime",strTime);
+                                    SharedPreferences.Editor editor = sharePref.edit();
+                                    editor.putString("appDate", strDate);
+                                    editor.putString("appTime", strTime);
                                     editor.apply();
-                                    sendEmail();
-                                }
-                                else Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                                    sendUpdateEmail();
+                                } else Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
                             } catch (JSONException e) {
                                 checkError(e, context);

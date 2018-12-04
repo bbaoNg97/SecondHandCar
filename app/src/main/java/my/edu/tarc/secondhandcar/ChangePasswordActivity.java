@@ -1,7 +1,6 @@
 package my.edu.tarc.secondhandcar;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -54,13 +53,14 @@ public class ChangePasswordActivity extends AppCompatActivity {
         etConfirmPw = (EditText) findViewById(R.id.editTextConfirmNewPw);
         changingPw = (ProgressBar) findViewById(R.id.changingPw);
         btnSave = (Button) findViewById(R.id.buttonSave);
-        btnReset = (Button) findViewById(R.id.buttonReset);
+        btnReset = (Button) findViewById(R.id.buttonPwRec);
         //progressbar invisible
         changingPw.setVisibility(View.INVISIBLE);
 
         if (!LoginActivity.isConnected(ChangePasswordActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
         }
 
@@ -74,6 +74,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 if (!LoginActivity.isConnected(ChangePasswordActivity.this)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
                     builder.setTitle("Connection Error");
+                    builder.setIcon(R.drawable.ic_action_info);
                     builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
                 } else if (strCurrentPw.isEmpty()) {
                     etCurrentPw.setError("Please enter current password");
@@ -102,7 +103,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             btnSave.setEnabled(false);
                             makeServiceCall(ChangePasswordActivity.this, getString(R.string.update_password_url), custID, strNewPw);
                         } catch (Exception e) {
-                            Toast.makeText(ChangePasswordActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                            checkError(e,ChangePasswordActivity.this);
                         }
                     }
                 }
@@ -144,7 +145,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                     builder.setMessage(message).setNegativeButton("Retry", null).create().show();
                                 }
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                checkError(e,ChangePasswordActivity.this);
                                 proceed();
 
                             }
@@ -153,7 +154,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), "Error : " + error.toString(), Toast.LENGTH_LONG).show();
+                            checkError(error,ChangePasswordActivity.this);
                             proceed();
 
                         }
@@ -176,7 +177,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             };
             queue.add(postRequest);
         } catch (Exception e) {
-            e.printStackTrace();
+            checkError(e,ChangePasswordActivity.this);
             proceed();
         }
     }
@@ -207,5 +208,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

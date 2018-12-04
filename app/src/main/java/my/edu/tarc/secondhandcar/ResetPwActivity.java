@@ -1,6 +1,5 @@
 package my.edu.tarc.secondhandcar;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -14,30 +13,27 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class ResetPwActivity extends AppCompatActivity {
     private Button btnReset;
     private EditText etEmailAddr;
     private ProgressBar checkingEmail;
-    private String email;
+    private String email,strCustID;
     public static final String TAG = "my.edu.tarc.secondhandcar";
     List<String> custEmailList;
+    List<String> custIDList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +41,9 @@ public class ResetPwActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reset_pw);
         setTitle(R.string.title_reset_pw);
         custEmailList = new ArrayList<>();
+        custIDList=new ArrayList<>();
         btnReset = (Button) findViewById(R.id.buttonReset);
-        etEmailAddr = (EditText) findViewById(R.id.editTextEmail);
+        etEmailAddr = (EditText) findViewById(R.id.editTextPwRecConf);
         checkingEmail = (ProgressBar) findViewById(R.id.checkingEmail);
         checkingEmail.setVisibility(View.GONE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -62,15 +59,14 @@ public class ResetPwActivity extends AppCompatActivity {
         if (!LoginActivity.isConnected(ResetPwActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ResetPwActivity.this);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else if (etEmailAddr.getText().toString().isEmpty()) {
             etEmailAddr.setError("Please fill in your email address");
         } else {
             if (foundEmail(email)) {
-                Toast.makeText(ResetPwActivity.this, "Email sent!Please check your mailbox to reset password", Toast.LENGTH_LONG).show();
-                Intent loginIntent = new Intent(ResetPwActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
+                sendPwRescoveryEmail();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ResetPwActivity.this);
                 builder.setTitle("Incorrect Email");
@@ -82,6 +78,18 @@ public class ResetPwActivity extends AppCompatActivity {
         etEmailAddr.setEnabled(true);
         checkingEmail.setVisibility(View.GONE);
 
+
+    }
+
+    private void sendPwRescoveryEmail() {
+        String sender = "secondHandCarSellingSystem";
+        String senderPw="shcss,test";
+        String receipient=email;
+        List<String> recipients = Arrays.asList(receipient.split("\\s*,\\s*"));
+        String subject="Password Recovery";
+        String body="Please reset your password now";
+        SendMailTask smt = new SendMailTask(ResetPwActivity.this);
+        smt.execute(sender, senderPw, recipients, subject, body);
 
     }
 
@@ -103,7 +111,9 @@ public class ResetPwActivity extends AppCompatActivity {
                                 JSONObject userResponse = (JSONObject) response.get(i);
                                 //json object that contains all of the customer in the user table
                                 String strEmail = userResponse.getString("custEmail");
+                                String strCustID=userResponse.getString("custID");
                                 custEmailList.add(strEmail);
+                                custIDList.add(strCustID);
                             }
 
 
@@ -131,6 +141,7 @@ public class ResetPwActivity extends AppCompatActivity {
         if (!LoginActivity.isConnected(context)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else {
@@ -145,6 +156,7 @@ public class ResetPwActivity extends AppCompatActivity {
         boolean found = false;
         for (int i = 0; i < custEmailList.size(); ++i) {
             if (custEmailList.get(i).equals(emails)) {
+                strCustID=custIDList.get(i);
                 found = true;
 
             }
@@ -162,4 +174,5 @@ public class ResetPwActivity extends AppCompatActivity {
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
+
 }

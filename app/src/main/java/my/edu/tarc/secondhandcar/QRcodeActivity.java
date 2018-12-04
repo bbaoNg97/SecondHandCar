@@ -1,13 +1,16 @@
 package my.edu.tarc.secondhandcar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -37,7 +40,7 @@ public class QRcodeActivity extends AppCompatActivity {
             Bitmap bitmap=barcodeEncoder.createBitmap(bitMatrix);
             ivQRcode.setImageBitmap(bitmap);
         }catch (Exception e){
-            e.printStackTrace();
+           checkError(e,QRcodeActivity.this);
         }
 
     }
@@ -51,5 +54,16 @@ public class QRcodeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return super.onOptionsItemSelected(item);
+    }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

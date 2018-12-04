@@ -42,7 +42,7 @@
             tools:ignore="MissingConstraints">
 
             <EditText
-                android:id="@+id/editTextEmail"
+                android:id="@+id/editTextPwRecConf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_action_email"
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
+                app:layout_constraintBottom_toTopOf="@+id/editTextPwRecConf"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="RtlHardcoded" />
         </android.support.design.widget.TextInputLayout>

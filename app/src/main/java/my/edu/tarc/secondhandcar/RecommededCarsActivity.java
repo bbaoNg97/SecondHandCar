@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -46,6 +47,7 @@ public class RecommededCarsActivity extends AppCompatActivity {
     private ProgressBar recommendingResult;
     private TabLayout tabLayout;
     private Spinner spinnerSortBy;
+    private TextView tvMinMile,tvMaxMile,tvMinPrice,tvMaxPrice,tvMinYear,tvMaxYear,tvColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,13 @@ public class RecommededCarsActivity extends AppCompatActivity {
         listViewCarResult = (ListView) findViewById(R.id.listViewRecCarResult);
         tabLayout = (TabLayout) findViewById(R.id.tabLayoutRec);
         spinnerSortBy = (Spinner) findViewById(R.id.spinnerSortByRec);
+        tvMinMile=(TextView)findViewById(R.id.textViewShMinMileage);
+        tvMaxMile=(TextView)findViewById(R.id.textViewShMaxMileage);
+        tvMinPrice=(TextView)findViewById(R.id.textViewShMinPrice);
+        tvMaxPrice=(TextView)findViewById(R.id.textViewShMaxPrice);
+        tvMinYear=(TextView)findViewById(R.id.textViewShMinYear);
+        tvMaxYear=(TextView)findViewById(R.id.textViewShMaxYear);
+        tvColor=(TextView)findViewById(R.id.textViewShColor);
         Intent intent = getIntent();
         //show recommended car
         minPrice = intent.getIntExtra(AdvSearchActivity.MIN_PRICE, 0);
@@ -68,6 +77,14 @@ public class RecommededCarsActivity extends AppCompatActivity {
         //   purpose = intent.getStringExtra("Purpose");
         colorName = intent.getStringExtra("Color");
 
+        tvMaxPrice.setText(maxPrice+"");
+        tvMinPrice.setText(minPrice+"");
+        tvMinMile.setText(minMileage+"");
+        tvMaxMile.setText(maxMileage+"");
+        tvMaxYear.setText(maxYear+"");
+        tvMinYear.setText(minYear+"");
+
+        tvColor.setText(colorName+"");
 
         ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource(this, R.array.sort_by, android.R.layout.simple_spinner_item);
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -265,6 +282,7 @@ public class RecommededCarsActivity extends AppCompatActivity {
         if (!LoginActivity.isConnected(context)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else {

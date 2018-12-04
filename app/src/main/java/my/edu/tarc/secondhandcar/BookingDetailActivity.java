@@ -36,9 +36,11 @@ import org.json.JSONObject;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BookingDetailActivity extends AppCompatActivity {
@@ -116,7 +118,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                             }
 
                         } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
+                            checkError(e,BookingDetailActivity.this);
                             e.printStackTrace();
                             downloadingAppDetail.setVisibility(View.GONE);
 
@@ -127,8 +129,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
-                        // error.printStackTrace();
+                       checkError(error,BookingDetailActivity.this);
                         downloadingAppDetail.setVisibility(View.GONE);
 
                     }
@@ -192,7 +193,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     reason = spReason.getSelectedItem().toString();
-                                    cancelBooking(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID);
+                                    cancelBookingToAgent(BookingDetailActivity.this, getString(R.string.cancel_booking_url), appID, agentID,reason);
                                 }
                             }).setNegativeButton("Back", null);
                             alertDialog.setView(spReason).create().show();
@@ -216,7 +217,7 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     }
 
-    private void cancelBooking(final Context context, String url, final String appID, final String agentID) {
+    private void cancelBookingToAgent(final Context context, String url, final String appID, final String agentID, final String reason) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
         btnEditBooking.setEnabled(false);
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -235,14 +236,13 @@ public class BookingDetailActivity extends AppCompatActivity {
                                 String message = jsonObject.getString("message");
 
                                 if (success.equals("1")) {//UPDATED success
-                                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                                    finish();
+                                    sendEmail(reason);
                                 } else {
                                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 
                                 }
                             } catch (JSONException e) {
-                                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                                checkError(e,BookingDetailActivity.this);
                             }
                             proceed();
                         }
@@ -250,7 +250,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(context, "Error  " + error.toString(), Toast.LENGTH_LONG).show();
+                           checkError(error,BookingDetailActivity.this);
                             proceed();
 
                         }
@@ -274,7 +274,70 @@ public class BookingDetailActivity extends AppCompatActivity {
             };
             queue.add(postRequest);
         } catch (Exception e) {
-            Toast.makeText(context, "Error : " + e.toString(), Toast.LENGTH_LONG).show();
+            checkError(e,BookingDetailActivity.this);
+            proceed();
+        }
+    }
+
+    private void cancelBooking(final Context context, String url, final String appID, final String agentID) {
+        downloadingAppDetail.setVisibility(View.VISIBLE);
+        btnEditBooking.setEnabled(false);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        //Send data
+        try {
+            StringRequest postRequest = new StringRequest(
+                    Request.Method.POST,
+                    url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            JSONObject jsonObject;
+                            try {
+                                jsonObject = new JSONObject(response);
+                                String success = jsonObject.getString("success");
+                                String message = jsonObject.getString("message");
+
+                                if (success.equals("1")) {//UPDATED success
+                                    Toast.makeText(BookingDetailActivity.this,"Cancelled",Toast.LENGTH_LONG).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+
+                                }
+                            } catch (JSONException e) {
+                                checkError(e,BookingDetailActivity.this);
+                            }
+                            proceed();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            checkError(error,BookingDetailActivity.this);
+                            proceed();
+
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("appID", appID);
+                    params.put("agentID", agentID);
+                    params.put("cancelReason", reason);
+
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("Content-Type", "application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            queue.add(postRequest);
+        } catch (Exception e) {
+            checkError(e,BookingDetailActivity.this);
             proceed();
         }
     }
@@ -345,5 +408,37 @@ public class BookingDetailActivity extends AppCompatActivity {
         }
 
 
+    }
+    private void sendEmail(String strReason) {
+
+        String Recipient = agentEmail;
+        List<String> recipients = Arrays.asList(Recipient.split("\\s*,\\s*"));
+        String strDate, strTime, strCar, strSenderEmail, strSenderPw, strSender;
+        strDate = appDate;
+        strTime = appTime;
+        strSenderEmail = sharePref.getString("custEmail", null);
+        strSenderPw = sharePref.getString("password", null);
+        strSender = sharePref.getString("custName", null);
+
+        strCar =carName;
+        String subject = "Cancel booking on "+strDate+" "+ strTime;
+        String body = "Hi,\nI would like to apologize that I have cancelled the booking on " +strCar+". The reason is: "+strReason+
+                ". Hope you can understand. Thanks!" +
+                "\nRegards,\n" + strSender;
+        SendMailTask smt = new SendMailTask(BookingDetailActivity.this);
+        smt.execute(strSenderEmail, strSenderPw, recipients, subject, body);
+
+
+    }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

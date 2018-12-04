@@ -1,5 +1,6 @@
 package my.edu.tarc.secondhandcar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -122,14 +123,7 @@ public class searchCarActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    if (!LoginActivity.isConnected(searchCarActivity.this)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(searchCarActivity.this);
-                        builder.setTitle("Connection Error");
-                        builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
-
-                    } else
-                        Toast.makeText(searchCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
-
+                    checkError(e,searchCarActivity.this);
                     finish();
                 }
                 pbRetrievingData.setVisibility(View.GONE);
@@ -139,13 +133,7 @@ public class searchCarActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (!LoginActivity.isConnected(searchCarActivity.this)) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(searchCarActivity.this);
-                            builder.setTitle("Connection Error");
-                            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
-
-                        } else
-                            Toast.makeText(searchCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
+                        checkError(error,searchCarActivity.this);
                         pbRetrievingData.setVisibility(View.GONE);
                         buttonSearch.setEnabled(true);
                         finish();
@@ -186,14 +174,7 @@ public class searchCarActivity extends AppCompatActivity {
                         finish();
                     }
                 } catch (JSONException e) {
-                    if (!LoginActivity.isConnected(searchCarActivity.this)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(searchCarActivity.this);
-                        builder.setTitle("Connection Error");
-                        builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
-
-                    } else
-                        Toast.makeText(searchCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
-
+                    checkError(e,searchCarActivity.this);
                     finish();
                 }
                 pbRetrievingData.setVisibility(View.GONE);
@@ -204,13 +185,7 @@ public class searchCarActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (!LoginActivity.isConnected(searchCarActivity.this)) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(searchCarActivity.this);
-                            builder.setTitle("Connection Error");
-                            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
-
-                        } else
-                            Toast.makeText(searchCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
+                        checkError(error,searchCarActivity.this);
                         pbRetrievingData.setVisibility(View.GONE);
                         finish();
                     }
@@ -236,5 +211,16 @@ public class searchCarActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

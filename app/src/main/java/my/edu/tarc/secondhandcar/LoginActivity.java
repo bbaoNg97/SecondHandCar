@@ -1,15 +1,10 @@
 package my.edu.tarc.secondhandcar;
 
-import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        editTextEmail = (EditText) findViewById(R.id.editTextPwRecConf);
         editTextPw = (EditText) findViewById(R.id.editTextPw);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         textViewSignUp = (TextView) findViewById(R.id.textViewSignUp);
@@ -68,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         if (!isConnected(LoginActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         }
@@ -213,6 +209,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (!isConnected(LoginActivity.this)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle("Connection Error");
+                            builder.setIcon(R.drawable.ic_action_info);
                             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
                         } else {

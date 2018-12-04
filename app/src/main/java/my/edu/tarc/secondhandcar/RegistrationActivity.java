@@ -78,15 +78,15 @@ public class RegistrationActivity extends AppCompatActivity {
 
         String count = Integer.toString(countCustomer + 1);
         //if total cust is 0-9
-        if (countCustomer < 10) {
+        if (countCustomer < 9) {
             id = id + "000" + count;
         }
         //if total cust is 10-99
-        else if (countCustomer >= 10 && countCustomer < 100) {
+        else if (countCustomer >= 9 && countCustomer < 99) {
             id = id + "00" + count;
         }
         //if total cust is 100-999
-        else if (countCustomer >= 100 && countCustomer < 1000) {
+        else if (countCustomer >= 99 && countCustomer < 999) {
             id = id + "0" + count;
         }
         //if total cust is more than 1000
@@ -110,6 +110,7 @@ public class RegistrationActivity extends AppCompatActivity {
         if (!LoginActivity.isConnected(RegistrationActivity.this)) {
             builder = new AlertDialog.Builder(RegistrationActivity.this);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
         } else if (name.equals("")) {
             etName.setError("Please fill in your name");
@@ -261,6 +262,7 @@ public class RegistrationActivity extends AppCompatActivity {
         if (!LoginActivity.isConnected(RegistrationActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else {
@@ -301,4 +303,6 @@ public class RegistrationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
+
+
 }

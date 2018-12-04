@@ -25,7 +25,7 @@
 
     <string name="forgot_password">Forgot password?</string>
     <string name="reset_your_password">Reset your password</string>
-    <string name="caption_reset_password">Enter your email address and we will send you an email to reset your password</string>
+    <string name="caption_reset_password">Enter your email address and we will send you an email to recover your password</string>
     <string name="change_password">Reset Password</string>
     <string name="confirmPw">Confirm Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
@@ -128,6 +128,7 @@
     <string name="get_cust_url">https://dewy-minuses.000webhostapp.com/GetCustEmail.php</string>
     <string name="update_prof_url">https://dewy-minuses.000webhostapp.com/CustUpdateProf.php</string>
     <string name="update_password_url">https://dewy-minuses.000webhostapp.com/CustUpdatePwd.php</string>
+
     <string name="insert_booking_url">https://dewy-minuses.000webhostapp.com/InsertBooking.php</string>
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAppointment.php</string>
     <string name="get_agent_url">https://dewy-minuses.000webhostapp.com/getAgent.php</string>
@@ -158,7 +159,16 @@
     <string name="tips3Cancelled">- Cancelled</string>
     <string name="tips4Pending">- Pending</string>
     <string name="qrcode_msg">*This QR code is only for agent to scan*</string>
-    <string name="qrcode_msg1" >*Please show to your agent when meet up*</string>
+    <string name="qrcode_msg1">*Please show to your agent when meet up*</string>
     <string name="scan_me">SCAN ME</string>
+    <string name="dis_year">Year:</string>
+    <string name="dis_milegae">Mileage:</string>
+    <string name="dis_price_range">Price range:</string>
+    <string name="search_criteria">Search Criteria</string>
+    <string name="caption_enter_new_password" >Please enter your new password and confirm password</string>
+    <string name="recover">Recover</string>
+    <string name="recover_password">Recover your password</string>
+    <string name="next">Next</string>
+    <string name="update_password_email_url">https://dewy-minuses.000webhostapp.com/PwdRecovery.php</string>
 
 </resources>

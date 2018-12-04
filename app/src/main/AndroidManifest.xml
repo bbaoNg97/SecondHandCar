@@ -39,7 +39,7 @@
         <activity android:name=".MakeAppointmentActivity" />
         <activity android:name=".BookingDetailActivity" />
         <activity android:name=".QRcodeActivity" />
-        <activity android:name=".RecommededCarsActivity"></activity>
+        <activity android:name=".RecommededCarsActivity" />
     </application>
 
 </manifest>

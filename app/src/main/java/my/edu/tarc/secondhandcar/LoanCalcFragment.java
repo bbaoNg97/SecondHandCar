@@ -2,8 +2,10 @@ package my.edu.tarc.secondhandcar;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +52,7 @@ public class LoanCalcFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_loan_calc, container, false);
         buttonCal = (Button) v.findViewById(R.id.buttonCal);
         buttonRepayment = (Button) v.findViewById(R.id.buttonRepayment);
-        buttonReset = (Button) v.findViewById(R.id.buttonReset);
+        buttonReset = (Button) v.findViewById(R.id.buttonPwRec);
         editTextPrice = (EditText) v.findViewById(R.id.editTextPrice);
         editTextDownpay = (EditText) v.findViewById(R.id.editTextDownpay);
         editTextLoan = (EditText) v.findViewById(R.id.editTextLoan);
@@ -117,6 +119,17 @@ public class LoanCalcFragment extends Fragment {
 
             hideSoftKeyboard(getActivity());
 
+        }
+    }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 

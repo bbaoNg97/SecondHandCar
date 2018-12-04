@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -90,9 +91,19 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(ViewProfileActivity.this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+            checkError(e,ViewProfileActivity.this);
         }
 
+    }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

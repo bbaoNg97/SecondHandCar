@@ -1,5 +1,6 @@
 package my.edu.tarc.secondhandcar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -31,7 +33,7 @@ public class AdvSearchActivity extends AppCompatActivity {
     private TextView textViewMinPrice, textViewMaxPrice, textViewMinMileage, textViewMaxMileage, textViewMinYear, textViewMaxYear;
     private Button buttonAdvSearchCar, buttonResetRec;
 
-    public static final int MAX_PRICE = 5000000;
+    public static final int MAX_PRICE = 3500000;
     public static final int MAX_MILEAGE = 1000000;
     public static final int MAX_YEAR = 2018;
 
@@ -137,7 +139,7 @@ public class AdvSearchActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-                maxPrice = 5000000;
+                maxPrice = 3500000;
                 //let the min price become starting value of max price
                 textViewMaxPrice.setText(getFormattedValue(String.valueOf(minPrice)));
 
@@ -164,8 +166,8 @@ public class AdvSearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                        //if user does not drag seekBarMaxPrice, the maxPrice should be 5000000
-                        maxPrice = 5000000;
+                        //if user does not drag seekBarMaxPrice, the maxPrice should be 3500000
+                        maxPrice = 3500000;
                     }
 
                     @Override
@@ -296,7 +298,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                 try {
                     maxPrice = numberFormat.parse(textViewMaxPrice.getText().toString()).intValue();
                 } catch (Exception e) {
-                    maxPrice = 5000000;
+                    maxPrice = 3500000;
                 }
                 //if the value didnt change
                 try {
@@ -314,7 +316,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                     msg = msg.replaceAll("[,]", "");
                     maxMileage = Integer.parseInt(msg);
                 } catch (Exception e) {
-                    maxMileage = 5000000;
+                    maxMileage = 1000000;
                 }
                 //if the value didnt change
                 try {
@@ -428,4 +430,5 @@ public class AdvSearchActivity extends AppCompatActivity {
         mSpinnerColor.setAdapter(mAdapterCustomColor);
 
     }
+
 }

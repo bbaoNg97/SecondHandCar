@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -162,7 +163,6 @@ public class MyBookingFragment extends Fragment {
 
                                 }
                                 initListVIew(context);
-                                Toast.makeText(context, "Done ! ", Toast.LENGTH_SHORT).show();
                                 showTips();
 
                                 downloading.setVisibility(View.GONE);
@@ -175,7 +175,7 @@ public class MyBookingFragment extends Fragment {
                             }
 
                         } catch (JSONException e) {
-                            Toast.makeText(context, "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
+                            checkError(e,getContext());
                             downloading.setVisibility(View.GONE);
                             e.printStackTrace();
                             btnSearch.setEnabled(true);
@@ -187,9 +187,8 @@ public class MyBookingFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                        checkError(error,getContext());
                         downloading.setVisibility(View.GONE);
-                        error.printStackTrace();
                         btnSearch.setEnabled(true);
                         showTips();
 
@@ -289,5 +288,15 @@ public class MyBookingFragment extends Fragment {
         iv3Cancelled.setVisibility(View.GONE);
         iv4Pending.setVisibility(View.GONE);
     }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
 }

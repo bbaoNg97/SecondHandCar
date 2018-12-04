@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,12 +66,6 @@ public class ProfileFragment extends Fragment {
 
                 user.apply();
 
-                //HomeFragment fragmentMain = new HomeFragment();
-                //FragmentManager fManager = getFragmentManager();
-                //FragmentTransaction fTransaction = fManager.beginTransaction();
-                //fTransaction.replace(R.id.main_fram, fragmentMain);
-                //fTransaction.addToBackStack(null);
-                //fTransaction.commit();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 Toast.makeText(getActivity(), "Logout Success", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
@@ -88,7 +83,7 @@ public class ProfileFragment extends Fragment {
         boolean isLogin = checkCustomer(tvWelcome, btnLogout, tlWelcome);
         //check if it has been logged in
 
-        if (isLogin == true) {
+        if (isLogin) {
             inflater.inflate(R.menu.action_bar_welcome, menu);
         }
         //if havent login yet
@@ -104,12 +99,12 @@ public class ProfileFragment extends Fragment {
         int id = item.getItemId();
         //if it is showing login icon
         if (id == R.id.action_Login) {
-            Intent loginIntent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+            Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
             startActivity(loginIntent);
         }
         //if it is showing my profile icon
         else {
-            Intent myProfileIntent = new Intent(getActivity().getApplicationContext(), ViewProfileActivity.class);
+            Intent myProfileIntent = new Intent(getActivity(), ViewProfileActivity.class);
             startActivity(myProfileIntent);
         }
         return super.onOptionsItemSelected(item);
@@ -145,21 +140,30 @@ public class ProfileFragment extends Fragment {
         sharePref = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         //success case
         getActivity().invalidateOptionsMenu();
+
         custID = sharePref.getString("custID", null);
-        try {
-            if (custID.equals(null)) {
-                btnLogout.setVisibility(View.GONE);
-                tvWelcome.setVisibility(View.GONE);
-            } else {
-                btnLogout.setVisibility(View.VISIBLE);
-                tvWelcome.setVisibility(View.VISIBLE);
-            }
-        } catch (Exception e) {
+        //if no customer login
+        if (custID == null) {
             btnLogout.setVisibility(View.GONE);
             tvWelcome.setVisibility(View.GONE);
+        } else {
+            btnLogout.setVisibility(View.VISIBLE);
+            tvWelcome.setVisibility(View.VISIBLE);
         }
 
+    }
 
+
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
 }

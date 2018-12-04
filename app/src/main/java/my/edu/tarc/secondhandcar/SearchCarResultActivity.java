@@ -255,11 +255,13 @@ public class SearchCarResultActivity extends AppCompatActivity {
         if (!LoginActivity.isConnected(context)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
         } else {
             Toast.makeText(context, "No Record! \n" + e.toString(), Toast.LENGTH_LONG).show();
         }
     }
+
 
 }

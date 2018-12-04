@@ -71,6 +71,7 @@ public class EditProfActivity extends AppCompatActivity {
         if (!LoginActivity.isConnected(EditProfActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(EditProfActivity.this);
             builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
             builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
         }
 
@@ -84,6 +85,7 @@ public class EditProfActivity extends AppCompatActivity {
                 if (!LoginActivity.isConnected(EditProfActivity.this)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditProfActivity.this);
                     builder.setTitle("Connection Error");
+                    builder.setIcon(R.drawable.ic_action_info);
                     builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
                     proceed();
 
@@ -115,7 +117,7 @@ public class EditProfActivity extends AppCompatActivity {
                         }
 
                     } catch (Exception e) {
-                        Toast.makeText(EditProfActivity.this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+                        checkError(e,EditProfActivity.this);
                         proceed();
                     }
                 }
@@ -158,6 +160,7 @@ public class EditProfActivity extends AppCompatActivity {
                                 proceed();
 
                             } catch (JSONException e) {
+                                checkError(e,EditProfActivity.this);
                                 proceed();
                             }
                         }
@@ -165,7 +168,7 @@ public class EditProfActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(EditProfActivity.this, "Error  " + error.toString(), Toast.LENGTH_LONG).show();
+                            checkError(error,EditProfActivity.this);
                             proceed();
 
                         }
@@ -189,7 +192,7 @@ public class EditProfActivity extends AppCompatActivity {
             };
             queue.add(postRequest);
         } catch (Exception e) {
-            Toast.makeText(EditProfActivity.this, "Error : " + e.toString(), Toast.LENGTH_LONG).show();
+            checkError(e,EditProfActivity.this);
             proceed();
         }
     }
@@ -209,5 +212,16 @@ public class EditProfActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

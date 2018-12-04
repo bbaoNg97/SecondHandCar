@@ -51,12 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         setHome();
 
-        if (!isConnected()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Connection Error");
-            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
-        }
-
         mMainNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
@@ -125,16 +119,6 @@ public class MainActivity extends AppCompatActivity {
     private void setHome() {
         setFragment(homeFragment);
         setTitle(R.string.title_home);
-    }
-
-    //to check network connectivity
-    private boolean isConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
     }
 
     private void setFragment(Fragment fragement) {

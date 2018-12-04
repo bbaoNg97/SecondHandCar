@@ -1,9 +1,11 @@
 package my.edu.tarc.secondhandcar;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -226,7 +228,8 @@ public class HomeFragment extends Fragment {
                                     mDiscount1.add(discountRate);
                                 }
                             } catch (ParseException e) {
-                                e.printStackTrace();
+                                checkError(e,getContext());
+                                loadMain.setVisibility(View.GONE);
                             }
                         }
 
@@ -239,8 +242,7 @@ public class HomeFragment extends Fragment {
                         loadMain.setVisibility(View.GONE);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                    checkError(e,getContext());
                     loadMain.setVisibility(View.GONE);
                 }
             }
@@ -248,7 +250,7 @@ public class HomeFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity(), "Error " + error.toString(), Toast.LENGTH_LONG).show();
+                        checkError(error,getContext());
                         loadMain.setVisibility(View.GONE);
                     }
                 }) {
@@ -263,4 +265,15 @@ public class HomeFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
+    private void checkError(Exception e, Context context) {
+        if (!LoginActivity.isConnected(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Connection Error");
+            builder.setIcon(R.drawable.ic_action_info);
+            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+        } else {
+            Toast.makeText(context, "Error:  \n" + e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
 }
