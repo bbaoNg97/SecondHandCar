@@ -27,8 +27,6 @@ dependencies {
     //new
     //here
     apply plugin: 'com.android.application'
-
-
     compile 'com.android.volley:volley:1.1.0'
     compile 'com.android.support:appcompat-v7:27.+'
     compile 'com.android.support:design:27.+'
@@ -40,6 +38,9 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/mail.jar')
 }
 
 
