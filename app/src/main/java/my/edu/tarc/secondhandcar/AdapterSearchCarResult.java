@@ -30,6 +30,7 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
     private String strName, strImage, strPrice, strColor, strDesc, strYear, strCarStatus, strType, strMileage, strDealerID, strCarID;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
+
     public AdapterSearchCarResult(Context context, ArrayList<Car> car) {
         super(context, R.layout.content_search_result);
         mContext = context;
@@ -52,6 +53,7 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
         final TextView tvResultPrice = (TextView) v.findViewById(R.id.textViewResultPrice);
         final TextView tvResultYear = (TextView) v.findViewById(R.id.textViewResultYear);
         final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
+        final TextView tvMileage = (TextView) v.findViewById(R.id.textViewSearchResultM);
         final Car currentCar = cars.get(position);
         Glide.with(mContext)
                 .asBitmap()
@@ -63,11 +65,15 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
 
         strYear = currentCar.getYEARS() + "";
         tvResultYear.setText(strYear);
-
+        strMileage = String.valueOf(currentCar.getMILEAGES());
+        DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
+        strMileage=decimalFormat.format(Double.parseDouble(strMileage));
         Double dPrice = (double) currentCar.getPRICES();
         strPrice = formatter.format(dPrice);
         tvResultPrice.setText(strPrice);
 
+
+        tvMileage.setText(strMileage+" KM");
         ConstraintLayout searchResultLayout = (ConstraintLayout) v.findViewById(R.id.searchResultLayout);
         searchResultLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +81,7 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
 
                 strName = carResult.getText().toString();
                 strImage = currentCar.getCAR_PHOTOS();
-                strPrice = currentCar.getPRICES()+"";
+                strPrice = currentCar.getPRICES() + "";
                 strColor = currentCar.getCOLORS();
                 strMileage = String.valueOf(currentCar.getMILEAGES());
                 strYear = currentCar.getYEARS() + "";
