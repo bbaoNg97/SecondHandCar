@@ -126,10 +126,12 @@ public class RegistrationActivity extends AppCompatActivity {
             loading.setVisibility(View.VISIBLE);
             btnSignUp.setEnabled(false);
             if (foundEmail(email)) {
+                AlertDialog.Builder builder=new AlertDialog.Builder(RegistrationActivity.this);
                 builder.setMessage("Email is exist. Please try another.").setNegativeButton("Retry", null).create().show();
                 loading.setVisibility(View.GONE);
                 btnSignUp.setEnabled(true);
             } else if (!password.equals(confPwd)) {
+                AlertDialog.Builder builder=new AlertDialog.Builder(RegistrationActivity.this);
                 builder.setMessage("Please make sure password is match with confirm password.").setNegativeButton("Retry", null).create().show();
                 loading.setVisibility(View.GONE);
                 btnSignUp.setEnabled(true);
