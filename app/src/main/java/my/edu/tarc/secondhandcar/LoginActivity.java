@@ -92,9 +92,9 @@ public class LoginActivity extends AppCompatActivity {
                 String password = editTextPw.getText().toString();
 
                 if (email.isEmpty()) {
-                    editTextEmail.setError("Please enter your email");
+                    editTextEmail.setError("Please enter your email address");
                 } else if (password.isEmpty()) {
-                    editTextPw.setError("Password please");
+                    editTextPw.setError("Please enter your password");
                 } else {
                     onLogin(email, password);
                 }
