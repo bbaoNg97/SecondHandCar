@@ -62,6 +62,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
     //private Date selectedTime;
     SharedPreferences sharePref;
     private String appID, carID, appDate, appTime, strDate, strTime, strDealerID, agentEmail, currentAgentEmail;
+    private NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     RequestQueue requestQueue;
     List<String> bookingList = new ArrayList<>();
@@ -117,7 +118,8 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         carName = getIntent().getStringExtra("CarName");
         getAllAgentEmail(MakeAppointmentActivity.this, getString(R.string.get_agent_url), strDealerID);
 
-
+        Double dPrice=Double.parseDouble(price);
+        price=formatter.format(dPrice);
         tvSelectedCar.setText(carName);
         tvPrice.setText(price);
         proceed();
