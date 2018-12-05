@@ -97,11 +97,13 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         appTime = sharePref.getString("appTime", null);
 
         Intent intent = getIntent();
+        price = getIntent().getStringExtra("Price");
         strDealerID = intent.getStringExtra("dealerID");
         //if is from booking
         if (intent.getStringExtra("from").equals("booking")) {
             setTitle(R.string.title_chooseDateTime);
-
+            Double dPrice=Double.parseDouble(price);
+            price=formatter.format(dPrice);
             currentAgentEmail = intent.getStringExtra("agentEmail");
 
         }
@@ -114,12 +116,11 @@ public class MakeAppointmentActivity extends AppCompatActivity {
             btnSendRequest.setText(R.string.update_booking);
         }
         carID = intent.getStringExtra("carID");
-        price = getIntent().getStringExtra("Price");
+
         carName = getIntent().getStringExtra("CarName");
         getAllAgentEmail(MakeAppointmentActivity.this, getString(R.string.get_agent_url), strDealerID);
 
-        Double dPrice=Double.parseDouble(price);
-        price=formatter.format(dPrice);
+
         tvSelectedCar.setText(carName);
         tvPrice.setText(price);
         proceed();
