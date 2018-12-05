@@ -107,6 +107,8 @@ public class RegistrationActivity extends AppCompatActivity {
         final String email = this.etEmail.getText().toString();
         final String password = this.etPassword.getText().toString();
 
+        //String con = contactNo.substring(2, 3);
+
         if (!LoginActivity.isConnected(RegistrationActivity.this)) {
             builder = new AlertDialog.Builder(RegistrationActivity.this);
             builder.setTitle("Connection Error");
@@ -126,12 +128,12 @@ public class RegistrationActivity extends AppCompatActivity {
             loading.setVisibility(View.VISIBLE);
             btnSignUp.setEnabled(false);
             if (foundEmail(email)) {
-                AlertDialog.Builder builder=new AlertDialog.Builder(RegistrationActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
                 builder.setMessage("Email is exist. Please try another.").setNegativeButton("Retry", null).create().show();
                 loading.setVisibility(View.GONE);
                 btnSignUp.setEnabled(true);
             } else if (!password.equals(confPwd)) {
-                AlertDialog.Builder builder=new AlertDialog.Builder(RegistrationActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
                 builder.setMessage("Please make sure password is match with confirm password.").setNegativeButton("Retry", null).create().show();
                 loading.setVisibility(View.GONE);
                 btnSignUp.setEnabled(true);
@@ -153,6 +155,38 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     }
+
+  /*  private boolean checkContact(String con, String contactNo) {
+        boolean result;
+        result = false;
+        if (con.equals("1")) {
+            //if range is below 11 or above 12
+            if (contactNo.length() < 11 || contactNo.length() > 12) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
+                builder.setMessage("Invalid contact number.\nPlease try again.").setNegativeButton("Retry", null).create().show();
+                loading.setVisibility(View.GONE);
+                btnSignUp.setEnabled(true);
+                result = false;
+            } else {
+                result = true;
+            }
+
+        }
+        //case 2: if contact no is not 011
+        // /if digit is more than 11 or less than 11
+        else {
+            if (contactNo.length() > 11 || contactNo.length() < 11) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
+                builder.setMessage("Invalid digit range of contact number.\nPlease try again.").setNegativeButton("Retry", null).create().show();
+                loading.setVisibility(View.GONE);
+                btnSignUp.setEnabled(true);
+                result = false;
+            } else
+                result = true;
+
+        }
+        return result;
+    }*/
 
     private void makeServiceCall(final Context context, String url, final Customer customer) {
         RequestQueue queue = Volley.newRequestQueue(context);
