@@ -89,8 +89,7 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
 
                 strName = carResult.getText().toString();
                 strImage = currentCar.getCAR_PHOTOS();
-                Double dPrice = (double) currentCar.getPRICES();
-                strPrice = formatter.format(dPrice);
+                strPrice = currentCar.getPRICES()+"";
                 strColor = currentCar.getCOLORS();
                 strMileage = String.valueOf(currentCar.getMILEAGES());
                 strYear = currentCar.getYEARS() + "";

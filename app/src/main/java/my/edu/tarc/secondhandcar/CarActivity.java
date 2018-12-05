@@ -200,12 +200,14 @@ public class CarActivity extends AppCompatActivity {
         String mileMsg = mile + " KM";
         textViewMileage.setText(mileMsg);
         textViewYear.setText(year);
+
         Double Ori = Double.parseDouble(price);
         if (discount > 0) {
             textViewOriPrice.setVisibility(View.VISIBLE);
             textViewOriPrice.setText(formatter.format(Ori));
             Double newPrice = Ori - (Ori * discount / 100);
             textViewPrice.setText(formatter.format(newPrice));
+            price=String.format("%.0f", newPrice);
         } else {
             textViewOriPrice.setVisibility(View.GONE);
             textViewPrice.setText(formatter.format(Ori));

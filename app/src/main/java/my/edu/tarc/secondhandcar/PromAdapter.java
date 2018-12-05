@@ -91,11 +91,11 @@ public class PromAdapter extends RecyclerView.Adapter<PromAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
 
-                dPrice = Double.parseDouble(mCarPrice.get(position));
+               /* dPrice = Double.parseDouble(mCarPrice.get(position));
                 price = formatter.format(dPrice);
                 Rate = Double.parseDouble(mDiscount.get(position));
                 oPrice = dPrice - (dPrice * Rate / 100);
-                Nprice = formatter.format(oPrice);
+                Nprice = formatter.format(oPrice);*/
 
                 Intent intent = new Intent(mContext, CarActivity.class);
                 intent.putExtra("carID", mCarId.get(position));
