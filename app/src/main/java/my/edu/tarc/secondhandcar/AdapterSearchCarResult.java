@@ -29,6 +29,7 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
     private List<Car> cars = new ArrayList<>();
     private String strName, strImage, strPrice, strColor, strDesc, strYear, strCarStatus, strType, strMileage, strDealerID, strCarID;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
     public AdapterSearchCarResult(Context context, ArrayList<Car> car) {
         super(context, R.layout.content_search_result);
         mContext = context;
@@ -48,8 +49,8 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
         View v = inflater.inflate(R.layout.content_search_result, null, true);
         final TextView carResult = (TextView) v.findViewById(R.id.textViewCarResult);
         final ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCarResult);
-        final TextView tvResultPrice=(TextView)v.findViewById(R.id.textViewResultPrice);
-        final TextView tvResultYear=(TextView)v.findViewById(R.id.textViewResultYear);
+        final TextView tvResultPrice = (TextView) v.findViewById(R.id.textViewResultPrice);
+        final TextView tvResultYear = (TextView) v.findViewById(R.id.textViewResultYear);
         final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
         final Car currentCar = cars.get(position);
         Glide.with(mContext)
@@ -74,8 +75,7 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
 
                 strName = carResult.getText().toString();
                 strImage = currentCar.getCAR_PHOTOS();
-                Double dPrice = (double) currentCar.getPRICES();
-                strPrice = formatter.format(dPrice);
+                strPrice = currentCar.getPRICES()+"";
                 strColor = currentCar.getCOLORS();
                 strMileage = String.valueOf(currentCar.getMILEAGES());
                 strYear = currentCar.getYEARS() + "";
