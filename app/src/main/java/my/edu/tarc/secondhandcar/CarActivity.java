@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,10 +37,12 @@ public class CarActivity extends AppCompatActivity {
 
     private ImageView imageViewCars;
     private Button btnMakeAppointment;
-    private TextView textViewName, textViewDealerName, textViewDealerAddress, textViewDesc, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation;
+    private TextView textViewName, textViewDealerName, textViewDealerAddress, textViewDesc, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation, textViewOriPrice;
     private ProgressBar pbLoading;
     private String carID, name, price, color, desc, year, mile, status, carType, carPhoto, dealerID, dealerLoc, dealerAddress, dealerName;
     private String custID;
+    private Double discount;
+    private NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
     SharedPreferences sharePref;
@@ -49,7 +52,7 @@ public class CarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car);
-        setTitle( R.string.title_car_detail);
+        setTitle(R.string.title_car_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
@@ -66,7 +69,7 @@ public class CarActivity extends AppCompatActivity {
         textViewLocation = (TextView) findViewById(R.id.textViewLocation);
         textViewDealerName = (TextView) findViewById(R.id.textViewDealerName);
         textViewDealerAddress = (TextView) findViewById(R.id.textViewDealerAddress);
-
+        textViewOriPrice = (TextView) findViewById(R.id.textViewOriPrice);
         pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 
         Intent intent = getIntent();
@@ -76,7 +79,7 @@ public class CarActivity extends AppCompatActivity {
         color = intent.getStringExtra("carColor");
         desc = intent.getStringExtra("carDesc");
         mile = intent.getStringExtra("carMileage");
-        mile=decimalFormat.format(Integer.parseInt(mile));
+        mile = decimalFormat.format(Integer.parseInt(mile));
         carType = intent.getStringExtra("carType");
         year = intent.getStringExtra("carYear");
         price = intent.getStringExtra("carPrice");
@@ -137,6 +140,7 @@ public class CarActivity extends AppCompatActivity {
                         dealerLoc = object.getString("dealerLoc").trim();
                         dealerAddress = object.getString("dealerAddress").trim();
                         dealerName = object.getString("dealerName").trim();
+                        discount = Double.parseDouble(object.getString("discountRate"));
 
 
                         loadData();
@@ -193,10 +197,20 @@ public class CarActivity extends AppCompatActivity {
         Glide.with(CarActivity.this).load(carPhoto).into(imageViewCars);
         textViewColor.setText(color);
         textViewDesc.setText(desc);
-        String mileMsg=mile + " KM";
+        String mileMsg = mile + " KM";
         textViewMileage.setText(mileMsg);
         textViewYear.setText(year);
-        textViewPrice.setText(price);
+        Double Ori = Double.parseDouble(price);
+        if (discount > 0) {
+            textViewOriPrice.setVisibility(View.VISIBLE);
+            textViewOriPrice.setText(formatter.format(Ori));
+            Double newPrice = Ori - (Ori * discount / 100);
+            textViewPrice.setText(formatter.format(newPrice));
+        } else {
+            textViewOriPrice.setVisibility(View.GONE);
+            textViewPrice.setText(formatter.format(Ori));
+        }
+
         textViewLocation.setText(dealerLoc);
         textViewDealerName.setText(dealerName);
         textViewDealerAddress.setText(dealerAddress);

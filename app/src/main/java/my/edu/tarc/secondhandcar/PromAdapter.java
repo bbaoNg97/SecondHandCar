@@ -39,7 +39,7 @@ public class PromAdapter extends RecyclerView.Adapter<PromAdapter.ViewHolder> {
     private Context mContext;
     private String price, Nprice;
     private Double dPrice, oPrice,Rate;
-    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    private NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     public PromAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarType, ArrayList<String> mDealerID, ArrayList<String> mStatus, ArrayList<String> mCarYear, ArrayList<String> mCarMile, ArrayList<String> mDiscount, Context mContext) {
         this.mCarName = mCarName;
@@ -101,7 +101,7 @@ public class PromAdapter extends RecyclerView.Adapter<PromAdapter.ViewHolder> {
                 intent.putExtra("carID", mCarId.get(position));
                 intent.putExtra("carName", mCarBrand.get(position) + " " + mCarName.get(position));
                 intent.putExtra("carPhoto", mCarImage.get(position));
-                intent.putExtra("carPrice", Nprice);
+                intent.putExtra("carPrice", mCarPrice.get(position));
                 intent.putExtra("carColor", mCarColor.get(position));
                 intent.putExtra("carDesc", mCarDesc.get(position));
                 intent.putExtra("carYear", mCarYear.get(position));

@@ -45,7 +45,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private Context mContext;
     private String price;
     private Double dPrice;
-    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    private NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarType, ArrayList<String> mDealerID, ArrayList<String> mStatus, ArrayList<String> mCarYear, ArrayList<String> mCarMile, Context mContext) {
         this.mCarName = mCarName;
@@ -92,7 +92,6 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick:Clicked on: " + mCarName.get(position));
-                Toast.makeText(mContext, mCarName.get(position), Toast.LENGTH_LONG).show();
 
                 dPrice = Double.parseDouble(mCarPrice.get(position));
                 price = formatter.format(dPrice);
@@ -102,7 +101,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 intent.putExtra("carID", mCarId.get(position));
                 intent.putExtra("carName", mCarBrand.get(position) + " " + mCarName.get(position));
                 intent.putExtra("carPhoto", mCarImage.get(position));
-                intent.putExtra("carPrice", price);
+                intent.putExtra("carPrice", mCarPrice.get(position));
                 intent.putExtra("carColor", mCarColor.get(position));
                 intent.putExtra("carDesc", mCarDesc.get(position));
                 intent.putExtra("carYear", mCarYear.get(position));
