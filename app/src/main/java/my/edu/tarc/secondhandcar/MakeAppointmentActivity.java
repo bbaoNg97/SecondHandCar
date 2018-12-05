@@ -117,6 +117,7 @@ public class MakeAppointmentActivity extends AppCompatActivity {
         carName = getIntent().getStringExtra("CarName");
         getAllAgentEmail(MakeAppointmentActivity.this, getString(R.string.get_agent_url), strDealerID);
 
+
         tvSelectedCar.setText(carName);
         tvPrice.setText(price);
         proceed();
