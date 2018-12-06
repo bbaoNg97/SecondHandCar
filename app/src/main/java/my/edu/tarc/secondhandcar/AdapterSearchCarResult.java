@@ -54,6 +54,7 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
         final TextView tvResultYear = (TextView) v.findViewById(R.id.textViewResultYear);
         final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
         final TextView tvMileage = (TextView) v.findViewById(R.id.textViewSearchResultM);
+        final TextView tvPromo=(TextView)v.findViewById(R.id.textViewSearchResPromo);
         final Car currentCar = cars.get(position);
         Glide.with(mContext)
                 .asBitmap()

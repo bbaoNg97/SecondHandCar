@@ -20,6 +20,9 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private MyBookingFragment myBookingFragment;
 
     private String name;
-
+   // public static Date nowDateTime= Calendar.getInstance().getTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

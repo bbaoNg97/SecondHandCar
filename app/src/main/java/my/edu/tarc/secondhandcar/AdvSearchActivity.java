@@ -16,7 +16,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
@@ -28,20 +32,24 @@ public class AdvSearchActivity extends AppCompatActivity {
 
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
-    private Spinner mSpinnerColor, mSpinnerPurpose;
+    private Spinner mSpinnerColor;
     private SeekBar seekBarMinPrice, seekBarMaxPrice, seekBarMinMileage, seekBarMaxMileage, seekBarMinYear, seekBarMaxYear;
     private TextView textViewMinPrice, textViewMaxPrice, textViewMinMileage, textViewMaxMileage, textViewMinYear, textViewMaxYear;
     private Button buttonAdvSearchCar, buttonResetRec;
 
     public static final int MAX_PRICE = 3500000;
     public static final int MAX_MILEAGE = 1000000;
-    public static final int MAX_YEAR = 2018;
+    public static Date nowDateTime= Calendar.getInstance().getTime();
+    public static SimpleDateFormat sdfYear=new SimpleDateFormat("yyyy");
 
-    public static final String MIN_PRICE = "minimum price";
+    public static final int MAX_YEAR = Integer.parseInt(sdfYear.format(nowDateTime));;
+
+    //for intent use purpose
+    public static final String Min_PRICE = "minimum price";
     public static final String Max_PRICE = "maximum price";
-    public static final String MIN_MILEAGE = "minimum mileage";
+    public static final String Min_MILEAGE = "minimum mileage";
     public static final String Max_MILEAGE = "maximum mileage";
-    public static final String MIN_YEAR = "minimum year";
+    public static final String Min_YEAR = "minimum year";
     public static final String Max_YEAR = "maximum year ";
 
     //store the default value
@@ -59,7 +67,6 @@ public class AdvSearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_adv_search);
 
         //link spinner UI
-        mSpinnerPurpose = (Spinner) findViewById(R.id.spinnerPurpose);
         mSpinnerColor = (Spinner) findViewById(R.id.spinnerColor);
         //link UI
         seekBarMinPrice = (SeekBar) findViewById(R.id.seekBarMinPrice);
@@ -95,12 +102,6 @@ public class AdvSearchActivity extends AppCompatActivity {
         //spinner color is custom spinner, so need adapterCustom
         AdapterCustomColor mAdapterCustomColor = new AdapterCustomColor(AdvSearchActivity.this, spinnerColorName, spinnerColor);
         mSpinnerColor.setAdapter(mAdapterCustomColor);
-
-        /*//TODO: will be deleted
-        ArrayAdapter<CharSequence> purposeAdapter = ArrayAdapter.createFromResource(this, R.array.purpose, android.R.layout.simple_spinner_item);
-        purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerPurpose.setAdapter(purposeAdapter);
-        //mSpinnerPurpose.setOnItemSelectedListener(this);*/
 
         mSpinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -271,7 +272,7 @@ public class AdvSearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                        maxYear = 2018;
+                        maxYear = MAX_YEAR;
                     }
 
                     @Override
@@ -294,12 +295,14 @@ public class AdvSearchActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     minPrice = 0;
                 }
+
                 //if the value didnt change
                 try {
                     maxPrice = numberFormat.parse(textViewMaxPrice.getText().toString()).intValue();
                 } catch (Exception e) {
                     maxPrice = 3500000;
                 }
+
                 //if the value didnt change
                 try {
                     String msg = textViewMinMileage.getText().toString();
@@ -328,7 +331,7 @@ public class AdvSearchActivity extends AppCompatActivity {
                 try {
                     maxYear = Integer.parseInt(textViewMaxYear.getText().toString());
                 } catch (Exception e) {
-                    maxYear = 2018;
+                    maxYear = MAX_YEAR;
                 }
 
                 if (maxMileage == 0 || maxPrice == 0) {
@@ -339,11 +342,11 @@ public class AdvSearchActivity extends AppCompatActivity {
                 } else {
                     Intent advSearchCarIntent = new Intent(AdvSearchActivity.this, RecommededCarsActivity.class);
                     //pass all selected criteria to searchResultAct
-                    advSearchCarIntent.putExtra(MIN_PRICE, minPrice);
+                    advSearchCarIntent.putExtra(Min_PRICE, minPrice);
                     advSearchCarIntent.putExtra(Max_PRICE, maxPrice);
-                    advSearchCarIntent.putExtra(MIN_MILEAGE, minMileage);
+                    advSearchCarIntent.putExtra(Min_MILEAGE, minMileage);
                     advSearchCarIntent.putExtra(Max_MILEAGE, maxMileage);
-                    advSearchCarIntent.putExtra(MIN_YEAR, minYear);
+                    advSearchCarIntent.putExtra(Min_YEAR, minYear);
                     advSearchCarIntent.putExtra(Max_YEAR, maxYear);
                     //spPurpose = mSpinnerPurpose.getSelectedItem().toString();
                     //advSearchCarIntent.putExtra("Purpose", spPurpose);
