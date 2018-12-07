@@ -37,9 +37,9 @@ public class CarActivity extends AppCompatActivity {
 
     private ImageView imageViewCars;
     private Button btnMakeAppointment;
-    private TextView textViewName, textViewDealerName, textViewDealerAddress, textViewDesc, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation, textViewOriPrice;
+    private TextView textViewName, textViewDealerName, textViewDealerAddress, textViewDesc, textViewPrice, textViewColor, textViewMileage, textViewYear, textViewLocation, textViewOriPrice,textViewUntil;
     private ProgressBar pbLoading;
-    private String carID, name, price, color, desc, year, mile, status, carType, carPhoto, dealerID, dealerLoc, dealerAddress, dealerName;
+    private String carID, name, price, color, desc, year, mile, status, carType, carPhoto, dealerID, dealerLoc, dealerAddress, dealerName,endDate;
     private String custID;
     private Double discount;
     private NumberFormat formatter = NumberFormat.getCurrencyInstance();
@@ -60,6 +60,7 @@ public class CarActivity extends AppCompatActivity {
 
         imageViewCars = (ImageView) findViewById(R.id.imageViewCars);
         btnMakeAppointment = (Button) findViewById(R.id.buttonAppointment);
+        textViewUntil = (TextView) findViewById(R.id.textViewUntil);
         textViewDesc = (TextView) findViewById(R.id.textViewDesc);
         textViewPrice = (TextView) findViewById(R.id.textViewPrice);
         textViewColor = (TextView) findViewById(R.id.textViewColor);
@@ -141,6 +142,7 @@ public class CarActivity extends AppCompatActivity {
                         dealerAddress = object.getString("dealerAddress").trim();
                         dealerName = object.getString("dealerName").trim();
                         discount = Double.parseDouble(object.getString("discountRate"));
+                        endDate =object.getString("endDate");
 
 
                         loadData();
@@ -204,12 +206,16 @@ public class CarActivity extends AppCompatActivity {
         Double Ori = Double.parseDouble(price);
         if (discount > 0) {
             textViewOriPrice.setVisibility(View.VISIBLE);
+            textViewUntil.setVisibility(View.VISIBLE);
             textViewOriPrice.setText(formatter.format(Ori));
+            textViewUntil.setText("Promotion Until: ("+endDate+")");
             Double newPrice = Ori - (Ori * discount / 100);
             textViewPrice.setText(formatter.format(newPrice));
             price=String.format("%.0f", newPrice);
+
         } else {
             textViewOriPrice.setVisibility(View.GONE);
+            textViewUntil.setVisibility(View.GONE);
             textViewPrice.setText(formatter.format(Ori));
         }
 
