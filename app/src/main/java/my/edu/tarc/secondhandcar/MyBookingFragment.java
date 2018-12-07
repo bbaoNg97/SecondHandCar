@@ -204,6 +204,13 @@ public class MyBookingFragment extends Fragment {
 
                 return params;
             }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
         };
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());

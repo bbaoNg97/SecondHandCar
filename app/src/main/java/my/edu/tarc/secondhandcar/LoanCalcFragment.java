@@ -36,6 +36,7 @@ public class LoanCalcFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(

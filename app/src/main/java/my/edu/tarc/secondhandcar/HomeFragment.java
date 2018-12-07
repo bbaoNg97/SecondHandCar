@@ -259,6 +259,13 @@ public class HomeFragment extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 return params;
             }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());

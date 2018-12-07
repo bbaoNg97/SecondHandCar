@@ -49,6 +49,7 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
         final TextView tvResultPrice=(TextView)v.findViewById(R.id.textViewResultPrice);
         final TextView tvResultYear=(TextView)v.findViewById(R.id.textViewResultYear);
         final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
+        final TextView tvMileage=(TextView)v.findViewById(R.id.textViewSearchResultM);
         final Car currentCar = cars.get(position);
         Glide.with(mContext)
                 .asBitmap()
@@ -64,6 +65,10 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
         strPrice = formatter.format(dPrice);
         tvResultPrice.setText(strPrice);
 
+        strMileage = String.valueOf(currentCar.getMILEAGES());
+        DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
+        strMileage=decimalFormat.format(Double.parseDouble(strMileage));
+        tvMileage.setText(strMileage+" KM");
 
         carResult.setText(currentCar.getNAMES());
         if (position == 0) {
