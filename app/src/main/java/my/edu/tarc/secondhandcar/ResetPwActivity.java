@@ -1,7 +1,7 @@
 package my.edu.tarc.secondhandcar;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,27 +13,35 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class ResetPwActivity extends AppCompatActivity {
     private Button btnReset;
     private EditText etEmailAddr;
     private ProgressBar checkingEmail;
-    private String email,strCustID;
+    private String email, strCustID;
     public static final String TAG = "my.edu.tarc.secondhandcar";
     List<String> custEmailList;
     List<String> custIDList;
+    public String code = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +49,9 @@ public class ResetPwActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reset_pw);
         setTitle(R.string.title_reset_pw);
         custEmailList = new ArrayList<>();
-        custIDList=new ArrayList<>();
+        custIDList = new ArrayList<>();
         btnReset = (Button) findViewById(R.id.buttonReset);
-        etEmailAddr = (EditText) findViewById(R.id.editTextPwRecConf);
+        etEmailAddr = (EditText) findViewById(R.id.etPwCode);
         checkingEmail = (ProgressBar) findViewById(R.id.checkingEmail);
         checkingEmail.setVisibility(View.GONE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,7 +74,10 @@ public class ResetPwActivity extends AppCompatActivity {
             etEmailAddr.setError("Please fill in your email address");
         } else {
             if (foundEmail(email)) {
-                sendPwRescoveryEmail();
+                int rand = generatePwRecoveryCode();
+                code = rand + "";
+                sendPwRescoveryEmail(code);
+                //updateCode(ResetPwActivity.this, getString(R.string.update_code_url), code, email);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ResetPwActivity.this);
                 builder.setTitle("Incorrect Email");
@@ -81,14 +92,80 @@ public class ResetPwActivity extends AppCompatActivity {
 
     }
 
-    private void sendPwRescoveryEmail() {
+    private void updateCode(Context context, String url, final String code, final String email) {
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        //Send data
+        try {
+            StringRequest postRequest = new StringRequest(
+                    Request.Method.POST,
+                    url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            JSONObject jsonObject;
+                            try {
+                                jsonObject = new JSONObject(response);
+                                String success = jsonObject.getString("success");
+                                String message = jsonObject.getString("message");
+                                //update code success
+                                if (success.equals("1")) {
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                    SharedPreferences.Editor editor = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                                    editor.putString("custEmail", email);
+                                    editor.apply();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                checkError(e, ResetPwActivity.this);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            checkError(error, ResetPwActivity.this);
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("code", code);
+                    params.put("email", email);
+
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("Content-Type", "application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            queue.add(postRequest);
+        } catch (Exception e) {
+            checkError(e, ResetPwActivity.this);
+
+        }
+    }
+
+    private static final Random generator = new Random();
+
+    public static int generatePwRecoveryCode() {
+        return 100000 + generator.nextInt(900000);
+    }
+
+
+    private void sendPwRescoveryEmail(String value) {
         String sender = "secondHandCarSellingSystem";
-        String senderPw="shcss,test";
-        String receipient=email;
+        String senderPw = "shcss,test";
+        String receipient = email;
         List<String> recipients = Arrays.asList(receipient.split("\\s*,\\s*"));
-        String subject="Password Recovery";
-        String body="Please reset your password now";
-        SendMailTask smt = new SendMailTask(ResetPwActivity.this);
+        String subject = "Password Recovery";
+        String body = "Your code is " + value + ". Plase enter this code to reset your password";
+        SendPwRecoverMailTask smt = new SendPwRecoverMailTask(ResetPwActivity.this,code);
         smt.execute(sender, senderPw, recipients, subject, body);
 
     }
@@ -111,7 +188,7 @@ public class ResetPwActivity extends AppCompatActivity {
                                 JSONObject userResponse = (JSONObject) response.get(i);
                                 //json object that contains all of the customer in the user table
                                 String strEmail = userResponse.getString("custEmail");
-                                String strCustID=userResponse.getString("custID");
+                                String strCustID = userResponse.getString("custID");
                                 custEmailList.add(strEmail);
                                 custIDList.add(strCustID);
                             }
@@ -156,7 +233,7 @@ public class ResetPwActivity extends AppCompatActivity {
         boolean found = false;
         for (int i = 0; i < custEmailList.size(); ++i) {
             if (custEmailList.get(i).equals(emails)) {
-                strCustID=custIDList.get(i);
+                strCustID = custIDList.get(i);
                 found = true;
 
             }

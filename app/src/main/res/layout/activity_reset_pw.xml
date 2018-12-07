@@ -42,7 +42,7 @@
             tools:ignore="MissingConstraints">
 
             <EditText
-                android:id="@+id/editTextPwRecConf"
+                android:id="@+id/etPwCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_action_email"

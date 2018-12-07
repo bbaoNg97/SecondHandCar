@@ -168,10 +168,14 @@
     <string name="dis_milegae">Mileage:</string>
     <string name="dis_price_range">Price range:</string>
     <string name="search_criteria">Search Criteria</string>
-    <string name="caption_enter_new_password" >Please enter your new password and confirm password</string>
+    <string name="caption_enter_new_password">Please enter your new password and confirm password</string>
     <string name="recover">Recover</string>
     <string name="recover_password">Recover your password</string>
     <string name="next">Next</string>
     <string name="update_password_email_url">https://dewy-minuses.000webhostapp.com/PwdRecovery.php</string>
+    <string name="enter_code">Enter Code</string>
+    <string name="code_caption">Please enter the code after receive email</string>
+    <string name="six_digit_code">Code</string>
+    <string name="update_code_url">https://dewy-minuses.000webhostapp.com/updateCode.php</string>
 
 </resources>

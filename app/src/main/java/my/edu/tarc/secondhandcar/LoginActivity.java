@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        editTextEmail = (EditText) findViewById(R.id.editTextPwRecConf);
+        editTextEmail = (EditText) findViewById(R.id.etPwCode);
         editTextPw = (EditText) findViewById(R.id.editTextPw);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         textViewSignUp = (TextView) findViewById(R.id.textViewSignUp);
