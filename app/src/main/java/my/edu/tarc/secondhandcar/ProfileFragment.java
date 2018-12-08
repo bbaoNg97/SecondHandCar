@@ -68,6 +68,7 @@ public class ProfileFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 Toast.makeText(getActivity(), "Logout Success", Toast.LENGTH_SHORT).show();
+                intent.putExtra("from","Profile Fragment");
                 startActivity(intent);
             }
         });
@@ -100,6 +101,7 @@ public class ProfileFragment extends Fragment {
         //if it is showing login icon
         if (id == R.id.action_Login) {
             Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+            loginIntent.putExtra("from","ProfileFragment");
             startActivity(loginIntent);
         }
         //if it is showing my profile icon

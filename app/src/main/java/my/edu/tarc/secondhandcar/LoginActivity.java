@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        editTextEmail = (EditText) findViewById(R.id.etPwCode);
+        editTextEmail = (EditText) findViewById(R.id.etLoginEmail);
         editTextPw = (EditText) findViewById(R.id.editTextPw);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         textViewSignUp = (TextView) findViewById(R.id.textViewSignUp);
@@ -58,7 +58,12 @@ public class LoginActivity extends AppCompatActivity {
         loading = (ProgressBar) findViewById(R.id.loadingLogin);
         loading.setVisibility(View.GONE);
         setTitle(R.string.login);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Intent intent=getIntent();
+        //if come from password recovery, no need back arrow
+        if(!intent.getStringExtra("from").equals("PwRecovery")){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //if no internet
         if (!isConnected(LoginActivity.this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

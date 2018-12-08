@@ -15,7 +15,7 @@ public class CodeActivity extends AppCompatActivity {
     private ProgressBar checkingCode;
     private Button btnConfCode;
     private SharedPreferences sharePref;
-    private String code, email, intentCode;
+    private String code, intentCode;
     private EditText etPwCode;
 
     @Override
@@ -25,10 +25,9 @@ public class CodeActivity extends AppCompatActivity {
         setTitle(getString(R.string.title_reset_pw));
         checkingCode = (ProgressBar) findViewById(R.id.checkingCode);
         btnConfCode = (Button) findViewById(R.id.buttonConfCode);
-        etPwCode = (EditText) findViewById(R.id.etPwCode);
+        etPwCode = (EditText) findViewById(R.id.etCode);
         checkingCode.setVisibility(View.GONE);
-        sharePref = getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
-        email = sharePref.getString("custEmail", null);
+
         Intent intent = getIntent();
         intentCode = intent.getStringExtra("code");
     }
@@ -36,9 +35,18 @@ public class CodeActivity extends AppCompatActivity {
     public void OnConfCode(View view) {
 
         code = etPwCode.getText().toString();
-        if (code.equals(intentCode)) {
+        if(code.equals("")){
+            etPwCode.setError("Please enter code");
+        }
+        else if (code.equals(intentCode)) {
            Intent intent=new Intent(CodeActivity.this,PwRecoveryActivity.class);
             startActivity(intent);
+        }
+        else{
+            AlertDialog.Builder builder=new AlertDialog.Builder(CodeActivity.this);
+            builder.setTitle("Incorrect code");
+            builder.setMessage("Incorrect code, please enter again").setNegativeButton("Retry",null);
+            builder.create().show();
         }
     }
 }
