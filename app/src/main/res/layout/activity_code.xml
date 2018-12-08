@@ -27,26 +27,28 @@
             tools:ignore="ContentDescription" />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayout"
-            android:layout_width="0dp"
+            android:id="@+id/textInputLayout1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv1"
             tools:ignore="MissingConstraints">
 
             <EditText
-                android:id="@+id/etPwCode"
-                android:layout_width="match_parent"
+                android:id="@+id/etCode"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/six_digit_code"
                 android:inputType="number"
+                android:maxLength="6"
+                android:singleLine="true"
                 tools:ignore="RtlHardcoded"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="-19dp" />
@@ -54,7 +56,7 @@
 
         <Button
             android:id="@+id/buttonConfCode"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -64,13 +66,13 @@
             android:maxLength="6"
             android:onClick="OnConfCode"
             android:text="@string/next"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout1" />
 
         <TextView
-            android:id="@+id/tv"
+            android:id="@+id/tvEnterNewPw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -101,7 +103,7 @@
             android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv" />
+            app:layout_constraintTop_toBottomOf="@+id/tvEnterNewPw" />
 
         <ProgressBar
             android:id="@+id/checkingCode"

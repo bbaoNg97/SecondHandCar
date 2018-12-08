@@ -136,7 +136,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                                     SharedPreferences.Editor editor = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
                                     editor.putString("password", strNewPw);
-                                    editor.commit();
+                                    editor.apply();
                                     onBackPressed();
                                 } else {
                                     proceed();

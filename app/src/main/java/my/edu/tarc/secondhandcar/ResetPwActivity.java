@@ -51,7 +51,7 @@ public class ResetPwActivity extends AppCompatActivity {
         custEmailList = new ArrayList<>();
         custIDList = new ArrayList<>();
         btnReset = (Button) findViewById(R.id.buttonReset);
-        etEmailAddr = (EditText) findViewById(R.id.etPwCode);
+        etEmailAddr = (EditText) findViewById(R.id.etPwRecoveryEmail);
         checkingEmail = (ProgressBar) findViewById(R.id.checkingEmail);
         checkingEmail.setVisibility(View.GONE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,6 +77,9 @@ public class ResetPwActivity extends AppCompatActivity {
                 int rand = generatePwRecoveryCode();
                 code = rand + "";
                 sendPwRescoveryEmail(code);
+                SharedPreferences.Editor editor = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                editor.putString("custEmail", email);
+                editor.apply();
                 //updateCode(ResetPwActivity.this, getString(R.string.update_code_url), code, email);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ResetPwActivity.this);

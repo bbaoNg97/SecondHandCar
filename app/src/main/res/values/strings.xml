@@ -177,5 +177,7 @@
     <string name="code_caption">Please enter the code after receive email</string>
     <string name="six_digit_code">Code</string>
     <string name="update_code_url">https://dewy-minuses.000webhostapp.com/updateCode.php</string>
+    <string name="caption_enter_newpw">Enter new password</string>
+    <string name="caption_newpw">Please enter new password and confirm password</string>
 
 </resources>
