@@ -21,9 +21,10 @@ public class Car {
     private String CAR_PHOTOS;
     private String DEALER_ID;
     private String CAR_ID;
+    private String DISCOUNT;
+    private String ENDDATE;
 
-    public Car(String NAMES, int PRICES, String COLORS, String DESCS, int YEARS, String CAR_STATUS, String CAR_TYPES, int MILEAGES, String CAR_PHOTOS, String DEALER_ID, String CAR_ID) {
-
+    public Car(String NAMES, int PRICES, String COLORS, String DESCS, int YEARS, String CAR_STATUS, String CAR_TYPES, int MILEAGES, String CAR_PHOTOS, String DEALER_ID, String CAR_ID, String DISCOUNT, String ENDDATE) {
         this.NAMES = NAMES;
         this.PRICES = PRICES;
         this.COLORS = COLORS;
@@ -35,6 +36,24 @@ public class Car {
         this.CAR_PHOTOS = CAR_PHOTOS;
         this.DEALER_ID = DEALER_ID;
         this.CAR_ID = CAR_ID;
+        this.DISCOUNT = DISCOUNT;
+        this.ENDDATE = ENDDATE;
+    }
+
+    public String getDISCOUNT() {
+        return DISCOUNT;
+    }
+
+    public void setDISCOUNT(String DISCOUNT) {
+        this.DISCOUNT = DISCOUNT;
+    }
+
+    public String getENDDATE() {
+        return ENDDATE;
+    }
+
+    public void setENDDATE(String ENDDATE) {
+        this.ENDDATE = ENDDATE;
     }
 
     public String getNAMES() {

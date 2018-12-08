@@ -191,7 +191,10 @@ public class RecommededCarsActivity extends AppCompatActivity {
                             String dealerID = jsonObj.getString("dealerID");
                             String carID = jsonObj.getString("carID");
 
-                            Car car = new Car(carName, price, color, desc, year, carStatus, carType, mileage, carPhoto, dealerID, carID);
+                            String EndDate = jsonObj.getString("endDate");
+                            String Discount = jsonObj.getString("discount");
+
+                            Car car = new Car(carName, price, color, desc, year, carStatus, carType, mileage, carPhoto, dealerID, carID,Discount,EndDate);
 
                             carArr.add(car);
 

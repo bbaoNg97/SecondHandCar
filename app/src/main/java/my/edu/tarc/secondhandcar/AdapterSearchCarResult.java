@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,16 +51,28 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
         View v = inflater.inflate(R.layout.content_search_result, null, true);
         final TextView carResult = (TextView) v.findViewById(R.id.textViewCarResult);
         final ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCarResult);
+        final ImageView imageViewdis = (ImageView) v.findViewById(R.id.imageViewdis);
         final TextView tvResultPrice = (TextView) v.findViewById(R.id.textViewResultPrice);
         final TextView tvResultYear = (TextView) v.findViewById(R.id.textViewResultYear);
         final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
         final TextView tvMileage = (TextView) v.findViewById(R.id.textViewSearchResultM);
-        final TextView tvPromo=(TextView)v.findViewById(R.id.textViewSearchResPromo);
         final Car currentCar = cars.get(position);
+        double dis = Double.parseDouble(currentCar.getDISCOUNT());
+        Double dPrice = (double) currentCar.getPRICES();
         Glide.with(mContext)
                 .asBitmap()
                 .load(currentCar.getCAR_PHOTOS())
                 .into(imCarResult);
+
+        if (dis > 0) {
+            dPrice = dPrice - (dPrice * dis / 100);
+            imageViewdis.setVisibility(View.VISIBLE);
+            tvResultPrice.setTextColor(ContextCompat.getColor(mContext, R.color.Red));
+        }else {
+            imageViewdis.setVisibility(View.GONE);
+            tvResultPrice.setTextColor(ContextCompat.getColor(mContext, R.color.Black));
+        }
+
 
         carResult.setText(currentCar.getNAMES());
         imageViewTop.setVisibility(View.GONE);
@@ -69,7 +82,6 @@ public class AdapterSearchCarResult extends ArrayAdapter<Car> {
         strMileage = String.valueOf(currentCar.getMILEAGES());
         DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
         strMileage=decimalFormat.format(Double.parseDouble(strMileage));
-        Double dPrice = (double) currentCar.getPRICES();
         strPrice = formatter.format(dPrice);
         tvResultPrice.setText(strPrice);
 

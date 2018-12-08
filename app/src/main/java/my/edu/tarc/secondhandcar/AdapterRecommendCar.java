@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,30 +46,40 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.content_search_result, null, true);
         final TextView carResult = (TextView) v.findViewById(R.id.textViewCarResult);
+        final ImageView imageViewdis = (ImageView) v.findViewById(R.id.imageViewdis);
         final ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCarResult);
-        final TextView tvResultPrice=(TextView)v.findViewById(R.id.textViewResultPrice);
-        final TextView tvResultYear=(TextView)v.findViewById(R.id.textViewResultYear);
+        final TextView tvResultPrice = (TextView) v.findViewById(R.id.textViewResultPrice);
+        final TextView tvResultYear = (TextView) v.findViewById(R.id.textViewResultYear);
         final ImageView imageViewTop = (ImageView) v.findViewById(R.id.imageViewTop);
-        final TextView tvMileage=(TextView)v.findViewById(R.id.textViewSearchResultM);
+        final TextView tvMileage = (TextView) v.findViewById(R.id.textViewSearchResultM);
         final Car currentCar = cars.get(position);
+        double dis = Double.parseDouble(currentCar.getDISCOUNT());
+
+        Double dPrice = (double) currentCar.getPRICES();
         Glide.with(mContext)
                 .asBitmap()
                 .load(currentCar.getCAR_PHOTOS())
                 .into(imCarResult);
-
+        if (dis > 0) {
+            dPrice = dPrice - (dPrice * dis / 100);
+            imageViewdis.setVisibility(View.VISIBLE);
+            tvResultPrice.setTextColor(ContextCompat.getColor(mContext, R.color.Red));
+        }else {
+            imageViewdis.setVisibility(View.GONE);
+            tvResultPrice.setTextColor(ContextCompat.getColor(mContext, R.color.Black));
+        }
 
 
         strYear = currentCar.getYEARS() + "";
         tvResultYear.setText(strYear);
 
-        Double dPrice = (double) currentCar.getPRICES();
         strPrice = formatter.format(dPrice);
         tvResultPrice.setText(strPrice);
 
         strMileage = String.valueOf(currentCar.getMILEAGES());
         DecimalFormat decimalFormat = new DecimalFormat("#,###,###,###");
-        strMileage=decimalFormat.format(Double.parseDouble(strMileage));
-        tvMileage.setText(strMileage+" KM");
+        strMileage = decimalFormat.format(Double.parseDouble(strMileage));
+        tvMileage.setText(strMileage + " KM");
 
         carResult.setText(currentCar.getNAMES());
         if (position == 0) {
@@ -94,7 +105,7 @@ public class AdapterRecommendCar extends ArrayAdapter<Car> {
 
                 strName = carResult.getText().toString();
                 strImage = currentCar.getCAR_PHOTOS();
-                strPrice = currentCar.getPRICES()+"";
+                strPrice = currentCar.getPRICES() + "";
                 strColor = currentCar.getCOLORS();
                 strMileage = String.valueOf(currentCar.getMILEAGES());
                 strYear = currentCar.getYEARS() + "";
